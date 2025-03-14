@@ -1,0 +1,98 @@
+.tour-detail-page {
+    padding: 20px;
+
+    h1 {
+        text-align: left;
+        color: black;
+    }
+
+    #orders {
+        margin: 5px 0 10px 0;
+        font-weight: normal;
+        font-style: italic;
+        color: rgb(124, 124, 124);
+    }
+
+    .tour-info {
+        display: flex;
+        gap: 30px;
+        border-bottom: 1px solid rgb(216, 216, 216);
+        padding-bottom: 30px;
+    }
+
+    .tour-image img {
+        width: 800px;
+        height: 400px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .tour-infor p#price {
+        font-size: 24px;
+        color: #de2e2e;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .book-now {
+        width: 200px;
+        padding: 10px 20px 15px 20px;
+        background-color: #45C3D2;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    .book-now:hover {
+        color: #ffc10e;
+    }
+
+    .tour-schedule {
+        margin-top: 30px;
+    }
+
+    .tour-schedule h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .tour-detail {
+        text-align: justify;
+        line-height: 30px;
+        padding: 0px 20px;
+    }
+
+    .tour-detail img {
+        align-items: center;
+    }
+
+    .tour-detail p:has(img) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 0;
+    }
+
+    .tour-infor #tour-introduction {
+        text-align: justify;
+        margin-bottom: 5px;
+    }
+
+    .tour-infor #introduce-tour {
+        margin-bottom: 10px;
+    }
+
+    .tour-infor #price-tour {
+        margin: 30px 0 10px 0;
+    }
+
+    .tour-infor p {
+        font-size: 18px;
+    }
+
+    .tour-infor #introduce {
+        text-align: justify;
+    }
+}

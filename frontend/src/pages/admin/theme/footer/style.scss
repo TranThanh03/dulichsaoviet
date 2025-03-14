@@ -1,0 +1,102 @@
+.footer-manage {
+    height: 255px;
+    background-color: #eeeded;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    padding-top: 25px;
+    justify-content: space-evenly;
+    min-width: 800px;
+
+    .infor {
+        width: 300px;
+    }
+
+    h4 {
+        font-size: 17px;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+
+    .infor span {
+        float: left;
+        padding-right: 10px;
+        width: 25px;
+    }
+
+    .infor p {
+        display: block;
+    }
+
+    .infor .sub img {
+        width: 18px;
+    }
+
+    .infor .sub {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .policy {
+        width: 325px;
+        justify-content: center;
+        margin-top: -10px;
+    }
+
+    .policy img {
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .policy span {
+        font-weight: bold;
+        position: relative;
+        top: -12px;
+        right: -5px;
+        color: #ffc10e;
+    }
+
+    .policy p {
+        margin-top: 5px;
+    }
+
+    .policy a {
+        text-decoration: none;
+        color: #34b7c6;
+    }
+
+    .contact p {
+        padding-bottom: 15px;
+    }
+
+    .contact a {
+        text-decoration: none;
+        color: black;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .contact img {
+        width: 18px;
+        margin-right: 10px;
+    }
+
+    .end {
+        margin-top: 200px;
+        position: absolute;
+        height: 10px;
+        padding-left: 100px;
+    }
+
+    .end hr {
+        width: 1480px;
+    }
+
+    .end span {
+        font-size: 11px;
+    }
+}

@@ -1,0 +1,152 @@
+.home-manage-page {
+    .admin-dashboard {
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 28px;
+        color: #ffc107;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-header p {
+        color: #666;
+        font-size: 18px;
+    }
+
+    .dashboard-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-stats {
+        display: flex;
+        justify-content: space-around;
+        flex-grow: 1;
+    }
+
+    .stat-card {
+        background-color: #34b7c6;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        width: 200px;
+    }
+
+    .stat-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .stat-card p {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .dashboard-content {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .recent-orders {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .recent-orders h2 {
+        color: #34b7c6;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .recent-users {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .recent-users h2 {
+        color: #34b7c6;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    table th,
+    table td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #34b7c6;
+        color: white;
+        font-weight: bold;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .highlighted-tours ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .highlighted-tours li {
+        font-size: 16px;
+        padding: 8px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .highlighted-tours {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .highlighted-tours h2 {
+        color: #34b7c6;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .highlighted-tours ul li {
+        font-size: 16px;
+        margin-bottom: 8px;
+        padding-left: 10px;
+        position: relative;
+    }
+
+    .highlighted-tours ul li::before {
+        content: "★";
+        color: #ffc107;
+        position: absolute;
+        left: -10px;
+    }
+
+    #total-price {
+        overflow-wrap: break-word;
+    }
+
+    #orders {
+        font-style: italic;
+        color: #666;
+    }
+}

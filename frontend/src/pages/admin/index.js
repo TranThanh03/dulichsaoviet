@@ -1,0 +1,16 @@
+export { default as MasterLayout } from './theme/masterLayout/index';
+export { default as HomePage } from './homePage/index';
+export { default as LoginPage } from './authPage/login';
+export { default as TourPage } from './tourPage/index';
+export { default as TourInsertPage } from './tourPage/insert';
+export { default as TourUpdatePage } from './tourPage/update';
+export { default as UserPage } from './userPage/index';
+export { default as GuidePage } from './guidePage/index';
+export { default as GuideInsertPage } from './guidePage/insert';
+export { default as GuideUpdatePage } from './guidePage/update';
+export { default as AssignmentPage } from './assignmentPage/index';
+export { default as CalendarPage } from './calendarPage/index';
+export { default as CalendarDetailPage } from './calendarPage/detail';
+export { default as ProfilePage } from './profilePage/index';
+export { default as PasswordPage } from './profilePage/password';
+export { default as DashboardPage } from './dashboardPage/index';

@@ -1,0 +1,119 @@
+.guide-detail-page {
+    width: 900px;
+    margin: 40px auto 0 auto;
+    
+    h2 {
+        font-size: 1.8em;
+        color: #3498db;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+    
+    .guide-profile {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .guide-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 30px;
+    }
+
+    .guide-info h1 {
+        margin-bottom: 10px;
+        font-size: 2.5em;
+        color: #2c3e50;
+    }
+
+    .guide-info p {
+        margin: 9px 0;
+    }
+
+    #evaluate img {
+        width: 15px;
+        height: 15px;
+    }
+
+    #totalEvaluate {
+        cursor: pointer;
+        color: blue;
+    }
+
+    .guide-description,
+    .guide-expertise,
+    .guide-reviews,
+    .guide-booking {
+        margin-bottom: 30px;
+    }
+
+    .guide-description #description {
+        text-align: justify;
+        line-height: 30px;
+    }
+
+    .review {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .reviewer {
+        font-style: italic;
+        text-align: right;
+    }
+
+    .tour-infor {
+        margin: 25px 0px;
+        border-bottom: 1px solid black;
+        overflow: hidden;
+    }
+
+    .tour-infor img {
+        width: 426px;
+        height: 233px;
+        float: left;
+        margin: 0 30px 25px 0;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .tour-infor h3 {
+        margin-bottom: 10px;
+        color: #0056b3;
+    }
+
+    .tour-infor .book-button {
+        width: 150px;
+        color: white;
+        background-color: #0066cc;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        margin-bottom: 25px;
+    }
+
+    .tour-infor a {
+        text-decoration: none;
+    }
+
+    .tour-infor .book-button:hover {
+        background-color: #0052a3;
+    }
+
+    .tour-infor p {
+        margin-bottom: 5px;
+    }
+
+    .red {
+        color: red;
+    }
+}

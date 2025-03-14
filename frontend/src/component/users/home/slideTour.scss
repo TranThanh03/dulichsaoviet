@@ -1,0 +1,106 @@
+.list-tour {
+    position: relative;
+    height: 470px;
+    padding: 20px 189px;
+    width: auto;
+    overflow: hidden;
+
+    .title {
+        color: black;
+        font-size: 30px;
+        font-weight: 600;
+        padding-bottom: 20px;
+    }
+
+    .title a {
+        color: white;
+        text-decoration: none;
+        font-size: 25px;
+        background-color: #45c3d2;
+        float: right;
+        padding: 10px 15px;
+        border-radius: 25px;
+        font-weight: normal;
+        font-size: 23px;
+    }
+    
+    .container {
+        width: 1095px;
+        overflow: hidden;
+    }
+
+    .content {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+        transition: all 0.5s ease;
+    }
+
+    .slide {
+        margin: 10px;
+    }
+
+    .sub-list {
+        padding: 50px 10px;
+        border-radius: 15px;
+        text-align: center;
+        background-color: rgb(246, 246, 246);
+        height: 100%;
+    }
+
+    .sub-list img {
+        width: 320px;
+        height: 160px;
+        margin-bottom: 10px;
+        border-radius: 10px 10px 0 0;
+        object-fit: cover;
+    }
+
+    .content a {
+        color: black;
+        text-decoration: none;
+        font-size: 20px;
+    }
+
+    .sub-list h4 {
+        width: 315px;
+        margin-bottom: 10px;
+    }
+
+    .sub-list #orders {
+        display: block;
+        font-style: italic;
+        font-size: 14px;
+        margin-top: 8px;
+        color: rgb(124, 124, 124);
+    }
+
+    .button-prev,
+    .button-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(223, 222, 222, 0.5);
+        color: black;
+        border: none;
+        padding: 8px 8px 10px 8px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        box-shadow: 5px 5px 5px rgb(150, 149, 149);
+        font-weight: 500;
+    }
+    .button-prev {
+        left: 152px;
+    }
+
+    .button-next {
+        right: 190px;
+    }
+
+    .button-next:active,
+    .button-prev:active {
+        background-color: #45c3d2;
+        color: white;
+    }
+}

@@ -1,0 +1,47 @@
+package com.websitesaoviet.WebsiteSaoViet.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "user")
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", unique = true)
+    String id;
+
+    @Column(name = "user_id", unique = true)
+    String userId;
+
+    @Column(name = "full_name")
+    String fullName;
+
+    @Column(name = "phone", unique = true)
+    String phone;
+
+    @Column(name = "email", unique = true)
+    String email;
+
+    @Column(name = "password")
+    String password;
+
+    @ElementCollection
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "role")
+    Set<String> roles = new HashSet<>();
+
+    @Column(name = "register_time")
+    LocalDateTime registerTime;
+}

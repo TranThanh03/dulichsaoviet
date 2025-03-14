@@ -1,0 +1,183 @@
+.calendar-detail-page {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        color: #2980b9;
+        border-bottom: 2px solid #2980b9;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #34495e;
+        font-size: 16px;
+        padding: 5px 0;
+    }
+
+    .info-section {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .tour-info {
+        margin-top: 20px;
+        text-align: center;
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .tour-image {
+        width: 100%;
+        height: 245px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .guide-info {
+        width: 50%;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 10px;
+        padding: 10px;
+    }
+
+    .guide-avatar {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .payment-info {
+        margin-top: 20px;
+        background: #ecf0f1;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .confirm,
+    .paid {
+        color: green;
+        font-weight: bold;
+    }
+
+    .cancel,
+    .unpaid {
+        color: red;
+        font-weight: bold;
+    }
+
+    .processing {
+        color: #e5af10;
+        font-weight: bold;
+    }
+
+    .red-bold {
+        color: red;
+        font-weight: bold;
+    }
+
+    .sub-tour {
+        display: flex;
+    }
+
+    .info {
+        width: 50%;
+        gap: 23px;
+    }
+
+    .sub-info {
+        text-align: left;
+    }
+
+    .sub-guide {
+        margin-top: 34px;
+    }
+
+    .cost {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .sub-cost {
+        border-top: 2px solid;
+        padding: 0 100px;
+    }
+
+    .sub-cost strong {
+        float: left;
+        margin-right: 40px;
+        color: #34495e;
+    }
+
+    .sub-cost span {
+        float: right;
+    }
+
+    .sub-cost table td {
+        padding: 5px 0;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .control {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .control button {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        min-width: 120px;
+    }
+
+    .control #cancel {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .control #cancel:hover {
+        background-color: #d32f2f;
+    }
+
+    .control #confirm {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .control #confirm:hover {
+        background-color: #388E3C;
+    }
+
+    .control #back:hover {
+        background-color: #e0e0e0;
+    }
+}

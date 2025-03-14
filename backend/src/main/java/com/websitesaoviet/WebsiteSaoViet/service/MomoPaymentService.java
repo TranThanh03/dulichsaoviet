@@ -1,0 +1,99 @@
+package com.websitesaoviet.WebsiteSaoViet.service;
+
+import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
+import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.json.JSONObject;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class MomoPaymentService {
+    @NonFinal
+    @Value("${momo.partnerCode}")
+    protected String partnerCode;
+    @NonFinal
+    @Value("${momo.accessKey}")
+    protected String accessKey;
+    @NonFinal
+    @Value("${momo.secretKey}")
+    protected String secretKey;
+
+    private String generateSignature(String rawHash) {
+        try {
+            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            sha256Hmac.init(secretKeySpec);
+            byte[] signedBytes = sha256Hmac.doFinal(rawHash.getBytes(StandardCharsets.UTF_8));
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : signedBytes) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.PAYMENT_MOMO_FALIED);
+        }
+    }
+
+    public String createPayment(int amount, String orderId, String ipnUrl, String redirectUrl, String extraData) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            Random random = new Random();
+            String requestId = System.currentTimeMillis() + "" + random.nextInt(1000);
+            String orderInfo = "Thanh toán qua MoMo";
+            String requestType = "payWithATM";
+            String rawHash = "accessKey=" + accessKey +
+                    "&amount=" + amount +
+                    "&extraData=" + extraData +
+                    "&ipnUrl=" + ipnUrl +
+                    "&orderId=" + orderId +
+                    "&orderInfo=" + orderInfo +
+                    "&partnerCode=" + partnerCode +
+                    "&redirectUrl=" + redirectUrl +
+                    "&requestId=" + requestId +
+                    "&requestType=" + requestType;
+
+            String signature = generateSignature(rawHash);
+
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("partnerCode", partnerCode);
+            requestBody.put("partnerName", "Test");
+            requestBody.put("storeId", "MomoTestStore");
+            requestBody.put("requestId", requestId);
+            requestBody.put("amount", amount);
+            requestBody.put("orderId", orderId);
+            requestBody.put("orderInfo", orderInfo);
+            requestBody.put("redirectUrl", redirectUrl);
+            requestBody.put("ipnUrl", ipnUrl);
+            requestBody.put("lang", "vi");
+            requestBody.put("extraData", extraData);
+            requestBody.put("requestType", requestType);
+            requestBody.put("signature", signature);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), headers);
+
+            String endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+            ResponseEntity<String> response = restTemplate.exchange(endpoint, HttpMethod.POST, entity, String.class);
+            JSONObject jsonResponse = new JSONObject(response.getBody());
+
+            return jsonResponse.getString("payUrl");
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.PAYMENT_MOMO_FALIED);
+        }
+    }
+}

@@ -1,0 +1,143 @@
+.header-manage {
+    height: 255px;
+    background: url("~assets/users/img/background.jpg") no-repeat;
+    background-size: cover;
+    min-width: 800px;
+
+    .header-container {
+        height: 150px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    #manage-page {
+        gap: 550px;
+    }
+
+    .logo {
+        padding: 28px 0;
+        width: 180px;
+    }
+
+    .logo img {
+        width: 70px;
+        border-radius: 50%;
+        margin-left: 20%;
+    }
+
+    .logo p {
+        color: #ffc10e;
+        font-size: 22px;
+        margin-top: 10px;
+        margin-left: 30px;
+        font-weight: bold;
+    }
+
+    .content-right {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    p {
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .icon-account {
+        text-align: center;
+        padding: 45px 0;
+    }
+
+    .icon-account p {
+        color: white;
+    }
+
+    .icon-account .account-info {
+        padding-bottom: 10px;
+    }
+
+    .icon-account #slidebar {
+        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 5px 4px 6px rgb(146 146 150);
+        list-style: none;
+        padding: 15px 0;
+        z-index: 10;
+        width: 200px;
+        border-radius: 5px;
+    }
+
+    .icon-account #slidebar li{
+        margin-bottom: 10px;
+    }
+
+    .icon-account #slidebar li:hover a,
+    .icon-account #slidebar li:hover span {
+        font-weight: bold;
+    }
+
+
+    .icon-account #slidebar a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .icon-account #slidebar span {
+        color: red;
+        cursor: pointer;
+    }
+
+    .icon-calendar img {
+        width: 28px;
+        cursor: pointer;
+    }
+
+    .icon-account img {
+        width: 25px;
+        cursor: pointer;
+    }
+
+    nav {
+        height: 80px;
+    }
+
+    nav .menu {
+        width: 860px;
+        list-style: none;
+        display: flex;
+        justify-content: space-evenly;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        margin-top: 30px;
+        padding: 0;
+    }
+
+    nav .menu li {
+        text-align: center;
+        margin: 0 5px;
+    }
+
+    nav .menu a {
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 1px 10px 3px 10px;
+        border-radius: 15px;
+        font-size: 20px;
+    }
+
+    .activeNav {
+        background-color: #45C3D2;
+        border-radius: 20px;
+        padding: 2px 5px 5px 5px;
+    }
+}
