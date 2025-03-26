@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PaymentStatusResponse {
-    String status;
+public class IntrospectResponse {
+    String fullName;
+    boolean valid;
 }

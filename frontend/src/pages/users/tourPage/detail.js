@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './detail.scss';
-import { TourApi } from 'api';
+import { TourApi } from 'services';
 import formaterCurrency from 'utils/formatCurrency';
 import { sanitizeHtml } from 'utils/sanitizeHtml';
 

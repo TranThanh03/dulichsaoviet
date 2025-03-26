@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,9 +12,10 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GuideResponse {
     String id;
+    String guideCode;
     String fullName;
     String avatar;
-    String sex;
+    String gender;
     LocalDate dateOfBirth;
     String phone;
     String email;

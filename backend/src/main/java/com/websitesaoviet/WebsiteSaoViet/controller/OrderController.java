@@ -1,9 +1,11 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.*;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.*;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderDetailResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderListResponse;
 import com.websitesaoviet.WebsiteSaoViet.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +29,12 @@ public class OrderController {
     AuthenticationService authenticationService;
     TourService tourService;
     GuideService guideService;
-    UserService userService;
+    CustomerService customerService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
-    ResponseEntity<ApiResponse<List<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>>> getOrders() {
-        ApiResponse<List<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>> apiResponse = ApiResponse.<List<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>>builder()
+    ResponseEntity<ApiResponse<List<OrderResponse>>> getOrders() {
+        ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
                 .code(1958)
                 .result(orderService.getOrders())
                 .build();
@@ -41,22 +43,22 @@ public class OrderController {
     }
 
     @GetMapping("/list")
-    ResponseEntity<ApiResponse<List<OrderResponse>>> getOrdersByUserId(@RequestHeader("Authorization") String authorizationHeader)
+    ResponseEntity<ApiResponse<List<OrderListResponse>>> getOrdersByUserId(@RequestHeader("Authorization") String authorizationHeader)
             throws ParseException, JOSEException {
         String token = authenticationService.extractTokenFromHeader(authorizationHeader);
-        String id = authenticationService.getUserIdByToken(token);
+        String id = authenticationService.getCustomerIdByToken(token);
 
-        ApiResponse<List<OrderResponse>> apiResponse = ApiResponse.<List<OrderResponse>>builder()
+        ApiResponse<List<OrderListResponse>> apiResponse = ApiResponse.<List<OrderListResponse>>builder()
                 .code(1957)
-                .result(orderService.getOrdersByUserId(id))
+                .result(orderService.getOrdersByCustomerId(id))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>> getOrderById(@PathVariable String id) {
-        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>builder()
+    ResponseEntity<ApiResponse<OrderResponse>> getOrderById(@PathVariable String id) {
+        ApiResponse<OrderResponse> apiResponse = ApiResponse.<OrderResponse>builder()
                 .code(1956)
                 .result(orderService.getOrderById(id))
                 .build();
@@ -65,11 +67,11 @@ public class OrderController {
     }
 
     @PostMapping("/cancel/{id}")
-    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>> cancelOrder(@PathVariable String id) {
+    ResponseEntity<ApiResponse<OrderListResponse>> cancelOrder(@PathVariable String id) {
         orderService.cancelOrder(id);
 
 
-        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>builder()
+        ApiResponse<OrderListResponse> apiResponse = ApiResponse.<OrderListResponse>builder()
                 .code(1955)
                 .message("Hủy lịch đặt thành công.")
                 .build();
@@ -79,10 +81,10 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/confirm/{id}")
-    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>> confirmOrder(@PathVariable String id) {
+    ResponseEntity<ApiResponse<OrderResponse>> confirmOrder(@PathVariable String id) {
         orderService.confirmOrder(id);
 
-        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.OrderResponse>builder()
+        ApiResponse<OrderResponse> apiResponse = ApiResponse.<OrderResponse>builder()
                 .code(1954)
                 .message("Xác nhận lịch đặt thành công.")
                 .build();
@@ -92,14 +94,14 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
-    ResponseEntity<ApiResponse<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.OrderResponse>>> getAllOrders(
+    ResponseEntity<ApiResponse<Page<OrderListResponse>>> getAllOrders(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.OrderResponse> ordersPage = orderService.getAllOrders(pageable);
+        Page<OrderListResponse> ordersPage = orderService.getAllOrders(pageable);
 
-        ApiResponse<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.OrderResponse>> apiResponse = ApiResponse.<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.OrderResponse>>builder()
+        ApiResponse<Page<OrderListResponse>> apiResponse = ApiResponse.<Page<OrderListResponse>>builder()
                 .code(1953)
                 .result(ordersPage)
                 .build();
@@ -123,7 +125,7 @@ public class OrderController {
     ResponseEntity<ApiResponse<HomeResponse>> getAllInfo() {
         long quantityTour = tourService.countTours();
         long quantityGuide = guideService.countGuides();
-        long quantityUser = userService.countUsers();
+        long quantityUser = customerService.countCustomers();
         long quantityOrder = orderService.countOrders();
         long quantityTotalPrice = orderService.getTotalRevenue();
 

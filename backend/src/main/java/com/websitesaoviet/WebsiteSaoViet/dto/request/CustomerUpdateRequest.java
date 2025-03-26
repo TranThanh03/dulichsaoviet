@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserCreationRequest {
+public class CustomerUpdateRequest {
     @Size(min = 5, max = 50, message = "FULLNAME_LENGTH_INVALID")
     @Pattern(regexp = "^[\\p{L} ]+$", message = "FULLNAME_INVALID")
     String fullName;
@@ -21,7 +21,4 @@ public class UserCreationRequest {
 
     @Email(message = "EMAIL_INVALID")
     String email;
-
-    @Size(min = 8, message = "PASSWORD_INVALID")
-    String password;
 }

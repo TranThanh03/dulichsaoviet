@@ -1,6 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.exception;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

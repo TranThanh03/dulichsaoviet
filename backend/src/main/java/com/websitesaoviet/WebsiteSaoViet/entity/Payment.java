@@ -20,8 +20,8 @@ public class Payment {
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "payment_id")
-    String paymentId;
+    @Column(name = "payment_code")
+    String paymentCode;
 
     @Column(name = "order_id")
     String orderId;

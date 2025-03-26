@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./message.scss";
-import { PaymentApi } from "api";
+import { PaymentApi } from "services";
 import { failedSvg, successSvg } from "assets/users";
 
 const MessagePage = () => {

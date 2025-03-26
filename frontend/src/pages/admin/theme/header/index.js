@@ -2,7 +2,7 @@ import { memo, useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { logo, userIcon } from 'assets/users';
 import './style.scss';
 import { Link, useLocation } from 'react-router-dom';
-import { AuthApi } from 'api';
+import { AuthApi } from 'services';
 import { AuthContext } from '../masterLayout';
 
 const Navbar = () => {

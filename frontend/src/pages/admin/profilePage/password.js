@@ -3,7 +3,7 @@ import './password.scss';
 import { useNavigate } from 'react-router-dom';
 import { userPassword } from 'assets/users';
 import Swal from 'sweetalert2';
-import { UserApi } from 'api';
+import { UserApi } from 'services';
 
 const PasswordPage = () => {
     const [error, setError] = useState(null);

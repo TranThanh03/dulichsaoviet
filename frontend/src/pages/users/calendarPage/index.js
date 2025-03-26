@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
-import { OrderApi, PaymentApi } from 'api';
+import { OrderApi, PaymentApi } from 'services';
 
 const CalendarPage = () => {
     const [calendars, setCalendars] = useState([]);

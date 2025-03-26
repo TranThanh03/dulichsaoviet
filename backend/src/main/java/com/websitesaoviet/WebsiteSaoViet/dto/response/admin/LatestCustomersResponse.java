@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.admin;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,11 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    String id;
-    String userId;
+public class LatestCustomersResponse {
+    String CustomerCode;
     String fullName;
-    String phone;
-    String email;
     LocalDateTime registerTime;
 }

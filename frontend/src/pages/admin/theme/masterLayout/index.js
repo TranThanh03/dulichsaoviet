@@ -2,7 +2,7 @@ import { memo, useState, useEffect, createContext } from "react";
 import Header from "../header";
 import Footer from "../footer";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AuthApi } from "api";
+import { AuthApi } from "services";
 import getToken from "utils/getToken";
 
 export const AuthContext = createContext(null);

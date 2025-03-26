@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.user;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class IntrospectResponse {
-    String fullName;
-    boolean valid;
+public class OrderSummaryResponse {
+    String assignmentId;
+    int numberOfPeople;
 }

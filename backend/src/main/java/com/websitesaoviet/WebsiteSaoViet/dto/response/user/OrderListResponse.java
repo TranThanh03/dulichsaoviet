@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderResponse {
+public class OrderListResponse {
     String id;
-    String orderId;
+    String orderCode;
     String tourId;
     String tourName;
     String tourImage;
@@ -21,15 +21,10 @@ public class OrderResponse {
     String guideName;
     LocalDate startDate;
     LocalDate endDate;
-    int tourPrice;
-    int guidePrice;
     int numberOfPeople;
     double totalPrice;
     LocalDateTime orderDatetime;
     String orderStatus;
-    String payId;
-    String paymentId;
     String method;
-    LocalDateTime paymentDatetime;
     String paymentStatus;
 }

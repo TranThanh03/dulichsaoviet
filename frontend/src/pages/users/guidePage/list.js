@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { AssignmentApi } from 'api';
+import { AssignmentApi } from 'services';
 import "./index.scss";
 import ageCalculate from 'utils/ageCalculation';
 import formatErevaluate from 'utils/formatEvaluate';

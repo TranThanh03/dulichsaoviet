@@ -2,7 +2,7 @@ import { memo, useState, useEffect, useRef, useMemo } from "react";
 import { logo, searchIcon, clockIcon, userIcon } from "assets/users";
 import "./style.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthApi } from "api";
+import { AuthApi } from "services";
 import getToken from "utils/getToken";
 
 const Navbar = () => {

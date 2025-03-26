@@ -16,8 +16,12 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Tour {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
     String id;
+
+    @Column(name = "tour_code", unique = true)
+    String tourCode;
 
     @Column(name = "name")
     String name;

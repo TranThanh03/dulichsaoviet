@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import  { locationIcon, envelopeIcon, ministryOfIndustryAndTradeIcon, facebookIcon, instagramIcon, zaloIcon, logo, phoneIcon } from 'assets/users';
 import './style.scss';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -27,18 +28,18 @@ const Footer = () => {
             <div className="policy">
                 <img src={logo} alt="Logo Sao Việt" />
                 <span>Sao Việt</span>
-                <p><a href="#">Tuyển dụng</a></p>
-                <p><a href="#">Chính sách bảo mật</a></p>
-                <p><a href="#">Điều khoản sử dụng</a></p>
-                <p><a href="#">Liên hệ hợp tác</a></p>
-                <p><a href="#">Câu hỏi thường gặp</a></p>
+                <p><Link to="#">Tuyển dụng</Link></p>
+                <p><Link to="#">Chính sách bảo mật</Link></p>
+                <p><Link to="#">Điều khoản sử dụng</Link></p>
+                <p><Link to="#">Liên hệ hợp tác</Link></p>
+                <p><Link to="#">Câu hỏi thường gặp</Link></p>
             </div>
 
             <div className="contact">
                 <h4>Liên hệ hỗ trợ</h4>
-                <p><a href="#"><img src={facebookIcon} alt="Facebook" />Facebook</a></p>
-                <p><a href="#"><img src={instagramIcon} alt="Instagram" />Instagram</a></p>
-                <p><a href="#"><img src={zaloIcon} alt="Zalo" />Zalo</a></p>
+                <p><Link to="#"><img src={facebookIcon} alt="Facebook" />Facebook</Link></p>
+                <p><Link to="#"><img src={instagramIcon} alt="Instagram" />Instagram</Link></p>
+                <p><Link to="#"><img src={zaloIcon} alt="Zalo" />Zalo</Link></p>
             </div>
 
             <div className="end">

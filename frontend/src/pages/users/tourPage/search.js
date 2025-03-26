@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { TourApi } from 'api';
+import { TourApi } from 'services';
 import { TourList } from 'component/users';
 import "./index.scss";
 

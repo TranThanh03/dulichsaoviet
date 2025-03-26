@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.scss';
 import { logo } from 'assets/users';
-import { AuthApi } from 'api';
+import { AuthApi } from 'services';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({ username: '', password: '' });

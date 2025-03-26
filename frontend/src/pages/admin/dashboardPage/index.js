@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import "./index.scss";
 import formatCurrency from "utils/formatCurrency";
-import { OrderApi } from "api";
+import { OrderApi } from "services";
 
 const DashboardPage = () => {
     const [isLoading, setLoading] = useState(false);

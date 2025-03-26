@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from 'react';
 import './style.scss';
 import { slide1, slide2, slide3, slide4, slide5 } from 'assets/users';
 import { SlideShow, SlideTour, SlideGuide } from 'component/users';
-import { TourApi, GuideApi } from 'api';
+import { TourApi, GuideApi } from 'services';
 
 const slides = [slide1, slide2, slide3, slide4, slide5];
 

@@ -9,9 +9,6 @@ import java.util.List;
 
 @Repository
 public interface GuideRepository extends JpaRepository<Guide, String> {
-    @Query("SELECT MAX(g.id) FROM Guide g")
-    String findMaxId();
-
     List<Guide> getGuideByEvaluate(int evaluate);
 
     long count();

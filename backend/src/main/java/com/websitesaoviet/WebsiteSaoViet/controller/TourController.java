@@ -2,9 +2,10 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.TourUpdateRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.*;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AssignmentToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.CategoryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.TourNewResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;

@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaymentResponse {
     String id;
-    String paymentId;
-    String orderId;
+    String paymentCode;
     double amount;
     String method;
     LocalDateTime paymentDatetime;

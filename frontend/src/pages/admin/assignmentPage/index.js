@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
-import { AssignmentApi } from "api";
+import { AssignmentApi } from "services";
 import AddAssignmentForm from "./insert";
 import formatDatetime from "utils/formatDatetime";
 import "./index.scss";

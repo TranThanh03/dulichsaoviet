@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
 import "./index.scss";
-import { GuideApi } from "api";
+import { GuideApi } from "services";
 import formatDatetime from "utils/formatDatetime";
 import { Link } from "react-router-dom";
 

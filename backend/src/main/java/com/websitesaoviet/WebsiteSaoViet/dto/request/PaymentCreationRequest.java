@@ -9,7 +9,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaymentCreationRequest {
-    String orderId;
-    double amount;
+    String customerId;
+    String assignmentId;
+    int numberOfPeople;
     String method;
+    int amount;
 }

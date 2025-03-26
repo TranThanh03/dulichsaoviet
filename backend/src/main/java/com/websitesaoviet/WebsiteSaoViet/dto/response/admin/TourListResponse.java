@@ -9,7 +9,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TourListResponse {
-    String tourId;
+    String id;
+    String tourCode;
     String tourName;
     String image;
     String category;

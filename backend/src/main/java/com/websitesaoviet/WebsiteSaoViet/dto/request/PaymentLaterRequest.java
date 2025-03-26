@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PaymentUpdateRequest {
-    double amount;
+public class PaymentLaterRequest {
     String method;
+    int amount;
 }

@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LatestOrdersResponse {
-    String orderId;
-    String customerId;
+    String orderCode;
+    String customerCode;
     String tourName;
     LocalDateTime orderDatetime;
     int totalPrice;

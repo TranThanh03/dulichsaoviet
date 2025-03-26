@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './detail.scss';
-import { AssignmentApi, GuideApi } from 'api';
+import { AssignmentApi, GuideApi } from 'services';
 import ageCalculate from 'utils/ageCalculation';
 import formatEvaluate from 'utils/formatEvaluate';
 import formatCurrency from 'utils/formatCurrency';

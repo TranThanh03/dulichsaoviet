@@ -3,15 +3,14 @@ package com.websitesaoviet.WebsiteSaoViet.dto.response.admin;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LatestUsersResponse {
-    String userId;
+public class CustomerListResponse {
+    String customerCode;
     String fullName;
-    LocalDateTime registerTime;
+    String phone;
+    String email;
 }

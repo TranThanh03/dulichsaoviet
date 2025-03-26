@@ -4,7 +4,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.GuideCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.GuideUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AssignmentGuidesResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.GuideEvaluateResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.GuideResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.GuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Guide;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -39,7 +39,7 @@ public class GuideService {
     }
 
     public List<AssignmentGuidesResponse> getGuidesByAssignment() {
-        return guideMapper.toGuidesByAssignment(guideRepository.findAll());
+        return guideMapper.toGuideListResponse(guideRepository.findAll());
     }
 
     public List<GuideEvaluateResponse> getGuidesEvaluate() {
@@ -73,13 +73,13 @@ public class GuideService {
     }
 
     public String generateNextId() {
-        String maxId = guideRepository.findMaxId();
-        if (maxId == null) {
-            return "HDV25001";
-        }
-
-        int currentMax = Integer.parseInt(maxId.substring(3));
-        int nextId = currentMax + 1;
-        return "HDV" + nextId;
+//        String maxId = guideRepository.findMaxId();
+//        if (maxId == null) {
+//            return "HDV25001";
+//        }
+//
+//        int currentMax = Integer.parseInt(maxId.substring(3));
+//        int nextId = currentMax + 1;
+        return "HDV";
     }
 }

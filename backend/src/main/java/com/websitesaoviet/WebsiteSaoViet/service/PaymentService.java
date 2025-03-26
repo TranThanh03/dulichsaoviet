@@ -1,8 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.request.UserPaymentRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentStatusResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.PaymentCreationRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.PaymentResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Payment;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -40,7 +39,6 @@ public class PaymentService {
             String orderId, String paymentId, int amount, String method, LocalDateTime dateTime, String status) {
         Payment payment = new Payment();
 
-        payment.setPaymentId(paymentId);
         payment.setOrderId(orderId);
         payment.setAmount(amount);
         payment.setMethod(method);
@@ -51,7 +49,7 @@ public class PaymentService {
     }
 
     public List<PaymentResponse> getPayments() {
-        return paymentMapper.toListPaymentsResponse(paymentRepository.findAll());
+        return paymentMapper.toPaymentListResponse(paymentRepository.findAll());
     }
 
     public PaymentResponse getPaymentById(String id) {
@@ -59,53 +57,35 @@ public class PaymentService {
                 .orElseThrow(() -> new AppException(ErrorCode.PAYMENT_NOT_EXITED)));
     }
 
-    public PaymentResponse updatePayment(String id, String paymentId, String method, int amount) {
-        Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PAYMENT_NOT_EXITED));
-
-        if (payment != null) {
-            payment.setPaymentId(paymentId);
-            payment.setMethod(method);
-            payment.setAmount(amount);
-            payment.setPaymentDatetime(LocalDateTime.now());
-            payment.setStatus("Đã thanh toán");
-        }
-
-        return paymentMapper.toPaymentResponse(paymentRepository.save(payment));
-    }
-
-    public String processMomoPayment(String orderId, UserPaymentRequest request) {
+    public String processMomoPayment(String orderId, PaymentCreationRequest request) {
         String ipnUrl = momoUrl + "/api/payment/momo/callback";
         String redirectUrl = "http://localhost:3000/orders/message";
         int amount = request.getAmount();
-        String extraData = "assignmentId=" + request.getAssignmentId() + ";userId=" + request.getUserId() + ";people=" + request.getNumberOfPeople();
+        String extraData = "assignmentId=" + request.getAssignmentId() + ";customerId=" + request.getCustomerId() + ";people=" + request.getNumberOfPeople();
 
         return momoPaymentService.createPayment(amount, orderId, ipnUrl, redirectUrl, extraData);
     }
 
     public void resultMoMoPayment(
-            String orderId, String transId, String userId, String assignmentId,
+            String orderId, String transId, String customerId, String assignmentId,
             int numberOfPeople, int amount) {
         String method = "MoMo";
         LocalDateTime dateTime = LocalDateTime.now();
         String status = "Đã thanh toán";
 
-        var newOrder = orderService.createOrder(orderId, userId, assignmentId, numberOfPeople, amount);
+        var newOrder = orderService.createOrder(orderId, customerId, assignmentId, numberOfPeople, amount);
         createPayment(newOrder.getId(), transId, amount, method, dateTime, status);
 
         assignmentService.addNumberOfPeople(assignmentId, numberOfPeople);
     }
 
-    public String resultLaterPayment(String orderId, UserPaymentRequest request) {
-        String userId = request.getUserId();
+    public String resultLaterPayment(String orderId, PaymentCreationRequest request) {
+        String customerId = request.getCustomerId();
         String assignmentId = request.getAssignmentId();
-        String method = "Thanh toán sau";
         int numberOfPeople = request.getNumberOfPeople();
         int amount = request.getAmount();
-        String status = "Chưa thanh toán";
 
-        var newOrder = orderService.createOrder(orderId, userId, assignmentId, numberOfPeople, amount);
-        createPayment(newOrder.getId(), "", 0, method, null, status);
+        orderService.createOrder(orderId, customerId, assignmentId, numberOfPeople, amount);
 
         LocalDateTime nextDayMidnight = LocalDate.now().plusDays(1).atStartOfDay();
         String formattedTime = nextDayMidnight.format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy"));
@@ -113,12 +93,12 @@ public class PaymentService {
         return String.format("Vui lòng thanh toán trước %s!", formattedTime);
     }
 
-    public PaymentStatusResponse getStatusByPaymentId(String id) {
-        boolean isSuccess = paymentRepository.existsPaymentById(id);
+    public String getStatusByPaymentCode(String code) {
+        boolean isSuccess = paymentRepository.existsPaymentByPaymentCode(code);
 
         String paymentStatus = isSuccess ? "success" : "failed";
 
-        return new PaymentStatusResponse(paymentStatus);
+        return paymentStatus;
     }
 
     public String processMomoPaymentLater(String orderId, String userOrderId, int amount) {
@@ -129,16 +109,12 @@ public class PaymentService {
         return momoPaymentService.createPayment(amount, orderId, ipnUrl, redirectUrl, extraData);
     }
 
-    public void resultMoMoPaymentLater(String userOrderId, String transId, int amount) {
+    public void resultMoMoPaymentLater(String orderId, String transId, int amount) {
         String method = "MoMo";
 
-        var payment = orderService.getPaymentByOrderId(userOrderId);
-        updatePayment(payment.getPaymentId(), transId, method, amount);
+        var payment = orderService.getPaymentByOrderId(orderId);
+//        createPayment(payment.getPaymentId(), transId, method, amount);
 
         assignmentService.addNumberOfPeople(payment.getAssignmentId(), payment.getNumberOfPeople());
-    }
-
-    public void deleteByUserId(String userId) {
-        paymentRepository.deleteByUserId(userId);
     }
 }

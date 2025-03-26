@@ -2,7 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.mapper;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.TourUpdateRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AssignmentToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import org.mapstruct.Mapper;
@@ -16,7 +16,7 @@ public interface TourMapper {
 
     TourResponse toTourResponse(Tour tour);
 
-    List<AssignmentToursResponse> toToursListResponse(List<Tour> tourList);
+    List<AssignmentToursResponse> toTourListResponse(List<Tour> tourList);
 
     void updateTour(@MappingTarget Tour tour, TourUpdateRequest request);
 }

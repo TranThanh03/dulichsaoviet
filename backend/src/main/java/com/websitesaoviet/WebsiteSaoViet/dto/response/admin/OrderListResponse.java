@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderResponse {
+public class OrderListResponse {
     String id;
-    String orderId;
-    String customerId;
-    String tourId;
-    String guideId;
-    String assignmentId;
+    String orderCode;
+    String customerCode;
+    String tourCode;
+    String guideCode;
+    String assignmentCode;
     int totalPrice;
     String paymentStatus;
     LocalDateTime orderDatetime;

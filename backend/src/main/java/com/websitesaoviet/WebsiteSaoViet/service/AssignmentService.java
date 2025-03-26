@@ -3,7 +3,7 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.AssignmentResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AssignmentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourGuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Assignment;
@@ -48,7 +48,7 @@ public class AssignmentService {
 
         Assignment assignment = assignmentMapper.createAssignment(request);
 
-        assignment.setAssignmentId(String.valueOf(generateNextId()));
+        assignment.setAssignmentCode(String.valueOf(generateNextId()));
         assignment.setNumberOfPeople(0);
         assignment.setStatus("Đang diễn ra");
 
@@ -117,13 +117,14 @@ public class AssignmentService {
     }
 
     public String generateNextId() {
-        String maxId = assignmentRepository.findMaxId();
-        if (maxId == null) {
-            return "PC25000001";
-        }
-
-        int currentMax = Integer.parseInt(maxId.substring(2));
-        int nextId = currentMax + 1;
-        return "PC" + nextId;
+//        String maxId = assignmentRepository.findMaxId();
+//        if (maxId == null) {
+//            return "PC25000001";
+//        }
+//
+//        int currentMax = Integer.parseInt(maxId.substring(2));
+//        int nextId = currentMax + 1;
+//        return "PC" + nextId;
+        return "a";
     }
 }

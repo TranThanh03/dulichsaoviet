@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
 import "./index.scss";
-import { TourApi } from "api";
+import { TourApi } from "services";
 import { Link } from "react-router-dom";
 import formatCurrency from "utils/formatCurrency";
 

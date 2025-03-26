@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import "./insert.scss";
-import { GuideApi } from "api";
+import { GuideApi } from "services";
 import { useNavigate } from "react-router-dom";
 
 const GuideInsertPage = () => {

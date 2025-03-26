@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './category.scss';
-import { TourApi } from 'api';
+import { TourApi } from 'services';
 
 const TourCategoryPage = () => {
     const [categories, setCategories] = useState([]);

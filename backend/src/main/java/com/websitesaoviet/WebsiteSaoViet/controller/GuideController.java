@@ -2,10 +2,10 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.GuideCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.GuideUpdateRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AssignmentGuidesResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.GuideEvaluateResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.GuideResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.GuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.AssignmentService;

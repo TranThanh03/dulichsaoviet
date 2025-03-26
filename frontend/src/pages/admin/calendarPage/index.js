@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
 import "./style.scss";
-import { OrderApi } from "api";
+import { OrderApi } from "services";
 import formatCurrency from "utils/formatCurrency";
 import formatDatetime from "utils/formatDatetime";
 import { Link } from "react-router-dom";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import "./index.scss";
-import { UserApi } from "api";
+import { UserApi } from "services";
 import formatDatetime from "utils/formatDatetime";
 
 const UserPage = () => {

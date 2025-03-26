@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { GuideApi } from "api";
+import { GuideApi } from "services";
 import "./update.scss";
 
 const GuideUpdatePage = () => {

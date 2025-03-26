@@ -20,8 +20,8 @@ public class Assignment {
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "assignment_id", unique = true)
-    String assignmentId;
+    @Column(name = "assignment_code", unique = true)
+    String assignmentCode;
 
     @Column(name = "tour_id")
     String tourId;

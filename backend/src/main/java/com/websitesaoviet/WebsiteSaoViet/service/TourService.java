@@ -5,7 +5,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AssignmentToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.TourNewResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -44,7 +44,7 @@ public class TourService {
     }
 
     public List<AssignmentToursResponse> getToursByAssignment() {
-        return tourMapper.toToursListResponse(tourRepository.findAll());
+        return tourMapper.toTourListResponse(tourRepository.findAll());
     }
 
     public List<TourNewResponse> getToursNew() {
@@ -87,17 +87,6 @@ public class TourService {
         tourRepository.deleteById(id);
     }
 
-    public String generateNextId() {
-        String maxId = tourRepository.findMaxId();
-        if (maxId == null) {
-            return "T25001";
-        }
-
-        int currentMax = Integer.parseInt(maxId.substring(1));
-        int nextId = currentMax + 1;
-        return "T" + nextId;
-    }
-
     public Page<TourResponse> searchTours(String search, Pageable pageable) {
         return tourRepository.findByNameContainingIgnoreCaseOrderByOrdersDesc(search, pageable).map(tourMapper::toTourResponse);
     }
@@ -108,5 +97,16 @@ public class TourService {
 
     public List<PopularToursResponse> getPopularTours() {
         return tourRepository.getPopularTours();
+    }
+
+    public String generateNextId() {
+//        String maxId = tourRepository.findMaxId();
+//        if (maxId == null) {
+//            return "T25001";
+//        }
+//
+//        int currentMax = Integer.parseInt(maxId.substring(1));
+//        int nextId = currentMax + 1;
+        return "T";
     }
 }

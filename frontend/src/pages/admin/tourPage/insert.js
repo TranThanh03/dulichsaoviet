@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import "./insert.scss";
-import { TourApi } from "api";
+import { TourApi } from "services";
 import { useNavigate } from "react-router-dom";
 
 const TourInsertPage = () => {

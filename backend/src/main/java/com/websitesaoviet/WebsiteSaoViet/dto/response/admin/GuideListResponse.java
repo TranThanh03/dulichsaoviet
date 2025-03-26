@@ -11,10 +11,11 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GuideListResponse {
-    String guideId;
+    String id;
+    String guideCode;
     String fullName;
     LocalDate dateOfBirth;
-    String sex;
+    String gender;
     String phone;
     String avatar;
 }

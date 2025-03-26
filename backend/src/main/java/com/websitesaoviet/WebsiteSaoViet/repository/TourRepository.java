@@ -15,9 +15,6 @@ import java.util.List;
 
 @Repository
 public interface TourRepository extends JpaRepository<Tour, String> {
-    @Query("SELECT MAX(t.id) FROM Tour t")
-    String findMaxId();
-
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.TourNewResponse(" +
             "t.id, t.name, t.image, t.price, t.orders) FROM Tour t ORDER BY t.timeCreated DESC LIMIT 9")
     List<TourNewResponse> getTourListNew();

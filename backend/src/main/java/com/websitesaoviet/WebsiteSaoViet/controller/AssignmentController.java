@@ -2,7 +2,8 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentUpdateRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.*;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AssignmentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourGuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourResponse;

@@ -6,10 +6,10 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AuthenticationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.AuthenticationResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.IntrospectResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AuthenticationResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.IntrospectResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.InvalidatedToken;
-import com.websitesaoviet.WebsiteSaoViet.entity.User;
+import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.repository.InvalidatedTokenRepository;
@@ -33,7 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
-    UserService userService;
+    CustomerService customerService;
     InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
@@ -41,27 +41,27 @@ public class AuthenticationService {
     protected String SIGNER_KEY;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        User user;
+        Customer customer;
 
         if (request.getUsername() != null && !request.getUsername().isEmpty() &&
                 request.getPassword() != null && !request.getPassword().isEmpty()
         ) {
             if (request.getUsername().matches("\\d+")) {
-                user = userService.getUserByPhone(request.getUsername());
+                customer = customerService.getCustomerByPhone(request.getUsername());
             } else {
-                user = userService.getUserByEmail(request.getUsername());
+                customer = customerService.getCustomerByEmail(request.getUsername());
             }
 
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-            boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+            boolean authenticated = passwordEncoder.matches(request.getPassword(), customer.getPassword());
 
             if(!authenticated) {
                 throw new AppException(ErrorCode.LOGIN_FAILED);
             }
 
-            var token = generateToken(request.getUsername(), user);
-            var roles = user.getRoles();
+            var token = generateToken(request.getUsername(), customer);
+            var roles = customer.getRoles();
 
             return AuthenticationResponse.builder()
                     .token(token)
@@ -73,7 +73,7 @@ public class AuthenticationService {
         }
     }
 
-    private String generateToken(String username, User user) {
+    private String generateToken(String username, Customer customer) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
@@ -84,8 +84,8 @@ public class AuthenticationService {
                         Instant.now().plusSeconds(3600)
                 ))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("userId", user.getId())
-                .claim("scope", buildScope(user))
+                .claim("userId", customer.getId())
+                .claim("scope", buildScope(customer))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -108,8 +108,8 @@ public class AuthenticationService {
 
         try {
             verifyToken(token);
-            String userId = getUserIdByToken(token);
-            var user = userService.getUserById(userId);
+            String userId = getCustomerIdByToken(token);
+            var user = customerService.getCustomerById(userId);
             fullName = user.getFullName();
         }
         catch (AppException e) {
@@ -158,7 +158,7 @@ public class AuthenticationService {
         return signedJWT;
     }
 
-    public String getUserIdByToken(String token) throws ParseException, JOSEException {
+    public String getCustomerIdByToken(String token) throws ParseException, JOSEException {
         var signToken = verifyToken(token);
 
         String id = signToken.getJWTClaimsSet().getClaim("userId").toString();
@@ -173,10 +173,10 @@ public class AuthenticationService {
         return authorizationHeader.substring(7);
     }
 
-    private String buildScope(User user) {
+    private String buildScope(Customer customer) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(stringJoiner::add);
+        if (!CollectionUtils.isEmpty(customer.getRoles())) {
+            customer.getRoles().forEach(stringJoiner::add);
         }
 
         return stringJoiner.toString();

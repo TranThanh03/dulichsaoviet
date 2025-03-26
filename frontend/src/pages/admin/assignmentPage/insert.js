@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { AssignmentApi, TourApi, GuideApi } from "api";
+import { AssignmentApi, TourApi, GuideApi } from "services";
 import "./insert.scss";
 
 const AddAssignmentForm = ({ onClose, onAdded }) => {

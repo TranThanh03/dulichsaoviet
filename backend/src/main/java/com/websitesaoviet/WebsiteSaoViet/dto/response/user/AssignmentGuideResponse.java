@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AssignmentGuideResponse {
     String id;
-    String guideId;
+    String guideCode;
     String guideName;
     String guideAvatar;
     int evaluate;
-    String sex;
+    String gender;
     LocalDate dateOfBirth;
     LocalDate startDate;
     LocalDate endDate;

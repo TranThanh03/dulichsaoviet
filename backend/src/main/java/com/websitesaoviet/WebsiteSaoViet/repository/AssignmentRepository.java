@@ -18,14 +18,12 @@ import java.util.List;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, String> {
-    @Query("SELECT MAX(a.assignmentId) FROM Assignment a")
-    String findMaxId();
-
     @Query("SELECT COUNT(a) > 0 FROM Assignment a WHERE a.id = :id AND a.numberOfPeople + :people > a.totalPeople")
     boolean existsAssignmentByNumberPeople(@Param("id") String id, @Param("people") int people);
 
     @Query("SELECT COUNT(a) > 0 " +
-            "FROM Assignment a WHERE a.guideId = :guideId AND " +
+            "FROM Assignment a " +
+            "WHERE a.guideId = :guideId AND " +
             "(a.startDate BETWEEN :startDate AND :endDate OR " +
             "a.endDate BETWEEN :startDate AND :endDate OR " +
             "(a.startDate <= :startDate AND a.endDate >= :endDate))")
@@ -37,13 +35,14 @@ public interface AssignmentRepository extends JpaRepository<Assignment, String> 
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourResponse(" +
             "a.id, a.tourId, t.name, t.image, t.price, " +
             "a.startDate, a.endDate, a.numberOfPeople, a.totalPeople, a.guidePrice) " +
-            "FROM Assignment a JOIN Tour t ON a.tourId = t.id " +
+            "FROM Assignment a " +
+            "JOIN Tour t ON a.tourId = t.id " +
             "WHERE a.guideId = :guideId AND a.status = 'Đang diễn ra' " +
             "ORDER BY a.startDate ASC")
     List<AssignmentTourResponse> findTourListByGuideId(@Param("guideId") String guideId);
 
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse(" +
-            "a.id, a.guideId, g.fullName, g.avatar, g.evaluate, g.sex, g.dateOfBirth, " +
+            "a.id, a.guideId, g.fullName, g.avatar, g.evaluate, g.gender, g.dateOfBirth, " +
             "a.startDate, a.endDate, a.numberOfPeople, a.totalPeople, a.guidePrice) " +
             "FROM Assignment a " +
             "JOIN Guide g ON a.guideId = g.id " +

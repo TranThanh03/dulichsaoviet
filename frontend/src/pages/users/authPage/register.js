@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './register.scss';
-import { UserApi } from 'api';
+import { UserApi } from 'services';
 import Swal from 'sweetalert2';
 
 const RegisterPage = () => {

@@ -3,7 +3,7 @@ import './index.scss';
 import { useNavigate } from 'react-router-dom';
 import { userAvatar } from 'assets/users';
 import Swal from 'sweetalert2';
-import { UserApi } from 'api';
+import { UserApi } from 'services';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);

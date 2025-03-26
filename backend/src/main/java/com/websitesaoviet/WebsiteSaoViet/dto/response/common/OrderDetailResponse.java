@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,16 +11,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderResponse {
+public class OrderDetailResponse {
     String id;
-    String orderId;
-    String userId;
+    String orderCode;
+    String customerCode;
     String userName;
-    String tourId;
+    String phone;
+    String email;
+    String tourCode;
     String tourName;
-    String guideId;
+    String tourImage;
+    String guideCode;
     String guideName;
-    String assignmentId;
+    String guideAvatar;
     LocalDate startDate;
     LocalDate endDate;
     int tourPrice;
@@ -29,4 +32,9 @@ public class OrderResponse {
     int totalPrice;
     LocalDateTime orderDatetime;
     String status;
+    String paymentCode;
+    int amount;
+    String method;
+    LocalDateTime paymentDatetime;
+    String paymentStatus;
 }

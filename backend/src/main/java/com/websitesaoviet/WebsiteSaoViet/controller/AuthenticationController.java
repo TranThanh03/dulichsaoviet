@@ -2,9 +2,9 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.nimbusds.jose.JOSEException;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AuthenticationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.ApiResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.AuthenticationResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.IntrospectResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AuthenticationResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.IntrospectResponse;
 import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;

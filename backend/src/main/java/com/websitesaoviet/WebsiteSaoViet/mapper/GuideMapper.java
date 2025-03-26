@@ -4,7 +4,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.GuideCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.GuideUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AssignmentGuidesResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.GuideEvaluateResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.GuideResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.GuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Guide;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -17,9 +17,9 @@ public interface GuideMapper {
 
     GuideResponse toGuideResponse(Guide guide);
 
-    List<AssignmentGuidesResponse> toGuidesByAssignment(List<Guide> guidesList);
+    List<AssignmentGuidesResponse> toGuideListResponse(List<Guide> guideList);
 
-    List<GuideEvaluateResponse> toGuidesEvaluateResponse(List<Guide> guidesList);
+    List<GuideEvaluateResponse> toGuidesEvaluateResponse(List<Guide> guideList);
 
     void updateGuide(@MappingTarget Guide guide, GuideUpdateRequest request);
 }

@@ -12,12 +12,10 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderCreationRequest {
-    String userId;
-    String userName;
+    String customerId;
     String tourId;
     String tourName;
     String guideId;
-    String guideName;
     String assignmentId;
     LocalDate startDate;
     LocalDate endDate;

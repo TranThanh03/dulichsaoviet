@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,9 +12,9 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AssignmentResponse {
     String id;
-    String assignmentId;
-    String tourId;
-    String guideId;
+    String assignmentCode;
+    String tourCode;
+    String guideCode;
     LocalDate startDate;
     LocalDate endDate;
     int numberOfPeople;

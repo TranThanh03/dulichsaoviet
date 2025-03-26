@@ -21,20 +21,20 @@ public class Order {
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "order_id", unique = true)
-    String orderId;
-
-    @Column(name = "user_id")
-    String userId;
+    @Column(name = "order_code", unique = true)
+    String orderCode;
 
     @Column(name = "customer_id")
     String customerId;
 
-    @Column(name = "user_name")
-    String userName;
+    @Column(name = "customer_code")
+    String customerCode;
 
     @Column(name = "tour_id")
     String tourId;
+
+    @Column(name = "tour_code")
+    String tourCode;
 
     @Column(name = "tour_name")
     String tourName;
@@ -42,11 +42,14 @@ public class Order {
     @Column(name = "guide_id")
     String guideId;
 
-    @Column(name = "guide_name")
-    String guideName;
+    @Column(name = "guide_code")
+    String guideCode;
 
     @Column(name = "assignment_id")
     String assignmentId;
+
+    @Column(name = "assignment_code")
+    String assignmentCode;
 
     @Column(name = "start_date")
     LocalDate startDate;

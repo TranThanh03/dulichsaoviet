@@ -16,8 +16,12 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Guide {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
     String id;
+
+    @Column(name = "guide_code", unique = true)
+    String guideCode;
 
     @Column(name = "full_name")
     String fullName;
@@ -25,8 +29,8 @@ public class Guide {
     @Column(name = "avatar")
     String avatar;
 
-    @Column(name = "sex")
-    String sex;
+    @Column(name = "gender")
+    String gender;
 
     @Column(name = "date_of_birth")
     LocalDate dateOfBirth;

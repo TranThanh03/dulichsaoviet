@@ -1,9 +1,9 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.request.UserPaymentLaterRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.UserPaymentRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.ApiResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentStatusResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.PaymentLaterRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.PaymentCreationRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.PaymentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.UrlPaymentResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -34,8 +34,8 @@ public class PaymentController {
     OrderService orderService;
 
     @GetMapping()
-    ResponseEntity<ApiResponse<List<com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse>>> getPayments() {
-        ApiResponse<List<com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse>> apiResponse = ApiResponse.<List<com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse>>builder()
+    ResponseEntity<ApiResponse<List<PaymentResponse>>> getPayments() {
+        ApiResponse<List<PaymentResponse>> apiResponse = ApiResponse.<List<PaymentResponse>>builder()
                 .code(1948)
                 .result(paymentService.getPayments())
                 .build();
@@ -44,8 +44,8 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse>> getPaymentById(@PathVariable String id) {
-        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.PaymentResponse>builder()
+    ResponseEntity<ApiResponse<PaymentResponse>> getPaymentById(@PathVariable String id) {
+        ApiResponse<PaymentResponse> apiResponse = ApiResponse.<PaymentResponse>builder()
                 .code(1947)
                 .result(paymentService.getPaymentById(id))
                 .build();
@@ -53,19 +53,8 @@ public class PaymentController {
         return ResponseEntity.ok(apiResponse);
     }
 
-//    @PutMapping("/{id}")
-//    ResponseEntity<ApiResponse<PaymentResponse>> updatePayment(@PathVariable String id, @RequestBody PaymentUpdateRequest request) {
-//        ApiResponse<PaymentResponse> apiResponse = ApiResponse.<PaymentResponse>builder()
-//                .code(1946)
-//                .message("Cập nhật thông tin hóa đơn thành công.")
-//                .result(paymentService.updatePayment(id, request))
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-
     @PostMapping("/process")
-    ResponseEntity<ApiResponse<UrlPaymentResponse>> processPayment(@RequestBody UserPaymentRequest request) {
+    ResponseEntity<ApiResponse<UrlPaymentResponse>> processPayment(@RequestBody PaymentCreationRequest request) {
         String paymentUrl = "";
         Random random = new Random();
         String orderId = System.currentTimeMillis() + "" + random.nextInt(1000);
@@ -133,32 +122,32 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/status/{id}")
-    public ResponseEntity<ApiResponse<PaymentStatusResponse>> getStatusByPaymentId(@PathVariable String id){
-        ApiResponse<PaymentStatusResponse> apiResponse = ApiResponse.<PaymentStatusResponse>builder()
+    @GetMapping("/status/{code}")
+    public ResponseEntity<ApiResponse<String>> getStatusByPaymentId(@PathVariable String code){
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(1943)
-                .result(paymentService.getStatusByPaymentId(id))
+                .result(paymentService.getStatusByPaymentCode(code))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping("/process/later/{userOrderId}")
-    ResponseEntity<ApiResponse<UrlPaymentResponse>> processPaymentLater(@PathVariable String userOrderId, @RequestBody UserPaymentLaterRequest request) {
+    @PostMapping("/process/later/{orderId}")
+    ResponseEntity<ApiResponse<UrlPaymentResponse>> processPaymentLater(@PathVariable String orderId, @RequestBody PaymentLaterRequest request) {
         String paymentUrl = "";
-        var order = orderService.getOrderById(userOrderId);
+        var order = orderService.getOrderById(orderId);
 
         if (assignmentService.existsAssignment(order.getAssignmentId(), order.getNumberOfPeople())) {
             throw new AppException(ErrorCode.ASSIGNMENT_PEOPLE_INVALID);
         }
 
         Random random = new Random();
-        String orderId = System.currentTimeMillis() + "" + random.nextInt(1000);
+        String transId = System.currentTimeMillis() + "" + random.nextInt(1000);
         int amount = order.getTotalPrice();
 
         switch (request.getMethod()) {
             case "momo":
-                paymentUrl = paymentService.processMomoPaymentLater(orderId, userOrderId, amount);
+                paymentUrl = paymentService.processMomoPaymentLater(orderId, transId, amount);
                 break;
             case "vnpay":
 
@@ -186,18 +175,18 @@ public class PaymentController {
 
             String extraData = jsonData.optString("extraData", "");
             String[] extraParams = extraData.split(";");
-            String userOrderId = extraParams.length > 1 ? extraParams[1].split("=")[1] : "";
+            String orderId = extraParams.length > 1 ? extraParams[1].split("=")[1] : "";
 
             String transId = jsonData.optString("transId", "");
             int amount = jsonData.optInt("amount", 0);
             int resultCode = jsonData.optInt("resultCode", -1);
 
-            if (userOrderId.isEmpty() || transId.isEmpty()) {
+            if (orderId.isEmpty() || transId.isEmpty()) {
                 return ResponseEntity.badRequest().body("Missing required fields");
             }
 
             if (resultCode == 0) {
-                paymentService.resultMoMoPaymentLater(userOrderId, transId, amount);
+                paymentService.resultMoMoPaymentLater(orderId, transId, amount);
                 return ResponseEntity.ok("OK");
             }
 

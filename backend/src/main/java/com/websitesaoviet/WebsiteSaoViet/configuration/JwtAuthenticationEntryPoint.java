@@ -2,7 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.configuration;
 
 import java.io.IOException;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.ApiResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './index.scss';
 import formatCurrency from 'utils/formatCurrency';
-import { AssignmentApi, UserApi, PaymentApi } from 'api';
+import { AssignmentApi, UserApi, PaymentApi } from 'services';
 import formatDatetime from 'utils/formatDatetime';
 import Swal from 'sweetalert2';
 import { ScrollToTop } from 'utils/ScrollToTop';

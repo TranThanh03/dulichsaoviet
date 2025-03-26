@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo, useContext } from 'react';
 import './style.scss';
-import { OrderApi, TourApi, UserApi } from 'api';
+import { OrderApi, TourApi, UserApi } from 'services';
 import { AuthContext } from '../theme/masterLayout';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
