@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import "./insert.scss";
 import { TourApi } from "services";
 import { useNavigate } from "react-router-dom";
+import { noImage } from "assets";
 
 const TourInsertPage = () => {
     const introduceEditorRef = useRef(null);
@@ -15,7 +16,7 @@ const TourInsertPage = () => {
         image: "",
         price: 0
     });
-    const [preview, setPreview] = useState("/assets/users/img/tour/no-image.jpg");
+    const [preview, setPreview] = useState(noImage);
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -138,7 +139,7 @@ const TourInsertPage = () => {
                         <div className="form-group">
                             <label>Ảnh Tour:</label>
                             <div className="image-upload">
-                                <img src={preview} alt="Ảnh tour" className="image" />
+                                <img src={preview} alt="ảnh tour" className="image" />
                                 <input type="file" accept="image/*" onChange={handleFileChange} required/>
                             </div>
                         </div>

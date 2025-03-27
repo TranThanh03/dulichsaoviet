@@ -3,35 +3,28 @@ import getToken from "utils/getToken";
 
 const PaymentApi = {
     getByUserId: () => {
-        return axiosInstance.get("/api/payment/list", {
+        return axiosInstance.get("/api/v1/payment/list", {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     getStatus: (id) => {
-        return axiosInstance.get(`/api/payment/status/${id}`, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        });
-    },
-    update: (id, data) => {
-        return axiosInstance.put(`/api/payment/${id}`, data, {
+        return axiosInstance.get(`/api/v1/payment/status/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     process: (data) => {
-        return axiosInstance.post("/api/payment/process", data, {
+        return axiosInstance.post("/api/v1/payment/process", data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     processLater: (id, data) => {
-        return axiosInstance.post(`/api/payment/process/later/${id}`, data, {
+        return axiosInstance.post(`/api/v1/payment/process/later/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }

@@ -7,6 +7,7 @@ import formatEvaluate from 'utils/formatEvaluate';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
 import { sanitizeHtml } from 'utils/sanitizeHtml';
+import { noImage } from 'assets';
 
 const GuideDetailPage = () => {
     const [guide, setGuide] = useState([]);
@@ -61,10 +62,10 @@ const GuideDetailPage = () => {
     return (
         <div className="guide-detail-page">
             <div className="guide-profile">
-                <img src={`${guide.avatar || '/assets/users/img/guide/no-image.jpg'}`} alt={`${guide.fullName}`} className="guide-image" />
+                <img src={guide.avatar ? guide.avatar : noImage} alt={guide.fullName} className="guide-image" />
                 <div className="guide-info">
                     <h1>{guide.fullName}</h1>
-                    <p><strong>Thông tin:</strong> {guide.sex} - {ageCalculate(guide.dateOfBirth)} tuổi</p>
+                    <p><strong>Thông tin:</strong> {guide.gender} - {ageCalculate(guide.dateOfBirth)} tuổi</p>
                     <p><strong>Số điện thoại:</strong> {guide.phone}</p>
                     <p><strong>Email:</strong> {guide.email}</p>
                     <p><strong>Đánh giá:</strong> {formatEvaluate(guide.evaluate)}</p>
@@ -82,7 +83,7 @@ const GuideDetailPage = () => {
                     tours.map((item, index) => (
                         <div className="tour-infor" key={index}>
                             <Link to={`/tours/detail/${item.tourId}`}>
-                                <img src={`${item.tourImage || '/assets/users/img/tour/no-image.jpg'}`} alt={`${item.tourName}`} id="tour-image" />
+                                <img src={item.tourImage ? item.tourImage : noImage} alt={item.tourName} id="tour-image" />
                             </Link>
                             <h3>{item.tourName}</h3>
                             <p><b>Đã đặt: </b>{item.numberOfPeople}/<span className="red"><b>{item.totalPeople}</b></span></p>

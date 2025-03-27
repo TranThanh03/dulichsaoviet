@@ -4,6 +4,7 @@ import "./index.scss";
 import { TourApi } from "services";
 import { Link } from "react-router-dom";
 import formatCurrency from "utils/formatCurrency";
+import { noImage } from "assets";
 
 const TourPage = () => {
     const [tours, setTours] = useState([]);
@@ -133,9 +134,7 @@ const TourPage = () => {
                                     <td>{tour.id}</td>
                                     <td>{tour.name}</td>
                                     <td>
-                                        <img className="image" 
-                                            src={`${tour.image || "/assets/users/img/tour/no-image.jpg"}`}
-                                            alt="ảnh tour" />
+                                        <img className="image" src={tour.image ? tour.image : noImage} alt="ảnh tour" />
                                     </td>
                                     <td>{categories[tour.categoryId] || "Không xác định"}</td>
                                     <td className="bold-red">{formatCurrency(tour.price)}</td>

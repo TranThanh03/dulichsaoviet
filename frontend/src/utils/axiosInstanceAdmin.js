@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setLoading } from './loading';
 
-const axiosInstance = axios.create({
+const axiosInstanceAdmin = axios.create({
     baseURL: 'http://localhost:8080',
     timeout: 5000,
     headers: { 'Content-Type': 'application/json' },
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 const pendingRequests = new Set();
 
-axiosInstance.interceptors.request.use(
+axiosInstanceAdmin.interceptors.request.use(
     (config) => {
             config.metadata = { startTime: new Date().getTime() };
             const timer = setTimeout(() => {
@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-axiosInstance.interceptors.response.use(
+axiosInstanceAdmin.interceptors.response.use(
     (response) => {
         if (response.config.metadata?.timer) {
             clearTimeout(response.config.metadata.timer);
@@ -52,21 +52,21 @@ axiosInstance.interceptors.response.use(
         }
 
         if (error.response?.data?.code === 4445) {
-            if (error.config.url.includes("/api/v1/auth/introspect")) {
+            if (error.config.url.includes("/api/v1/auth/admin/introspect")) {
                 return Promise.reject(error.response || error.message);
             }
 
-            window.location.href = "/error/404";
+            window.location.href = "/manage/error/404";
         } 
         else if (error.response?.data?.code === 4446) {
-            window.location.href = "/error/404";
+            window.location.href = "/manage/error/404";
         }
         else if (error.code === "ERR_NETWORK") {
-            window.location.href = "/error/500";
+            window.location.href = "/manage/error/500";
         }
 
         return Promise.reject(error.response || error.message);
     }
 );
 
-export default axiosInstance;
+export default axiosInstanceAdmin;

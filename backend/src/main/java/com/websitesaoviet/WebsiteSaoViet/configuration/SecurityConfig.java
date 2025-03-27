@@ -22,16 +22,16 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] GET_PUBLIC_ENDPOINTS = {
-            "/api/auth/introspect",
-            "/api/tours", "/api/tours/category", "/api/tours/category/{id:\\d}", "/api/tours/new", "/api/tours/{id:[A-Z]\\d+}", "/api/tours/search",
-            "/api/guides", "/api/guides/{id:[A-Z]{3}\\d+}", "/api/guides/evaluate",
-            "/api/assignments/guide/{id:[A-Z]{3}\\d+}"
+            "/auth/introspect",
+            "/tours", "/tours/category", "/tours/category/{id:\\d}", "/tours/new", "/tours/{id:[A-Z]\\d+}", "/tours/search",
+            "/guides", "/guides/{id:[A-Z]{3}\\d+}", "/guides/evaluate",
+            "/assignments/guide/{id:[A-Z]{3}\\d+}"
     };
 
     private final String[] POST_PUBLIC_ENDPOINTS = {
-            "/api/auth/login", "/api/auth/admin/login", "/api/auth/register",
-            "/api/users",
-            "/api/payment/momo/callback/**",
+            "/auth/login", "/auth/admin/login", "/auth/register",
+            "/customers",
+            "/payment/momo/callback/**",
     };
 
     @Bean

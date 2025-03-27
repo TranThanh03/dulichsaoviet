@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { hotel1 } from 'assets/users';
+import { hotel1 } from 'assets';
 import './style.scss';
 
 const HotelDetailPage = () => {

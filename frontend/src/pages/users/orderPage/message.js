@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./message.scss";
 import { PaymentApi } from "services";
-import { failedSvg, successSvg } from "assets/users";
+import { failedSvg, successSvg } from "assets";
 
 const MessagePage = () => {
     const [status, setStatus] = useState(null);

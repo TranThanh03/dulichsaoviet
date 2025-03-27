@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './slideGuide.scss';
 import { Link } from 'react-router-dom';
 import ageCalculate from 'utils/ageCalculation';
+import { noImage } from 'assets';
 
 const SlideGuide = ({ data, itemsPerSlide, itemWidth }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,7 +32,7 @@ const SlideGuide = ({ data, itemsPerSlide, itemWidth }) => {
                             <div className="slide" key={index}>
                                 <Link to={`/guides/detail/${item.id}`}>
                                     <div className="sub-list" id="sub-guide">
-                                        <img id='avatar-guide' src={`${item.avatar || '/assets/users/img/guide/no-image.jpg'}`} alt={item.fullName} />
+                                        <img id='avatar-guide' src={item.avatar ? item.avatar : noImage} alt={item.fullName} />
                                         <h4>{item.fullName}</h4>
                                         <span>{ageCalculate(item.dateOfBirth)} tuổi</span>
                                     </div>

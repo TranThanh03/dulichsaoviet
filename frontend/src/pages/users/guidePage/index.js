@@ -5,6 +5,7 @@ import { GuideApi } from 'services';
 import "./index.scss";
 import ageCalculate from 'utils/ageCalculation';
 import formatEvaluate from 'utils/formatEvaluate';
+import { noImage } from 'assets';
 
 const GuidePage = () => {
     const [guides, setGuides] = useState([]);
@@ -49,10 +50,10 @@ const GuidePage = () => {
                         guides.map((item) => ( 
                             <div className="guide-card" key={item.id}>
                                 <Link to={`/guides/detail/${item.id}`}>
-                                    <img src={`${item.avatar || '/assets/users/img/guide/no-image.jpg'}`} alt={item.fullName} />
+                                    <img src={item.avatar ? item.avatar : noImage} alt={item.fullName} />
                                     <h3>{item.fullName}</h3>
                                     <p>
-                                        Thông tin: <span>{item.sex}</span> - 
+                                        Thông tin: <span>{item.gender}</span> - 
                                         <span> {ageCalculate(item.dateOfBirth)} tuổi</span>
                                     </p>
                                     <p>Điện thoại: <span>{item.phone}</span></p>

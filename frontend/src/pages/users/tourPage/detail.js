@@ -4,6 +4,7 @@ import './detail.scss';
 import { TourApi } from 'services';
 import formaterCurrency from 'utils/formatCurrency';
 import { sanitizeHtml } from 'utils/sanitizeHtml';
+import { noImage } from 'assets';
 
 const TourDetailPage = () => {
     const [tour, setTour] = useState([]);
@@ -49,7 +50,7 @@ const TourDetailPage = () => {
             
             <div className="tour-info">
                 <div className="tour-image">
-                    <img src={`${tour.image || '/assets/users/img/tour/no-image.jpg'}`} alt={`${tour.name}`} />
+                    <img src={tour.image ? tour.image : noImage} alt={tour.name} />
                 </div>
                 <div className="tour-infor">
                     <h2 id="introduce-tour">Giới thiệu:</h2>

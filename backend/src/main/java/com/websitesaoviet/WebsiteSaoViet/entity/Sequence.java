@@ -17,12 +17,12 @@ public class Sequence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type", nullable = false, unique = true)
+    @Column(name = "type", unique = true)
     private String type;
 
-    @Column(name = "year", nullable = false)
+    @Column(name = "year")
     private int year;
 
-    @Column(name = "last_number", nullable = false)
+    @Column(name = "last_number")
     private int lastNumber;
 }

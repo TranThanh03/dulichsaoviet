@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './register.scss';
-import { UserApi } from 'services';
+import { CustomerApi } from 'services';
 import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
@@ -46,7 +46,7 @@ const RegisterPage = () => {
         if (!validateForm()) return;
 
         try {
-            const response = await UserApi.create(formData);
+            const response = await CustomerApi.create(formData);
 
             if (response?.code === 1999) {
                 setFormData({

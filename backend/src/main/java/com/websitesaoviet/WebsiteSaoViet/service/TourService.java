@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
 
 @Service
@@ -28,11 +29,12 @@ import java.util.List;
 public class TourService {
     TourRepository tourRepository;
     TourMapper tourMapper;
+    SequenceService sequenceService;
 
     public TourResponse createTour(TourCreationRequest request) {
         Tour tour = tourMapper.createTour(request);
 
-        tour.setId(String.valueOf(generateNextId()));
+        tour.setId(String.valueOf(generateNextCode("tour")));
         tour.setTimeCreated(LocalDateTime.now());
         tour.setOrders(0);
 
@@ -99,14 +101,9 @@ public class TourService {
         return tourRepository.getPopularTours();
     }
 
-    public String generateNextId() {
-//        String maxId = tourRepository.findMaxId();
-//        if (maxId == null) {
-//            return "T25001";
-//        }
-//
-//        int currentMax = Integer.parseInt(maxId.substring(1));
-//        int nextId = currentMax + 1;
-        return "T";
+    public String generateNextCode(String type) {
+        int nextNumber = sequenceService.getNextNumber(type);
+
+        return "T" + Year.now().getValue() + String.format("%05d", nextNumber);
     }
 }

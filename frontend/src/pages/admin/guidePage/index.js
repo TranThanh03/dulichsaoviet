@@ -4,6 +4,7 @@ import "./index.scss";
 import { GuideApi } from "services";
 import formatDatetime from "utils/formatDatetime";
 import { Link } from "react-router-dom";
+import { noImage } from "assets";
 
 const GuidePage = () => {
     const [guides, setGuides] = useState([]);
@@ -117,12 +118,10 @@ const GuidePage = () => {
                                     <td>{guide.id}</td>
                                     <td>{guide.fullName}</td>
                                     <td>{formatDatetime(guide.dateOfBirth)}</td>
-                                    <td>{guide.sex}</td>
+                                    <td>{guide.gender}</td>
                                     <td>{guide.phone || "N/A"}</td>
                                     <td>
-                                        <img className="avatar" 
-                                             src={`${guide.avatar || "/assets/users/img/guide/no-image.jpg"}`}
-                                             alt="Ảnh HDV" />
+                                        <img className="avatar" src={guide.avatar ? guide.avatar : noImage} alt={guide.fullName} />
                                     </td>
                                     <td>
                                         <Link to={`/manage/guides/edit/${guide.id}`}><button>Sửa</button></Link>

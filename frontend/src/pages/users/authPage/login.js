@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './login.scss';
-import { logo } from 'assets/users';
+import { logo } from 'assets';
 import { AuthApi } from 'services';
 
 const LoginPage = () => {

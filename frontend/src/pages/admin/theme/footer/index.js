@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import  { locationIcon, envelopeIcon, ministryOfIndustryAndTradeIcon, facebookIcon, instagramIcon, zaloIcon, logo, phoneIcon } from 'assets/users';
+import  { locationIcon, envelopeIcon, ministryOfIndustryAndTradeIcon, facebookIcon, instagramIcon, zaloIcon, logo, phoneIcon } from 'assets';
 import './style.scss';
 import { Link } from 'react-router-dom';
 

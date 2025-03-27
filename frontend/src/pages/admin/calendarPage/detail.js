@@ -5,6 +5,7 @@ import formatCurrency from "utils/formatCurrency";
 import formatDatetime from "utils/formatDatetime";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { noImage } from "assets";
 
 const CalendarDetailPage = () => {
     const [calendar, setCalendar] = useState([]);
@@ -164,7 +165,7 @@ const CalendarDetailPage = () => {
                 <h3>Thông tin Tour</h3>
                 <div className="sub-tour">
                     <div className="info">
-                        <img src={`${calendar.tourImage || '/assets/users/img/tour/no-image.jpg'}`} alt={`${calendar.tourName}`} className="tour-image" />
+                        <img src={calendar.tourImage ? calendar.tourImage : noImage} alt={calendar.tourName} className="tour-image" />
                         
                         <div className="sub-info">
                             <p><strong>Mã tour:</strong> {calendar.tourId}</p>
@@ -174,7 +175,7 @@ const CalendarDetailPage = () => {
                         </div>
                     </div>
                     <div className="guide-info">
-                        <img src={`${calendar.guideAvatar || '/assets/users/img/guide/no-image.jpg'}`} alt={`${calendar.guideName}`} className="guide-avatar" />
+                        <img src={calendar.guideAvatar ? calendar.guideAvatar : noImage} alt={calendar.guideName} className="guide-avatar" />
                         
                         <div className="sub-guide">
                             <p><strong>Mã hướng dẫn viên:</strong> {calendar.guideId}</p>

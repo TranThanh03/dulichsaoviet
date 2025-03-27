@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useRef, useMemo, useContext } from 'react';
-import { logo, userIcon } from 'assets/users';
+import { logo, userIcon, background } from 'assets';
 import './style.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthApi } from 'services';
@@ -64,7 +64,7 @@ const Header = () => {
     const { fullName } = useContext(AuthContext);
 
     return (
-        <div className="header-manage">
+        <div className="header-manage" style={{ backgroundImage: `url(${background})` }}>
             <div className="header-container" id="manage-page">
                 <div className="logo">
                     <img src={logo} alt="logo" />

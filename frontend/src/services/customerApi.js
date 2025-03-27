@@ -1,9 +1,10 @@
 import axiosInstance from "utils/axiosInstance";
+import axiosInstanceAdmin from "utils/axiosInstanceAdmin";
 import getToken from "utils/getToken";
 
-const UserApi = {
+const CustomerApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/users", {
+        return axiosInstanceAdmin.get("/api/v1/customers", {
             params,
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
@@ -11,62 +12,62 @@ const UserApi = {
         });
     },
     getById: (id) => {
-        return axiosInstance.get(`/api/users/${id}`);
+        return axiosInstance.get(`/api/v1/customers/${id}`);
     },
-    getByToken: () => {
-        return axiosInstance.get("/api/users/infor", {
+    infor: () => {
+        return axiosInstance.get("/api/v1/customers/infor", {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
-    getByTokenAdmin: () => {
-        return axiosInstance.get("/api/users/infor", {
+    inforAdmin: () => {
+        return axiosInstanceAdmin.get("/api/v1/customers/infor", {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     create: (data) => {
-        return axiosInstance.post("/api/users", data);
+        return axiosInstance.post("/api/v1/customers", data);
     },
     update: (id, data) => {
-        return axiosInstance.put(`/api/users/${id}`, data, {
+        return axiosInstance.put(`/api/v1/customers/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     changePassword: (id, data) => {
-        return axiosInstance.put(`/api/users/password/${id}`, data, {
+        return axiosInstance.put(`/api/v1/customers/password/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     updateAdmin: (id, data) => {
-        return axiosInstance.put(`/api/users/${id}`, data, {
+        return axiosInstanceAdmin.put(`/api/v1/customers/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     changePasswordAdmin: (id, data) => {
-        return axiosInstance.put(`/api/users/password/${id}`, data, {
+        return axiosInstanceAdmin.put(`/api/v1/customers/password/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     delete: (id) => {
-        return axiosInstance.delete(`/api/users/${id}`, {
+        return axiosInstanceAdmin.delete(`/api/v1/customers/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     latest: () => {
-        return axiosInstance.get(`/api/users/latest`, {
+        return axiosInstanceAdmin.get(`/api/v1/customers/latest`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
@@ -74,4 +75,4 @@ const UserApi = {
     }
 };
 
-export default UserApi;
+export default CustomerApi;

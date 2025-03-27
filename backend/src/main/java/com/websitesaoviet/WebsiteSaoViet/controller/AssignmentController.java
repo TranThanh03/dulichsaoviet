@@ -1,7 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentCreationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AssignmentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/assignments")
+@RequestMapping("/assignments")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AssignmentController {
@@ -98,16 +97,6 @@ public class AssignmentController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<AssignmentResponse>> updateAssignment(@PathVariable String id, @RequestBody AssignmentUpdateRequest request) {
-        ApiResponse<AssignmentResponse> apiResponse = ApiResponse.<AssignmentResponse>builder()
-                .code(1975)
-                .result(assignmentService.updateAssignment(id, request))
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<ApiResponse<String>> deleteAssignment(@PathVariable String id) {
@@ -118,7 +107,7 @@ public class AssignmentController {
         assignmentService.deleteAssignment(id);
 
         ApiResponse<String> apiResponse = new ApiResponse<>();
-        apiResponse.setCode(1974);
+        apiResponse.setCode(1975);
         apiResponse.setMessage("Xóa lịch phân công thành công.");
 
         return ResponseEntity.ok(apiResponse);

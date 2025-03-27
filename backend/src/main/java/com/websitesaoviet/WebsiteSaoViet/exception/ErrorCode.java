@@ -10,6 +10,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(4444, "Uncategorized error!", HttpStatus.INTERNAL_SERVER_ERROR),
     UNAUTHENTICATED(4445, "Unauthenticated!", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(4446, "Unauthorized!", HttpStatus.FORBIDDEN),
+    TOKEN_INVALID(4447, "Token invalid!", HttpStatus.OK),
     PHONENUMBER_EXISTED(1001, "Số điện thoại đã tồn tại!", HttpStatus.OK),
     EMAIL_EXISTED(1002, "Email đã tồn tại!", HttpStatus.OK),
     PASSWORD_INVALID(1003, "Mật khẩu có độ dài từ 8 ký tự trở lên!", HttpStatus.OK),

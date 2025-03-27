@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import './style.scss';
-import { slide1, slide2, slide3, slide4, slide5 } from 'assets/users';
+import { slide1, slide2, slide3, slide4, slide5 } from 'assets';
 import { SlideShow, SlideTour, SlideGuide } from 'component/users';
 import { TourApi, GuideApi } from 'services';
 

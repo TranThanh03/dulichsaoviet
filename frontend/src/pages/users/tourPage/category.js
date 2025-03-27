@@ -2,6 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './category.scss';
 import { TourApi } from 'services';
+import { noImage } from 'assets';
 
 const TourCategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -39,7 +40,7 @@ const TourCategoryPage = () => {
                     categories.map((item, index) => (
                         <div className="category-item" key={index}>
                             <Link to={`/tours/category/${item.id}`}>
-                                <img src={`/assets/users/img/tour/${item.image || 'no-image.jpg'}`} alt={`${item.name}`} />
+                                <img src={item.image ? `/assets/img/tour/${item.image}` : noImage} alt={item.name} />
                                 <h4>{item.name}</h4>
                                 <p>{item.description}</p>
                             </Link>

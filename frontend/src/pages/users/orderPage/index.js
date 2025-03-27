@@ -2,10 +2,11 @@ import { memo, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './index.scss';
 import formatCurrency from 'utils/formatCurrency';
-import { AssignmentApi, UserApi, PaymentApi } from 'services';
+import { AssignmentApi, CustomerApi, PaymentApi } from 'services';
 import formatDatetime from 'utils/formatDatetime';
 import Swal from 'sweetalert2';
 import { ScrollToTop } from 'utils/ScrollToTop';
+import { noImage } from 'assets';
 
 const OrderPage = () => {
     const [user, setUser] = useState({ fullName: "", phone: "", email: "" });
@@ -40,7 +41,7 @@ const OrderPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resUser = await UserApi.getByToken();
+                const resUser = await CustomerApi.getByToken();
                 const resAssignment = await AssignmentApi.getById(id);
 
                 if (resUser?.code === 1996) {
@@ -179,7 +180,7 @@ const OrderPage = () => {
                 <section className="tour-info">
                     <h2>Thông tin tour</h2>
                     <div className="tour-image">
-                        <img src={`${assignment.tourImage || '/assets/users/img/tour/no-image.jpg'}`} alt={`${assignment.tourName}`} />
+                        <img src={assignment.tourImage ? assignment.tourImage : noImage} alt={assignment.tourName} />
                     </div>
                     <div className="form-group">
                         <label>Tên tour:</label>
@@ -219,7 +220,7 @@ const OrderPage = () => {
             <div className="guide-info">
                 <h2>Thông tin hướng dẫn viên</h2>
                 <div className="guide-image">
-                    <img src={`${assignment.guideAvatar || '/assets/users/img/guide/no-image.jpg'}`} alt={`${assignment.guideName}`} id="guide-image" />
+                    <img src={assignment.guideAvatar ? assignment.guideAvatar : noImage} alt={assignment.guideName} id="guide-image" />
                 </div>
                 <div className="guide-content">
                     <div className="form-group">
@@ -249,7 +250,7 @@ const OrderPage = () => {
             <div className="payment-method">
                 <h3>Phương thức thanh toán:</h3>
                 <div className="payment-options">
-                    {['momo', 'later'].map(method => (
+                    {['momo', 'vnpay', 'later'].map(method => (
                         <label key={method} className={`payment-box ${method}`}>
                             <input 
                                 type="radio" 
@@ -261,8 +262,8 @@ const OrderPage = () => {
                             {method === 'later' ? (
                                 <span value="later" id="later">Thanh toán sau</span>
                             ) : (
-                                <span value={`${method}`}>
-                                    <img className="payment-img" id={`${method}`} src={`/assets/users/img/payment/${method}.jpg`} alt={`${method}`}/>
+                                <span value={method}>
+                                    <img className="payment-img" id={method} src={`/assets/img/payment/${method}.jpg`} alt={method}/>
                                     {method.toUpperCase()}
                                 </span>
                             )}

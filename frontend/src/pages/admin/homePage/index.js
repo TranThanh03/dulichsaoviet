@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo, useContext } from 'react';
 import './style.scss';
-import { OrderApi, TourApi, UserApi } from 'services';
+import { OrderApi, TourApi, CustomerApi } from 'services';
 import { AuthContext } from '../theme/masterLayout';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
@@ -70,7 +70,7 @@ const HomePage = () => {
 
         const fetchLatestUsers = async () => {
             try {
-                const response = await UserApi.latest();
+                const response = await CustomerApi.latest();
 
                 if (response?.code === 1993) {
                     setUsers(response.result);

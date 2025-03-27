@@ -1,39 +1,40 @@
 import axiosInstance from "utils/axiosInstance";
+import axiosInstanceAdmin from "utils/axiosInstanceAdmin";
 import getToken from "utils/getToken";
 
 const GuideApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/guides", { params });
+        return axiosInstance.get("/api/v1/guides", { params });
     },
     getById: (id) => {
-        return axiosInstance.get(`/api/guides/${id}`);
+        return axiosInstance.get(`/api/v1/guides/${id}`);
     },
     getByEvaluate: () => {
-        return axiosInstance.get("/api/guides/evaluate");
+        return axiosInstance.get("/api/v1/guides/evaluate");
     },
     getGuidesByAssignment: () => {
-        return axiosInstance.get(`/api/guides/assignment`, {
+        return axiosInstanceAdmin.get(`/api/v1/guides/assignment`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     create: (data) => {
-        return axiosInstance.post("/api/guides", data, {
+        return axiosInstanceAdmin.post("/api/v1/guides", data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     update: (id, data) => {
-        return axiosInstance.put(`/api/guides/${id}`, data, {
+        return axiosInstanceAdmin.put(`/api/v1/guides/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     delete: (id) => {
-        return axiosInstance.delete(`/api/guides/${id}`, {
+        return axiosInstanceAdmin.delete(`/api/v1/guides/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }

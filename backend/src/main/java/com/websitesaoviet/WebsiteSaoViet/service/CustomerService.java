@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import java.util.List;
 public class CustomerService {
     CustomerRepository customerRepository;
     CustomerMapper customerMapper;
+    SequenceService sequenceService;
 
     public CustomerResponse createCustomer(CustomerCreationRequest request) {
         if(customerRepository.existsCustomerByPhone(request.getPhone())) {
@@ -41,7 +43,7 @@ public class CustomerService {
 
         Customer customer = customerMapper.createCustomer(request);
 
-        customer.setCustomerCode(String.valueOf(generateNextId()));
+        customer.setCustomerCode(String.valueOf(generateNextCode("customer")));
         customer.setRegisterTime(LocalDateTime.now());
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -120,14 +122,9 @@ public class CustomerService {
                 orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
     }
 
-    public String generateNextId() {
-//        String maxId = customerRepository.findMaxId();
-//        if (maxId == null) {
-//            return "KH250001";
-//        }
-//
-//        int currentMax = Integer.parseInt(maxId.substring(2));
-//        int nextId = currentMax + 1;
-        return "KH";
+    public String generateNextCode(String type) {
+        int nextNumber = sequenceService.getNextNumber(type);
+
+        return "KH" + Year.now().getValue() + String.format("%06d", nextNumber);
     }
 }

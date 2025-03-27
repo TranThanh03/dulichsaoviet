@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class GuideCreationRequest {
     String fullName;
     String avatar;
-    String sex;
+    String gender;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate dateOfBirth;

@@ -1,9 +1,9 @@
 import { memo, useEffect, useState } from 'react';
 import './index.scss';
 import { useNavigate } from 'react-router-dom';
-import { userAvatar } from 'assets/users';
+import { userAvatar } from 'assets';
 import Swal from 'sweetalert2';
-import { UserApi } from 'services';
+import { CustomerApi } from 'services';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -26,7 +26,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await UserApi.getByTokenAdmin();
+                const response = await CustomerApi.inforAdmin();
                 if (response?.code === 1996) {
                     setUser(response.result);
                     setId(response.result.id);
@@ -73,7 +73,7 @@ const ProfilePage = () => {
         }
 
         try {
-            const response = await UserApi.updateAdmin(id, formData);
+            const response = await CustomerApi.updateAdmin(id, formData);
 
             if (response.code === 1995) {
                 setUser((prev) => ({ ...prev, ...formData }));

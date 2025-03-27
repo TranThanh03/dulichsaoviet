@@ -1,4 +1,5 @@
 export { default as logo } from './img/logo.jpg';
+export { default as background } from './img/background.jpg';
 export { default as searchIcon } from './icons/search.svg';
 export { default as clockIcon } from './icons/clock-regular.svg';
 export { default as userIcon } from './icons/user-regular.svg';
@@ -32,3 +33,4 @@ export { default as userAvatar} from './img/user/user-avatar.png';
 export { default as userPassword} from './img/user/user-password.png';
 export { default as successSvg } from './icons/success.svg';
 export { default as failedSvg } from './icons/failed.svg';
+export { default as noImage } from './img/no-image.jpg';

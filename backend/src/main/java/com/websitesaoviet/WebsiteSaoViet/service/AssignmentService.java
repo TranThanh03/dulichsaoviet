@@ -1,7 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentCreationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AssignmentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourGuideResponse;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 
 @Service
@@ -31,6 +31,7 @@ import java.util.List;
 public class AssignmentService {
     AssignmentRepository assignmentRepository;
     AssignmentMapper assignmentMapper;
+    SequenceService sequenceService;
 
     public AssignmentResponse createAssignment(AssignmentCreationRequest request) {
         LocalDate today = LocalDate.now();
@@ -48,7 +49,7 @@ public class AssignmentService {
 
         Assignment assignment = assignmentMapper.createAssignment(request);
 
-        assignment.setAssignmentCode(String.valueOf(generateNextId()));
+        assignment.setAssignmentCode(String.valueOf(generateNextCode("assignment")));
         assignment.setNumberOfPeople(0);
         assignment.setStatus("Đang diễn ra");
 
@@ -77,19 +78,6 @@ public class AssignmentService {
         return assignmentRepository.existsAssignmentByNumberPeople(id, people);
     }
 
-    public AssignmentResponse updateAssignment(String id, AssignmentUpdateRequest request) {
-        Assignment assignment = assignmentRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.ASSIGNMENT_NOT_EXITED));
-
-        if (assignment == null) {
-            throw new AppException(ErrorCode.ASSIGNMENT_NOT_EXITED);
-        }
-
-        assignment.setStatus("Đã kết thúc");
-
-        return assignmentMapper.toAssignmentResponse(assignmentRepository.save(assignment));
-    }
-
     @Transactional
     public void addNumberOfPeople(String id, int people) {
         assignmentRepository.addNumberOfPeople(id, people);
@@ -116,15 +104,9 @@ public class AssignmentService {
         assignmentRepository.deleteByGuideId(guideId);
     }
 
-    public String generateNextId() {
-//        String maxId = assignmentRepository.findMaxId();
-//        if (maxId == null) {
-//            return "PC25000001";
-//        }
-//
-//        int currentMax = Integer.parseInt(maxId.substring(2));
-//        int nextId = currentMax + 1;
-//        return "PC" + nextId;
-        return "a";
+    public String generateNextCode(String type) {
+        int nextNumber = sequenceService.getNextNumber(type);
+
+        return "PC" + Year.now().getValue() + String.format("%07d", nextNumber);
     }
 }

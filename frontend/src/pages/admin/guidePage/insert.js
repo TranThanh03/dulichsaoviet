@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import "./insert.scss";
 import { GuideApi } from "services";
 import { useNavigate } from "react-router-dom";
+import { noImage } from "assets";
 
 const GuideInsertPage = () => {
     const descriptionEditorRef = useRef(null);
@@ -13,12 +14,12 @@ const GuideInsertPage = () => {
         phone: "",
         email: "",
         dateOfBirth: "",
-        sex: "Nam",
+        gender: "Nam",
         description: "",
         avatar: "",
         evaluate: 1,
     });
-    const [preview, setPreview] = useState("/assets/users/img/guide/no-image.jpg");
+    const [preview, setPreview] = useState(noImage);
 
     useEffect(() => {
         const initEditor = (id, ref) => {
@@ -128,7 +129,7 @@ const GuideInsertPage = () => {
 
                         <div className="form-group">
                             <label>Giới tính:</label>
-                            <select name="sex" value={formData.sex} onChange={handleChange}>
+                            <select name="gender" value={formData.gender} onChange={handleChange}>
                                 <option value="Nam">Nam</option>
                                 <option value="Nữ">Nữ</option>
                             </select>

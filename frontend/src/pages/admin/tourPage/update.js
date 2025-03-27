@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { TourApi } from "services";
 import "./update.scss";
+import { noImage } from "assets";
 
 const TourUpdatePage = () => {
     const { id } = useParams();
@@ -17,7 +18,7 @@ const TourUpdatePage = () => {
         image: "",
         price: 0
     });
-    const [preview, setPreview] = useState("/assets/users/img/tour/no-image.jpg");
+    const [preview, setPreview] = useState(noImage);
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const TourUpdatePage = () => {
 
                 if (tourResponse?.code === 1985) {
                     setFormData(tourResponse.result);
-                    setPreview(tourResponse.result.image || "/assets/users/img/tour/no-image.jpg");
+                    setPreview(tourResponse.result.image ? tourResponse.result.image : noImage);
                 }
 
                 if (categoryResponse?.code === 1986) {
@@ -163,7 +164,7 @@ const TourUpdatePage = () => {
                         <div className="form-group">
                             <label>Ảnh Tour:</label>
                             <div className="image-upload">
-                                <img src={preview} alt="Ảnh tour" className="image" />
+                                <img src={preview} alt="ảnh tour" className="image" />
                                 <input type="file" accept="image/*" onChange={handleFileChange} />
                             </div>
                         </div>

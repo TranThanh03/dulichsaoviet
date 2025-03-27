@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import "./index.scss";
-import { UserApi } from "services";
+import { CustomerApi } from "services";
 import formatDatetime from "utils/formatDatetime";
 
 const UserPage = () => {
@@ -20,7 +20,7 @@ const UserPage = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await UserApi.getAll({ page: currentPage, size: pageSize });
+                const response = await CustomerApi.getAll({ page: currentPage, size: pageSize });
 
                 if (response?.code === 1998) {
                     setUsers(response.result.content);
@@ -50,7 +50,7 @@ const UserPage = () => {
 
         if (confirm.isConfirmed) {
             try {
-                const response = await UserApi.delete(id);
+                const response = await CustomerApi.delete(id);
 
                 if (response?.code === 1994) {
                     setUsers(users.filter(user => user.id !== id));
@@ -74,7 +74,7 @@ const UserPage = () => {
         const formData = new FormData(e.target);
         
         try {
-            const response = await UserApi.create(Object.fromEntries(formData));
+            const response = await CustomerApi.create(Object.fromEntries(formData));
 
             if (response?.code === 1999) {
                 setUsers([...users, response.result]);
@@ -95,7 +95,7 @@ const UserPage = () => {
         const formData = new FormData(e.target);
         
         try {
-            const response = await UserApi.updateAdmin(editUser.id, Object.fromEntries(formData));
+            const response = await CustomerApi.updateAdmin(editUser.id, Object.fromEntries(formData));
            
             if (response?.code === 1995) {
                 setUsers(users.map(user => user.id === editUser.id ? response.result : user));

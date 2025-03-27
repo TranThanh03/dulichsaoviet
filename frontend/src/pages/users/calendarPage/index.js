@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
 import { OrderApi, PaymentApi } from 'services';
+import { noImage } from 'assets';
 
 const CalendarPage = () => {
     const [calendars, setCalendars] = useState([]);
@@ -147,7 +148,7 @@ const CalendarPage = () => {
                             <div className="item" key={index}>
                                 <div className="image">
                                     <Link to={`/tours/detail/${item.tourId}`}>
-                                        <img src={`${item.tourImage || "/assets/users/img/tour/no-image.jpg"}`} id={`${item.tourImage ? 'img' : 'no-img'}`} alt={`${item.tourName}`} />
+                                        <img src={item.tourImage ? item.tourImage : noImage} id={item.tourImage ? 'img' : 'no-img'} alt={`${item.tourName}`} />
                                     </Link>
                                 </div>
                                 <div className="infor">

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { hotel1, hotel2, hotel3 } from 'assets/users';
+import { hotel1, hotel2, hotel3 } from 'assets';
 import './detail.scss';
 
 const HotelPage = () => {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './slideTour.scss';
 import formatCurrency from 'utils/formatCurrency';
 import { Link } from 'react-router-dom';
+import { noImage } from 'assets';
 
 const SlideTour = ({ data, itemsPerSlide, itemWidth }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,7 +31,7 @@ const SlideTour = ({ data, itemsPerSlide, itemWidth }) => {
                             <div className="slide" key={index}>
                                 <Link to={`/tours/detail/${item.id}`}>
                                     <div className="sub-list">
-                                        <img src={`${item.image || '/assets/users/img/tour/no-image.jpg'}`} alt={item.name} />
+                                        <img src={item.image ? item.image : noImage} alt={item.name} />
                                         <h4>{item.name}</h4>
                                         <span style={{color: 'red'}}>{formatCurrency(item.price)}</span>
                                         <span id="orders">

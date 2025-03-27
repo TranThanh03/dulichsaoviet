@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Year;
 import java.util.List;
 
 @Service
@@ -25,11 +26,12 @@ import java.util.List;
 public class GuideService {
     GuideRepository guideRepository;
     GuideMapper guideMapper;
+    SequenceService sequenceService;
 
     public GuideResponse createGuide(GuideCreationRequest request) {
         Guide guide = guideMapper.createGuide(request);
 
-        guide.setId(String.valueOf(generateNextId()));
+        guide.setId(String.valueOf(generateNextCode("guide")));
 
         return guideMapper.toGuideResponse(guideRepository.save(guide));
     }
@@ -72,14 +74,9 @@ public class GuideService {
         return guideRepository.count();
     }
 
-    public String generateNextId() {
-//        String maxId = guideRepository.findMaxId();
-//        if (maxId == null) {
-//            return "HDV25001";
-//        }
-//
-//        int currentMax = Integer.parseInt(maxId.substring(3));
-//        int nextId = currentMax + 1;
-        return "HDV";
+    public String generateNextCode(String type) {
+        int nextNumber = sequenceService.getNextNumber(type);
+
+        return "HDV" + Year.now().getValue() + String.format("%05d", nextNumber);
     }
 }

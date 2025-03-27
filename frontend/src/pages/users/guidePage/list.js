@@ -7,6 +7,7 @@ import formatErevaluate from 'utils/formatEvaluate';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
 import { ScrollToTop } from 'utils/ScrollToTop';
+import { noImage } from 'assets';
 
 const GuideListPage = () => {
     const [guides, setGuides] = useState([]);
@@ -65,9 +66,9 @@ const GuideListPage = () => {
                     {guides.length > 0 ? (
                         guides.map((item, index) => (
                             <Link to={`/orders/${item.id}`} key={index} className="guide-card">
-                                <img src={`${item.guideAvatar || '/assets/users/img/guide/no-image.jpg'}`} alt={item.guideName} />
+                                <img src={item.guideAvatar ? item.guideAvatar : noImage} alt={item.guideName} />
                                 <h3>{item.guideName}</h3>
-                                <p>Thông tin: <span>{item.sex}</span> - <span>{ageCalculate(item.dateOfBirth)} tuổi</span></p>
+                                <p>Thông tin: <span>{item.gender}</span> - <span>{ageCalculate(item.dateOfBirth)} tuổi</span></p>
                                 <p>Đã đặt: <span>{item.numberOfPeople}</span>/<span className="red"><b>{item.totalPeople}</b></span></p>
                                 <p>Ngày khởi hành: <span>{formatDatetime(item.startDate)}</span></p>
                                 <p>Ngày kết thúc: <span>{formatDatetime(item.endDate)}</span></p>

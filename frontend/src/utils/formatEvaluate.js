@@ -1,4 +1,4 @@
-import { starSolid, starRegular } from "assets/users"; 
+import { starSolid, starRegular } from "assets"; 
 
 const formatEvaluate = (number) => {
     const totalReviews = {

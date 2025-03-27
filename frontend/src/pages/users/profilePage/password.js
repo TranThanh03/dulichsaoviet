@@ -1,9 +1,9 @@
 import { memo, useState, useEffect } from 'react';
 import './password.scss';
 import { useNavigate } from 'react-router-dom';
-import { userPassword } from 'assets/users';
+import { userPassword } from 'assets';
 import Swal from 'sweetalert2';
-import { UserApi } from 'services';
+import { CustomerApi } from 'services';
 
 const PasswordPage = () => {
     const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const PasswordPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await UserApi.getByToken();
+                const response = await CustomerApi.infor();
                 if (response?.code === 1996) {
                     setId(response.result.id);
                 }
@@ -61,7 +61,7 @@ const PasswordPage = () => {
         }
 
         try {
-            const response = await UserApi.changePassword(id, formData);
+            const response = await CustomerApi.changePassword(id, formData);
 
             if (response?.code === 1992) {
                 setFormData((prev) =>

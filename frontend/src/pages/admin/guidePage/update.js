@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { GuideApi } from "services";
 import "./update.scss";
+import { noImage } from "assets";
 
 const GuideUpdatePage = () => {
     const { id } = useParams();
@@ -15,12 +16,12 @@ const GuideUpdatePage = () => {
         phone: "",
         email: "",
         dateOfBirth: "",
-        sex: "Nam",
+        gender: "Nam",
         description: "",
         avatar: "",
         evaluate: 1,
     });
-    const [preview, setPreview] = useState("/assets/users/img/guide/no-image.jpg");
+    const [preview, setPreview] = useState(noImage);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,7 +30,7 @@ const GuideUpdatePage = () => {
 
                 if (response?.code === 1966) {
                     setFormData(response.result);
-                    setPreview(response.result.avatar || "/assets/users/img/tour/no-image.jpg");
+                    setPreview(response.result.avatar ? response.result.avatar : noImage);
                 }
             }
             catch (error) {
@@ -152,7 +153,7 @@ const GuideUpdatePage = () => {
 
                         <div className="form-group">
                             <label>Giới tính:</label>
-                            <select name="sex" value={formData.sex} onChange={handleChange}>
+                            <select name="gender" value={formData.gender} onChange={handleChange}>
                                 <option value="Nam">Nam</option>
                                 <option value="Nữ">Nữ</option>
                             </select>

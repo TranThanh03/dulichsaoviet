@@ -50,7 +50,7 @@ const AssignmentPage = () => {
             try {
                 const response = await AssignmentApi.delete(id);
 
-                if (response?.code === 1974) {
+                if (response?.code === 1975) {
                     fetchAssignments();
                     Swal.fire("Thành công", "Xóa lịch phân công thành công", "success");
                 }

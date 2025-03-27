@@ -4,6 +4,7 @@ import './list.scss';
 import formaterCurrency from 'utils/formatCurrency';
 import PropTypes from 'prop-types';
 import { sanitizeHtml } from 'utils/sanitizeHtml';
+import { noImage } from 'assets';
 
 const TourList = ({ data }) => {
     return (
@@ -16,7 +17,7 @@ const TourList = ({ data }) => {
                     data.map((item, index) => (
                         <div className="tour-item" key={index}>
                             <Link to={`/tours/detail/${item.id}`} id="link-item">
-                                <img src={`${item.image || '/assets/users/img/tour/no-image.jpg'}`} alt={`${item.name}`} />
+                                <img src={item.image ? item.image : noImage} alt={item.name} />
                                 <div className="tour-info">
                                     <h2>{item.name}</h2>
                                     <p id="orders">

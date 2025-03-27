@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useRef, useMemo } from "react";
-import { logo, searchIcon, clockIcon, userIcon } from "assets/users";
+import { logo, searchIcon, clockIcon, userIcon, background } from "assets";
 import "./style.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthApi } from "services";
@@ -92,7 +92,7 @@ const Header = () => {
     };
 
     return (
-        <div className="header">
+        <div className="header" style={{ backgroundImage: `url(${background})` }}>
             <div className="header-container">
                 <div className="logo">
                     <img src={logo} alt="logo" />

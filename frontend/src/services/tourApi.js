@@ -1,59 +1,60 @@
 import axiosInstance from "utils/axiosInstance";
+import axiosInstanceAdmin from "utils/axiosInstanceAdmin";
 import getToken from "utils/getToken";
 
 const TourApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/tours", { params });
+        return axiosInstance.get("/api/v1/tours", { params });
     },
     getById: (id) => {
-        return axiosInstance.get(`/api/tours/${id}`);
+        return axiosInstance.get(`/api/v1/tours/${id}`);
     },
     getTourListNew: () => {
-        return axiosInstance.get("/api/tours/new");
+        return axiosInstance.get("/api/v1/tours/new");
     },
     getByCategoryId: (id, page = 0, size = 6) => {
-        return axiosInstance.get(`/api/tours/category/${id}`, {
+        return axiosInstance.get(`/api/v1/tours/category/${id}`, {
             params: { page, size },
         });
     },
     getToursByAssignment: () => {
-        return axiosInstance.get(`/api/tours/assignment`, {
+        return axiosInstanceAdmin.get(`/api/v1/tours/assignment`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     create: (data) => {
-        return axiosInstance.post("/api/tours", data, {
+        return axiosInstanceAdmin.post("/api/v1/tours", data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     update: (id, data) => {
-        return axiosInstance.put(`/api/tours/${id}`, data, {
+        return axiosInstanceAdmin.put(`/api/v1/tours/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     delete: (id) => {
-        return axiosInstance.delete(`/api/tours/${id}`, {
+        return axiosInstanceAdmin.delete(`/api/v1/tours/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     getCategory: () => {
-        return axiosInstance.get("/api/tours/category");
+        return axiosInstance.get("/api/v1/tours/category");
     },
     searchTours: (searchQuery, page = 0, size = 6) => {
-        return axiosInstance.get(`/api/tours/search?p=${searchQuery}`, {
+        return axiosInstance.get(`/api/v1/tours/search?p=${searchQuery}`, {
             params: { page, size },
         });
     },
     popular: () => {
-        return axiosInstance.get(`/api/tours/popular`, {
+        return axiosInstanceAdmin.get(`/api/v1/tours/popular`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
