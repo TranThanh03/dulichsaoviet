@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    Long id;
+    String id;
 
     @Column(name = "description")
     String description;
