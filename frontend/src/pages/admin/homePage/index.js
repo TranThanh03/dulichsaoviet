@@ -172,7 +172,7 @@ const HomePage = () => {
                                 {Array.isArray(users) && users.length > 0 && (
                                     users.map((item, index) => (
                                         <tr key={index}>
-                                            <td>{item.userId}</td>
+                                            <td>{item.code}</td>
                                             <td>{item.fullName}</td>
                                             <td>{formatDatetime(item.registerTime)}</td>
                                         </tr>

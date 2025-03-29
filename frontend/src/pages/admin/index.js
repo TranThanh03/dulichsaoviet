@@ -4,7 +4,7 @@ export { default as LoginPage } from './authPage/login';
 export { default as TourPage } from './tourPage/index';
 export { default as TourInsertPage } from './tourPage/insert';
 export { default as TourUpdatePage } from './tourPage/update';
-export { default as UserPage } from './userPage/index';
+export { default as CustomerPage } from './customerPage/index';
 export { default as GuidePage } from './guidePage/index';
 export { default as GuideInsertPage } from './guidePage/insert';
 export { default as GuideUpdatePage } from './guidePage/update';

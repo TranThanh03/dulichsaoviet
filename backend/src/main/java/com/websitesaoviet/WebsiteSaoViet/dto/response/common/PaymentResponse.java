@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaymentResponse {
     String id;
-    String paymentCode;
+    String code;
     double amount;
     String method;
     LocalDateTime paymentDatetime;

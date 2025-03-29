@@ -109,7 +109,7 @@ const ProfilePage = () => {
                     <tbody>
                         <tr>
                             <td><strong>Mã quản trị:</strong></td>
-                            <td className="infor">{user?.userId || 'N/A'}</td>
+                            <td className="infor">{user?.code || 'N/A'}</td>
                         </tr>
                         <tr>
                             <td><strong>Họ tên:</strong></td>

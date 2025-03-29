@@ -36,10 +36,10 @@ const AssignmentPage = () => {
         fetchAssignments();
     }, [fetchAssignments]);
 
-    const handleDelete = async (id, assignmentId) => {
+    const handleDelete = async (id, assignmentCode) => {
         const confirm = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn xóa lịch phân công <b>${assignmentId}</b> không?`,
+            html: `Bạn có chắc chắn xóa lịch phân công <b>${assignmentCode}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -67,7 +67,7 @@ const AssignmentPage = () => {
     };
 
     const filteredAssignments = assignments.filter((assignment) =>
-        assignment.assignmentId?.toLowerCase().includes(search.toLowerCase()) ||
+        assignment.assignmentCode?.toLowerCase().includes(search.toLowerCase()) ||
         assignment.tourId?.toLowerCase().includes(search.toLowerCase()) ||
         assignment.guideId?.toLowerCase().includes(search.toLowerCase())
     );
@@ -115,7 +115,7 @@ const AssignmentPage = () => {
                             filteredAssignments.map((assignment, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{assignment.assignmentId}</td>
+                                    <td>{assignment.assignmentCode}</td>
                                     <td>{assignment.tourId}</td>
                                     <td>{assignment.guideId}</td>
                                     <td>{assignment.numberOfPeople}/<b>{assignment.totalPeople}</b></td>
@@ -127,7 +127,7 @@ const AssignmentPage = () => {
                                     </td>
                                     <td>
                                         {assignment.status === "Đang diễn ra" && (
-                                            <button onClick={() => handleDelete(assignment.id, assignment.assignmentId)} style={{ color: "red" }}>Xóa</button>
+                                            <button onClick={() => handleDelete(assignment.id, assignment.assignmentCode)} style={{ color: "red" }}>Xóa</button>
                                         )}
                                     </td>
                                 </tr>

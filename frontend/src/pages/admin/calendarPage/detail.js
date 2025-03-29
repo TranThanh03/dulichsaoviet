@@ -45,10 +45,10 @@ const CalendarDetailPage = () => {
         fetchCalendar();
     }, [id]);
 
-    const handleCancel = async (id, orderId) => {
+    const handleCancel = async (id, orderCode) => {
         const result = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn muốn hủy lịch đặt <b>${orderId}</b> không?`,
+            html: `Bạn có chắc chắn muốn hủy lịch đặt <b>${orderCode}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -90,10 +90,10 @@ const CalendarDetailPage = () => {
         }
     };
 
-    const handleConfirm = async (id, orderId) => {
+    const handleConfirm = async (id, orderCode) => {
         const result = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn muốn xác nhận lịch đặt <b>${orderId}</b> không?`,
+            html: `Bạn có chắc chắn muốn xác nhận lịch đặt <b>${orderCode}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -148,7 +148,7 @@ const CalendarDetailPage = () => {
             <div className="info-section">
                 <div>
                 <h3>Thông tin lịch đặt</h3>
-                <p><strong>Mã lịch đặt:</strong> {calendar.orderId}</p>
+                <p><strong>Mã lịch đặt:</strong> {calendar.orderCode}</p>
                 <p><strong>Thời gian đặt:</strong> {calendar.orderDatetime ? formatDatetime(calendar.orderDatetime) : ""}</p>
                 <p><strong>Trạng thái:</strong> <span className={statusClassMap[calendar.status] || ""}>{calendar.status}</span></p>
                 </div>
@@ -168,7 +168,7 @@ const CalendarDetailPage = () => {
                         <img src={calendar.tourImage ? calendar.tourImage : noImage} alt={calendar.tourName} className="tour-image" />
                         
                         <div className="sub-info">
-                            <p><strong>Mã tour:</strong> {calendar.tourId}</p>
+                            <p><strong>Mã tour:</strong> {calendar.tourCode}</p>
                             <p><strong>Tên tour:</strong> {calendar.tourName}</p>
                             <p><strong>Thời gian:</strong> <span>{calendar.startDate ? formatDatetime(calendar.startDate) : ""}</span> - <span>{calendar.endDate ? formatDatetime(calendar.endDate) : ""}</span></p>
                             <p><strong>Giá:</strong> <span className="red">{formatCurrency(calendar.tourPrice || 0)}</span></p>
@@ -178,7 +178,7 @@ const CalendarDetailPage = () => {
                         <img src={calendar.guideAvatar ? calendar.guideAvatar : noImage} alt={calendar.guideName} className="guide-avatar" />
                         
                         <div className="sub-guide">
-                            <p><strong>Mã hướng dẫn viên:</strong> {calendar.guideId}</p>
+                            <p><strong>Mã hướng dẫn viên:</strong> {calendar.guideCode}</p>
                             <p><strong>Họ tên:</strong> {calendar.guideName}</p>
                             <p><strong>Giá:</strong> <span className="red">{formatCurrency(calendar.guidePrice || 0)}</span></p>
                         </div>
@@ -218,11 +218,11 @@ const CalendarDetailPage = () => {
                 <button id="back" type="button" onClick={() => navigate("/manage/calendars/index")} className="btn btn-secondary">Quay về</button>
                 {calendar.status === "Đang xử lý" && calendar.paymentStatus === "Đã thanh toán" ? (
                     <>
-                        <button id="cancel" type="button" onClick={() => handleCancel(calendar.id, calendar.orderId)}>Hủy</button>
-                        <button id="confirm" type="button" onClick={() => handleConfirm(calendar.id, calendar.orderId)}>Xác nhận</button>
+                        <button id="cancel" type="button" onClick={() => handleCancel(calendar.id, calendar.orderCode)}>Hủy</button>
+                        <button id="confirm" type="button" onClick={() => handleConfirm(calendar.id, calendar.orderCode)}>Xác nhận</button>
                     </>
                 ) : calendar.status === "Đang xử lý" && calendar.paymentStatus === "Chưa thanh toán" ? (
-                    <button id="cancel" type="button" onClick={() => handleCancel(calendar.id, calendar.orderId)}>Hủy</button>
+                    <button id="cancel" type="button" onClick={() => handleCancel(calendar.id, calendar.orderCode)}>Hủy</button>
                 ) : null}
             </div>
         </div>

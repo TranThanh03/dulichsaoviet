@@ -8,21 +8,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "booking")
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Order {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "order_code", unique = true)
-    String orderCode;
+    @Column(name = "code", unique = true)
+    String code;
 
     @Column(name = "customer_id")
     String customerId;
@@ -39,12 +39,6 @@ public class Order {
     @Column(name = "tour_name")
     String tourName;
 
-    @Column(name = "guide_id")
-    String guideId;
-
-    @Column(name = "guide_code")
-    String guideCode;
-
     @Column(name = "assignment_id")
     String assignmentId;
 
@@ -57,20 +51,26 @@ public class Order {
     @Column(name = "end_date")
     LocalDate endDate;
 
-    @Column(name = "tour_price")
-    int tourPrice;
-
-    @Column(name = "guide_price")
-    int guidePrice;
+    @Column(name = "number_of_days")
+    int numberOfDays;
 
     @Column(name = "number_of_people")
     int numberOfPeople;
 
-    @Column(name = "total_price")
-    int totalPrice;
+    @Column(name = "adult_price")
+    Double adultPrice;
 
-    @Column(name = "order_datetime")
-    LocalDateTime orderDatetime;
+    @Column(name = "children_price")
+    Double childrenPrice;
+
+    @Column(name = "discount")
+    Double discount;
+
+    @Column(name = "total_price")
+    Double totalPrice;
+
+    @Column(name = "booking_time")
+    LocalDateTime bookingTime;
 
     @Column(name = "status")
     String status;

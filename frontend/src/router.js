@@ -116,8 +116,8 @@ const RenderRouter = () => {
             component: <adminPage.LoginPage />
         },
         {
-            path: ROUTERS.ADMIN.USERSPAGE,
-            component: <adminPage.UserPage />
+            path: ROUTERS.ADMIN.CUSTOMERSPAGE,
+            component: <adminPage.CustomerPage />
         },
         {
             path: ROUTERS.ADMIN.TOURSPAGE,

@@ -7,6 +7,7 @@ import { noImage } from "assets";
 
 const TourUpdatePage = () => {
     const { id } = useParams();
+    const [tourCode, setTourCode] = useState(null);
     const introduceEditorRef = useRef(null);
     const descriptionEditorRef = useRef(null);
     const [isLoading, setLoading] = useState(false);
@@ -30,8 +31,9 @@ const TourUpdatePage = () => {
                 ]);
 
                 if (tourResponse?.code === 1985) {
-                    setFormData(tourResponse.result);
-                    setPreview(tourResponse.result.image ? tourResponse.result.image : noImage);
+                    setTourCode(tourResponse?.result?.tourCode);
+                    setFormData(tourResponse?.result);
+                    setPreview(tourResponse?.result.image ? tourResponse.result.image : noImage);
                 }
 
                 if (categoryResponse?.code === 1986) {
@@ -140,7 +142,7 @@ const TourUpdatePage = () => {
         <div className="tour-update-page">
             <div className="form-container">
                 <div className="form-content">
-                    <h2>Cập nhật Tour {id}</h2>
+                    <h2>Cập nhật Tour {tourCode}</h2>
                     <form onSubmit={handleSubmit} className="tour-update-form">
                         <div className="form-group">
                             <label>Tên Tour:</label>

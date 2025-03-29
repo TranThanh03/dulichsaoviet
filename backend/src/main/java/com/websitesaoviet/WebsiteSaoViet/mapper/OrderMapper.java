@@ -2,16 +2,16 @@ package com.websitesaoviet.WebsiteSaoViet.mapper;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.OrderCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderResponse;
-import com.websitesaoviet.WebsiteSaoViet.entity.Order;
+import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
-    Order createOrder(OrderCreationRequest request);
+    Booking createOrder(OrderCreationRequest request);
 
-    OrderResponse toOrderResponse(Order order);
+    OrderResponse toOrderResponse(Booking booking);
 
-    List<OrderResponse> toOrderListResponse(List<Order> orderList);
+    List<OrderResponse> toOrderListResponse(List<Booking> bookingList);
 }

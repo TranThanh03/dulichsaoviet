@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LatestCustomersResponse {
-    String CustomerCode;
+    String code;
     String fullName;
     LocalDateTime registerTime;
 }

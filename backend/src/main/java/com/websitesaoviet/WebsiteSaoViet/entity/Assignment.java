@@ -20,14 +20,11 @@ public class Assignment {
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "assignment_code", unique = true)
-    String assignmentCode;
+    @Column(name = "code", unique = true)
+    String code;
 
     @Column(name = "tour_id")
     String tourId;
-
-    @Column(name = "guide_id")
-    String guideId;
 
     @Column(name = "start_date")
     LocalDate startDate;
@@ -35,14 +32,17 @@ public class Assignment {
     @Column(name = "end_date")
     LocalDate endDate;
 
-    @Column(name = "number_of_people")
-    int numberOfPeople;
+    @Column(name = "number_of_peoples")
+    int numberOfPeoples;
 
-    @Column(name = "total_people")
-    int totalPeople;
+    @Column(name = "total_peoples")
+    int totalPeoples;
 
-    @Column(name = "guide_price")
-    int guidePrice;
+    @Column(name = "adult_price")
+    Double adultPrice;
+
+    @Column(name = "children_price")
+    Double childrenPrice;
 
     @Column(name = "status")
     String status;

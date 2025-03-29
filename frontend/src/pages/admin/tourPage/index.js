@@ -57,10 +57,10 @@ const TourPage = () => {
         fetchTours();
     }, [fetchTours]);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id, tourCode) => {
         const confirm = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn xóa tour <b>${id}</b> không?`,
+            html: `Bạn có chắc chắn xóa tour <b>${tourCode}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -131,7 +131,7 @@ const TourPage = () => {
                             filteredTours.map((tour, index) => (
                                 <tr key={tour.id}>
                                     <td>{index + 1}</td>
-                                    <td>{tour.id}</td>
+                                    <td>{tour.tourCode}</td>
                                     <td>{tour.name}</td>
                                     <td>
                                         <img className="image" src={tour.image ? tour.image : noImage} alt="ảnh tour" />
@@ -142,7 +142,7 @@ const TourPage = () => {
                                         <Link to={`/manage/tours/edit/${tour.id}`}><button>Sửa</button></Link>
                                         <button 
                                             id="btn-delete" 
-                                            onClick={() => handleDelete(tour.id)}
+                                            onClick={() => handleDelete(tour.id, tour.tourCode)}
                                         >
                                             Xóa
                                         </button>

@@ -12,7 +12,7 @@ const Navbar = () => {
 
     const menuItems = useMemo(() => [
         { path: "/manage", label: "Trang chủ" },
-        { path: "/manage/users/index", label: "Khách hàng", topic: "/users" },
+        { path: "/manage/customers/index", label: "Khách hàng", topic: "/customers" },
         { path: "/manage/tours/index", label: "Tours", topic: "/tours" },
         { path: "/manage/guides/index", label: "Hướng dẫn viên", topic: "/guides" },
         { path: "/manage/assignments/index", label: "Phân công", topic: "/assignments" },

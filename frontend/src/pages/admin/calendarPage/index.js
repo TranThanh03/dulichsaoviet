@@ -45,11 +45,11 @@ const CalendarPage = () => {
     }, [currentPage, pageSize]);
 
     const filteredCalendars = calendars.filter((item) =>
-        item.orderId?.toLowerCase().includes(search.toLowerCase()) ||
-        item.customerId?.toLowerCase().includes(search.toLowerCase()) ||
-        item.tourId?.toLowerCase().includes(search.toLowerCase()) ||
-        item.guideId?.toLowerCase().includes(search.toLowerCase()) ||
-        item.assignmentId?.toLowerCase().includes(search.toLowerCase())
+        item.orderCode?.toLowerCase().includes(search.toLowerCase()) ||
+        item.customerCode?.toLowerCase().includes(search.toLowerCase()) ||
+        item.tourCode?.toLowerCase().includes(search.toLowerCase()) ||
+        item.guideCode?.toLowerCase().includes(search.toLowerCase()) ||
+        item.assignmentCode?.toLowerCase().includes(search.toLowerCase())
     );
 
     if (!isLoading) {
@@ -96,11 +96,11 @@ const CalendarPage = () => {
                             filteredCalendars.map((item, index) => (
                                 <tr key={item.id}>
                                     <td>{index + 1}</td>
-                                    <td>{item.orderId}</td>
-                                    <td>{item.customerId}</td>
-                                    <td>{item.tourId}</td>
-                                    <td>{item.guideId}</td>
-                                    <td>{item.assignmentId}</td>
+                                    <td>{item.orderCode}</td>
+                                    <td>{item.customerCode}</td>
+                                    <td>{item.tourCode}</td>
+                                    <td>{item.guideCode}</td>
+                                    <td>{item.assignmentCode}</td>
                                     <td style={{ color: 'red' }}>{formatCurrency(item.totalPrice || 0)}</td>
                                     <td className={paymentClassMap[item.paymentStatus] || ""}>{item.paymentStatus}</td>
                                     <td>{formatDatetime(item.orderDatetime || new Date())}</td>

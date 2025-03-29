@@ -5,7 +5,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderDetailResponse
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderPaymentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderListResponse;
-import com.websitesaoviet.WebsiteSaoViet.entity.Order;
+import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.mapper.OrderMapper;
@@ -34,7 +34,7 @@ public class OrderService {
     public com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderResponse createOrder (
             String orderId, String userId, String assignmentId,
             int numberOfPeople, int amount) {
-        Order order = new Order();
+        Booking booking = new Booking();
         var user = customerService.getCustomerById(userId);
         var assignment = assignmentService.getAssignmentById(assignmentId);
 
@@ -54,7 +54,7 @@ public class OrderService {
 //        order.setOrderDatetime(LocalDateTime.now());
 //        order.setStatus("Đang xử lý");
 
-        return orderMapper.toOrderResponse(orderRepository.save(order));
+        return orderMapper.toOrderResponse(orderRepository.save(booking));
     }
 
     public List<com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderResponse> getOrders() {

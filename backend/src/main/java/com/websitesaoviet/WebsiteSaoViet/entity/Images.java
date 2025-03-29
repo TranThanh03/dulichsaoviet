@@ -5,24 +5,21 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "sequence")
+@Table(name = "images")
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Sequence {
+public class Images {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "type", unique = true)
-    String type;
+    @Column(name = "tour_id")
+    String tourId;
 
-    @Column(name = "year")
-    int year;
-
-    @Column(name = "last_number")
-    int lastNumber;
+    @Column(name = "image_url")
+    String imageUrl;
 }

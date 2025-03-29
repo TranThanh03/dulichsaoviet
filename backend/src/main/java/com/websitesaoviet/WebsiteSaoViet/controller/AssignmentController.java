@@ -5,7 +5,6 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AssignmentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourGuideResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.AssignmentService;
@@ -21,8 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/assignments")
@@ -66,16 +63,6 @@ public class AssignmentController {
         ApiResponse<AssignmentTourGuideResponse> apiResponse = ApiResponse.<AssignmentTourGuideResponse>builder()
                 .code(1973)
                 .result(assignmentService.getAssignmentById(id))
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
-    }
-
-    @GetMapping("/guide/{id}")
-    ResponseEntity<ApiResponse<List<AssignmentTourResponse>>> getToursByGuideId(@PathVariable String id) {
-        ApiResponse<List<AssignmentTourResponse>> apiResponse = ApiResponse.<List<AssignmentTourResponse>>builder()
-                .code(1977)
-                .result(assignmentService.getTourListByGuideId(id))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

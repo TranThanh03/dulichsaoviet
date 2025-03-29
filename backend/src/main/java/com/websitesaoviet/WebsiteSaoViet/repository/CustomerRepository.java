@@ -22,7 +22,7 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     long countCustomers();
 
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.LatestCustomersResponse(" +
-            "c.customerCode, c.fullName, c.registerTime) " +
+            "c.code, c.fullName, c.registerTime) " +
             "FROM Customer c " +
             "JOIN c.roles r " +
             "WHERE r = 'USER' " +

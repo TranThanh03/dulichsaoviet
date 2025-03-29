@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CustomerResponse {
     String id;
-    String customerCode;
+    String code;
     String fullName;
     String phone;
     String email;

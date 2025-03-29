@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HomeResponse {
     long quantityTour;
-    long quantityGuide;
     long quantityUser;
     long quantityOrder;
     long quantityTotalPrice;

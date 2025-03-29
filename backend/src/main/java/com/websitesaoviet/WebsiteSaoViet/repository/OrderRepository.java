@@ -5,7 +5,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.common.OrderDetailResponse
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderPaymentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderSummaryResponse;
-import com.websitesaoviet.WebsiteSaoViet.entity.Order;
+import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, String> {
+public interface OrderRepository extends JpaRepository<Booking, String> {
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.OrderListResponse(" +
             "o.id, o.orderCode, o.tourId, o.tourName, t.image, " +
             "o.guideId, g.fullName, o.startDate, o.endDate, " +
@@ -65,7 +65,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
             "o.guideCode, g.fullName, g.avatar, " +
             "o.startDate, o.endDate, o.tourPrice, o.guidePrice, o.numberOfPeople, " +
             "o.totalPrice, o.orderDatetime, o.status, " +
-            "p.paymentCode, p.amount, p.method, p.paymentDatetime, p.status) " +
+            "p.code, p.amount, p.method, p.paymentDatetime, p.status) " +
             "FROM Order o " +
             "LEFT JOIN Customer c ON o.customerId = c.id " +
             "LEFT JOIN Tour t ON o.tourId = t.id " +
@@ -77,13 +77,13 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     @Query("SELECT o " +
             "FROM Order o " +
             "WHERE o.id = :id AND o.status = 'Đang xử lý'")
-    Order existsOrderProcessing(@Param("id") String id);
+    Booking existsOrderProcessing(@Param("id") String id);
 
     @Query("SELECT o " +
             "FROM Order o " +
             "INNER JOIN Payment p ON o.id = p.orderId " +
             "WHERE o.id = :id AND o.status = 'Đang xử lý'")
-    Order existsOrdersPaid(@Param("id") String id);
+    Booking existsOrdersPaid(@Param("id") String id);
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'Đã xác nhận'")
     long countOrders();

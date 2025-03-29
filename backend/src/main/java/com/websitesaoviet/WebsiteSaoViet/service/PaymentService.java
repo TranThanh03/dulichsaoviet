@@ -2,7 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.PaymentCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.PaymentResponse;
-import com.websitesaoviet.WebsiteSaoViet.entity.Payment;
+import com.websitesaoviet.WebsiteSaoViet.entity.Checkout;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.mapper.PaymentMapper;
@@ -36,16 +36,17 @@ public class PaymentService {
     protected String momoUrl;
 
     public PaymentResponse createPayment(
-            String orderId, String paymentId, int amount, String method, LocalDateTime dateTime, String status) {
-        Payment payment = new Payment();
+            String orderId, String transId, int amount, String method, LocalDateTime dateTime, String status) {
+        Checkout checkout = new Checkout();
 
-        payment.setOrderId(orderId);
-        payment.setAmount(amount);
-        payment.setMethod(method);
-        payment.setPaymentDatetime(dateTime);
-        payment.setStatus(status);
+        checkout.setCode(transId);
+        checkout.setOrderId(orderId);
+        checkout.setAmount(amount);
+        checkout.setMethod(method);
+        checkout.setPaymentDatetime(dateTime);
+        checkout.setStatus(status);
 
-        return paymentMapper.toPaymentResponse(paymentRepository.save(payment));
+        return paymentMapper.toPaymentResponse(paymentRepository.save(checkout));
     }
 
     public List<PaymentResponse> getPayments() {
@@ -94,7 +95,7 @@ public class PaymentService {
     }
 
     public String getStatusByPaymentCode(String code) {
-        boolean isSuccess = paymentRepository.existsPaymentByPaymentCode(code);
+        boolean isSuccess = paymentRepository.existsPaymentByCode(code);
 
         String paymentStatus = isSuccess ? "success" : "failed";
 

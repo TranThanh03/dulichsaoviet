@@ -4,7 +4,7 @@ import "./index.scss";
 import { CustomerApi } from "services";
 import formatDatetime from "utils/formatDatetime";
 
-const UserPage = () => {
+const CustomerPage = () => {
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
     const [showAddForm, setShowAddForm] = useState(false);
@@ -38,10 +38,10 @@ const UserPage = () => {
         fetchUsers();
     }, [currentPage]);
 
-    const handleDelete = async (id, userId) => {
+    const handleDelete = async (id, code) => {
         const confirm = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn xóa khách hàng <b>${userId}</b> không?`,
+            html: `Bạn có chắc chắn xóa khách hàng <b>${code}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -116,7 +116,7 @@ const UserPage = () => {
 
     const filteredUsers = users.filter(user => 
         user.fullName?.toLowerCase().includes(search.toLowerCase()) ||
-        user.userId?.toLowerCase().includes(search.toLowerCase()) ||
+        user.code?.toLowerCase().includes(search.toLowerCase()) ||
         user.phone?.includes(search) ||
         user.email?.toLowerCase().includes(search.toLowerCase())
     );
@@ -160,7 +160,7 @@ const UserPage = () => {
                             filteredUsers.map((user, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{user.userId}</td>
+                                    <td>{user.code}</td>
                                     <td>{user.fullName}</td>
                                     <td>{user.phone}</td>
                                     <td>{user.email}</td>
@@ -169,7 +169,7 @@ const UserPage = () => {
                                         <button onClick={() => handleEdit(user)}>Sửa</button>
                                         <button 
                                             id="btn-delete" 
-                                            onClick={() => handleDelete(user.id, user.userId)}
+                                            onClick={() => handleDelete(user.id, user.code)}
                                         >
                                             Xóa
                                         </button>
@@ -228,6 +228,8 @@ const UserPage = () => {
                                 setErrorMsgEdit("");
                             }}>X</button>
                         <form onSubmit={handleEditUser}>
+                            <label>Mã khách hàng:</label>
+                            <input type="text" name="code" defaultValue={editUser.code} disabled />
                             <label>Tên khách hàng</label>
                             <input type="text" name="fullName" defaultValue={editUser.fullName} required />
                             <label>Số điện thoại</label>
@@ -244,4 +246,4 @@ const UserPage = () => {
     );
 };
 
-export default UserPage;
+export default CustomerPage;

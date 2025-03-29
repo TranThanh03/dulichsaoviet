@@ -34,7 +34,7 @@ public class TourService {
     public TourResponse createTour(TourCreationRequest request) {
         Tour tour = tourMapper.createTour(request);
 
-        tour.setId(String.valueOf(generateNextCode("tour")));
+        tour.setCode(String.valueOf(generateNextCode("tour")));
         tour.setTimeCreated(LocalDateTime.now());
         tour.setOrders(0);
 

@@ -7,33 +7,33 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "checkout")
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Payment {
+public class Checkout {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "payment_code")
-    String paymentCode;
+    @Column(name = "code")
+    String code;
 
     @Column(name = "order_id")
     String orderId;
 
     @Column(name = "amount")
-    int amount;
+    Double amount;
 
     @Column(name = "method")
     String method;
 
-    @Column(name = "payment_datetime")
-    LocalDateTime paymentDatetime;
+    @Column(name = "checkout_time")
+    LocalDateTime checkoutTime;
 
     @Column(name = "status")
     String status;

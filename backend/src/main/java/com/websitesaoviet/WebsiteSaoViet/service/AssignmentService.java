@@ -4,7 +4,6 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.AssignmentCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentGuideResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AssignmentResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourGuideResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AssignmentTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Assignment;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,14 +41,10 @@ public class AssignmentService {
             throw new AppException(ErrorCode.ENDDATE_INVALID);
         }
 
-        if(assignmentRepository.existsAssignmentByGuideId(request.getGuideId(), request.getStartDate(), request.getEndDate())) {
-            throw new AppException(ErrorCode.GUIDE_ASSIGNED);
-        }
-
         Assignment assignment = assignmentMapper.createAssignment(request);
 
-        assignment.setAssignmentCode(String.valueOf(generateNextCode("assignment")));
-        assignment.setNumberOfPeople(0);
+        assignment.setCode(String.valueOf(generateNextCode("assignment")));
+        assignment.setNumberOfPeoples(0);
         assignment.setStatus("Đang diễn ra");
 
         return assignmentMapper.toAssignmentResponse(assignmentRepository.save(assignment));
@@ -58,10 +52,6 @@ public class AssignmentService {
 
     public Page<AssignmentResponse> getAssignments(Pageable pageable) {
         return assignmentRepository.findAll(pageable).map(assignmentMapper::toAssignmentResponse);
-    }
-
-    public List<AssignmentTourResponse> getTourListByGuideId(String id) {
-        return assignmentRepository.findTourListByGuideId(id);
     }
 
     public Page<AssignmentGuideResponse> getGuideListByTourId(String id, int page, int size) {
@@ -98,10 +88,6 @@ public class AssignmentService {
 
     public void deleteByTourId(String tourId) {
         assignmentRepository.deleteByTourId(tourId);
-    }
-
-    public void deleteByGuideId(String guideId) {
-        assignmentRepository.deleteByGuideId(guideId);
     }
 
     public String generateNextCode(String type) {

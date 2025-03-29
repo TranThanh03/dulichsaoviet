@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tour")
@@ -20,14 +21,24 @@ public class Tour {
     @Column(name = "id", unique = true)
     String id;
 
-    @Column(name = "tour_code", unique = true)
-    String tourCode;
+    @Column(name = "code", unique = true)
+    String code;
 
     @Column(name = "name")
     String name;
 
+    @Column(name = "destination")
+    String destination;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_images", joinColumns = @JoinColumn(name = "tour_id"))
     @Column(name = "image")
-    String image;
+    List<String> image;
+
+    @ElementCollection
+    @CollectionTable(name = "tour_itineraries", joinColumns = @JoinColumn(name = "tour_id"))
+    @Column(name = "itinerary")
+    List<String> itinerary;
 
     @Column(name = "introduce", columnDefinition = "LONGTEXT")
     String introduce;
@@ -38,12 +49,12 @@ public class Tour {
     @Column(name = "category_id")
     int categoryId;
 
-    @Column(name = "price")
-    int price;
+    @Column(name = "number_of_days")
+    int numberOfDays;
 
-    @Column(name = "time_created")
-    LocalDateTime timeCreated;
+    @Column(name = "created_time")
+    LocalDateTime createdTime;
 
-    @Column(name = "orders")
-    int orders;
+    @Column(name = "number_of_orders")
+    int numberOfOrders;
 }

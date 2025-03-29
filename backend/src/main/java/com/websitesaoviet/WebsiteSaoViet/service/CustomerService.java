@@ -43,8 +43,8 @@ public class CustomerService {
 
         Customer customer = customerMapper.createCustomer(request);
 
-        customer.setCustomerCode(String.valueOf(generateNextCode("customer")));
-        customer.setRegisterTime(LocalDateTime.now());
+        customer.setCode(String.valueOf(generateNextCode("customer")));
+        customer.setRegisteredTime(LocalDateTime.now());
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         customer.setPassword(passwordEncoder.encode(request.getPassword()));

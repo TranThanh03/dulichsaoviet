@@ -28,7 +28,6 @@ public class OrderController {
     OrderService orderService;
     AuthenticationService authenticationService;
     TourService tourService;
-    GuideService guideService;
     CustomerService customerService;
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -124,13 +123,12 @@ public class OrderController {
     @GetMapping("/info")
     ResponseEntity<ApiResponse<HomeResponse>> getAllInfo() {
         long quantityTour = tourService.countTours();
-        long quantityGuide = guideService.countGuides();
         long quantityUser = customerService.countCustomers();
         long quantityOrder = orderService.countOrders();
         long quantityTotalPrice = orderService.getTotalRevenue();
 
         HomeResponse adminHomeResponse = new HomeResponse(
-                quantityTour, quantityGuide, quantityUser, quantityOrder, quantityTotalPrice);
+                quantityTour, quantityUser, quantityOrder, quantityTotalPrice);
         ApiResponse<HomeResponse> apiResponse = ApiResponse.<HomeResponse>builder()
                 .code(1951)
                 .result(adminHomeResponse)

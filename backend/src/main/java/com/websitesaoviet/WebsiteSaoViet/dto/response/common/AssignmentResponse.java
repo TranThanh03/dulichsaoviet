@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AssignmentResponse {
     String id;
-    String assignmentCode;
+    String code;
     String tourCode;
     String guideCode;
     LocalDate startDate;

@@ -24,7 +24,7 @@ export const ROUTERS = {
     ADMIN: {
         HOME: "/manage",
         LOGINPAGE: "/manage/auth/login",
-        USERSPAGE: "/manage/users/index",
+        CUSTOMERSPAGE: "/manage/customers/index",
         TOURSPAGE: "/manage/tours/index",
         TOURINSERTPAGE: "/manage/tours/create",
         TOURUPDATEPAGE: "/manage/tours/edit/:id",

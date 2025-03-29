@@ -35,10 +35,10 @@ const GuidePage = () => {
         fetchGuides();
     }, [fetchGuides]);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id, code) => {
         const confirm = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn xóa hướng dẫn viên <b>${id}</b> không?`,
+            html: `Bạn có chắc chắn xóa hướng dẫn viên <b>${code}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -113,9 +113,9 @@ const GuidePage = () => {
                     <tbody>
                         {filteredGuides.length > 0 ? (
                             filteredGuides.map((guide, index) => (
-                                <tr key={guide.id}>
+                                <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{guide.id}</td>
+                                    <td>{guide.code}</td>
                                     <td>{guide.fullName}</td>
                                     <td>{formatDatetime(guide.dateOfBirth)}</td>
                                     <td>{guide.gender}</td>
@@ -125,7 +125,7 @@ const GuidePage = () => {
                                     </td>
                                     <td>
                                         <Link to={`/manage/guides/edit/${guide.id}`}><button>Sửa</button></Link>
-                                        <button id="btn-delete" onClick={() => handleDelete(guide.id)}>Xóa</button>
+                                        <button id="btn-delete" onClick={() => handleDelete(guide.id, guide.code)}>Xóa</button>
                                     </td>
                                 </tr>
                             ))

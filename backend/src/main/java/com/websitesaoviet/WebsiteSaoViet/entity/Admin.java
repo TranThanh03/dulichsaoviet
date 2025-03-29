@@ -9,14 +9,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "admin")
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Customer {
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
@@ -38,7 +38,7 @@ public class Customer {
     String password;
 
     @ElementCollection
-    @CollectionTable(name = "customer_roles", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "role")
     Set<String> roles = new HashSet<>();
 
