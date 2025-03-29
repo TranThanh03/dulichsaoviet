@@ -36,14 +36,14 @@ public class PaymentService {
     protected String momoUrl;
 
     public PaymentResponse createPayment(
-            String orderId, String transId, int amount, String method, LocalDateTime dateTime, String status) {
+            String orderId, String transId, double amount, String method, LocalDateTime dateTime, String status) {
         Checkout checkout = new Checkout();
 
         checkout.setCode(transId);
         checkout.setOrderId(orderId);
         checkout.setAmount(amount);
         checkout.setMethod(method);
-        checkout.setPaymentDatetime(dateTime);
+        checkout.setCheckoutTime(dateTime);
         checkout.setStatus(status);
 
         return paymentMapper.toPaymentResponse(paymentRepository.save(checkout));

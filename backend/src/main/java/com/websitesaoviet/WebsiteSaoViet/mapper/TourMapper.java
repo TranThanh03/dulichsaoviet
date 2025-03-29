@@ -12,11 +12,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TourMapper {
-//    Tour createTour(TourCreationRequest request);
-//
-//    TourResponse toTourResponse(Tour tour);
-//
-//    List<AssignmentToursResponse> toTourListResponse(List<Tour> tourList);
-//
-//    void updateTour(@MappingTarget Tour tour, TourUpdateRequest request);
+    Tour createTour(TourCreationRequest request);
+
+    TourResponse toTourResponse(Tour tour);
+
+    List<AssignmentToursResponse> toTourListResponse(List<Tour> tourList);
+
+    void updateTour(@MappingTarget Tour tour, TourUpdateRequest request);
 }

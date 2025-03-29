@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TourUpdateRequest {
     String name;
-    String image;
+//    String image;
     String introduce;
     String description;
     int categoryId;

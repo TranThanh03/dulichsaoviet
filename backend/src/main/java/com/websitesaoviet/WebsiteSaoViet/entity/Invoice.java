@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    Long id;
+    String id;
 
     @Column(name = "booking_id")
     String bookingId;

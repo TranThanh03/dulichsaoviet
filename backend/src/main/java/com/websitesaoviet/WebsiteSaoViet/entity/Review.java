@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    Long id;
+    String id;
 
     @Column(name = "tour_id")
     String tourId;

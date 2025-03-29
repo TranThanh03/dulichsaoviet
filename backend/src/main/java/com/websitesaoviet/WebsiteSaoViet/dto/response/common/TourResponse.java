@@ -12,7 +12,7 @@ public class TourResponse {
     String id;
     String code;
     String name;
-    String image;
+//    String image;
     String introduce;
     String description;
     int categoryId;
