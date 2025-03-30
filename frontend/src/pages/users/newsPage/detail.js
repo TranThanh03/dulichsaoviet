@@ -55,30 +55,6 @@ const NewsDetailPage = () => {
                         <li><Link to="#">5 hoạt động thú vị không thể bỏ qua khi đến Phú Quốc</Link></li>
                     </ul>
                 </div>
-                
-                <div className="comments-section">
-                    <h3>Bình luận</h3>
-                    <form className="comment-form">
-                        <textarea placeholder="Nhập bình luận của bạn"></textarea>
-                        <button type="button">Gửi bình luận</button>
-                    </form>
-                    <div className="comments-list">
-                        <div className="comment">
-                            <div className="comment-author">Nguyễn Văn A</div>
-                            <div className="comment-date">20/01/2025 10:30</div>
-                            <div className="comment-content">
-                                Bài viết rất hữu ích! Tôi đã đến Bãi Sao ở Phú Quốc và hoàn toàn đồng ý với đánh giá của bạn.
-                            </div>
-                        </div>
-                        <div className="comment">
-                            <div className="comment-author">Trần Thị B</div>
-                            <div className="comment-date">19/01/2025 15:45</div>
-                            <div className="comment-content">
-                                Cảm ơn vì đã chia sẻ thông tin về những bãi biển đẹp này. Tôi đang lên kế hoạch cho kỳ nghỉ sắp tới và sẽ cân nhắc những địa điểm này.
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </article>
             
             <aside className="sidebar">
@@ -112,18 +88,6 @@ const NewsDetailPage = () => {
                                 </div>
                             </Link>
                         </li>
-                    </ul>
-                </section>
-                
-                <section className="news-categories">
-                    <h3>Chuyên mục</h3>
-                    <ul>
-                        <li><Link to="#">Điểm đến hot</Link></li>
-                        <li><Link to="#">Ẩm thực du lịch</Link></li>
-                        <li><Link to="#">Mẹo vặt cho du khách</Link></li>
-                        <li><Link to="#">Văn hóa & Lễ hội</Link></li>
-                        <li><Link to="#">Khuyến mãi tour</Link></li>
-                        <li><Link to="#">Trải nghiệm du lịch</Link></li>
                     </ul>
                 </section>
             </aside>

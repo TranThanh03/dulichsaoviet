@@ -49,12 +49,12 @@ public class Tour {
     @Column(name = "category_id")
     int categoryId;
 
-    @Column(name = "number_of_days")
-    int numberOfDays;
+    @Column(name = "quantity_day")
+    int quantityDay;
 
     @Column(name = "created_time")
     LocalDateTime createdTime;
 
-    @Column(name = "number_of_orders")
-    int numberOfOrders;
+    @Column(name = "quantity_order")
+    int quantityOrder;
 }

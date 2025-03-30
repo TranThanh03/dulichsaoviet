@@ -44,4 +44,7 @@ public class Customer {
 
     @Column(name = "registered_time")
     LocalDateTime registeredTime;
+
+    @Column(name = "status")
+    String status;
 }

@@ -11,7 +11,5 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationResponse {
-    String token;
     boolean authenticated;
-    Set<String> roles;
 }

@@ -155,7 +155,10 @@ const RegisterPage = () => {
                         Bằng việc đăng ký tài khoản bạn đã đồng ý với 
                         <Link to="#"> Điều khoản sử dụng</Link> của chúng tôi!
                     </p>
-                    <p>Bạn đã có tài khoản? <Link to="/auth/login">Đăng nhập</Link></p>
+                    <p>
+                        Bạn đã có tài khoản? <Link to="/auth/login">Đăng nhập</Link>
+                        <Link to="/" id="back">Trang chủ</Link>    
+                    </p>
                 </div>
             </div>
         </div>

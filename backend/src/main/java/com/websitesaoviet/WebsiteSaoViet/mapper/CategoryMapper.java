@@ -1,6 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.mapper;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.CategoryResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.CategoryResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Category;
 import org.mapstruct.Mapper;
 

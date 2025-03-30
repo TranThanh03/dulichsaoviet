@@ -1,47 +1,9 @@
-import { memo, useState, useEffect, useRef, useMemo } from "react";
+import { memo, useState, useEffect } from "react";
 import { logo, searchIcon, clockIcon, userIcon, background } from "assets";
 import "./style.scss";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
-
-const Navbar = () => {
-    const location = useLocation();
-    const [activeIndex, setActiveIndex] = useState(null);
-    const prevIndexRef = useRef(0);
-
-    const menuItems = useMemo(
-        () => [
-            { path: "/", label: "🏠Trang chủ" },
-            { path: "/tours/category", label: "✈️Tours", topic: "/tours" },
-            { path: "/guides/index", label: "🧑‍💼Hướng dẫn viên", topic: "/guides" },
-            { path: "/hotels/index", label: "🏩Khách sạn", topic: "/hotels" },
-            { path: "/news/index", label: "📰Tin tức", topic: "/news" },
-        ],
-        []
-    );
-
-    useEffect(() => {
-        const currentIndex = menuItems.findIndex(
-            (item) => location.pathname.startsWith(item.topic) || location.pathname === item.path
-        );
-
-        setActiveIndex(currentIndex === -1 ? prevIndexRef.current : currentIndex);
-        prevIndexRef.current = currentIndex === -1 ? prevIndexRef.current : currentIndex;
-    }, [location.pathname, menuItems]);
-
-    return (
-        <nav>
-            <ul className="menu">
-                {menuItems.map((item, index) => (
-                    <li key={index} className={activeIndex === index ? "activeNav" : ""}>
-                        <Link to={item.path}>{item.label}</Link>
-                    </li>
-                ))}
-            </ul>
-        </nav>
-    );
-};
 
 const handleLogout = async () => {
     try {
@@ -121,10 +83,20 @@ const Header = () => {
                     </div>
                     <div className="icon-account">
                         {fullName == null ? (
-                            <Link to="/auth/login">
-                                <img src={userIcon} alt="Đăng nhập" />
-                                <p>Đăng nhập</p>
-                            </Link>
+                            <div>
+                                <img src={userIcon} alt="account" onClick={() => setShow(!isShow)} />
+                                <p onClick={() => setShow(!isShow)}>Tài khoản</p>
+                                {isShow && (
+                                    <ul id="slidebar">
+                                        <li>
+                                            <Link to="/auth/login">Đăng nhập</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/auth/register">Đăng ký</Link>
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
                         ) : (
                             <div className="account-info">
                                 <img src={userIcon} alt="Tài khoản" onClick={() => setShow(!isShow)} />
@@ -132,7 +104,7 @@ const Header = () => {
                                 {isShow && (
                                     <ul id="slidebar">
                                         <li>
-                                            <Link to="/users/infor">Thông tin khách hàng</Link>
+                                            <Link to="/users/infor">Thông tin</Link>
                                         </li>
                                         <li>
                                             <Link to="/users/password">Mật khẩu</Link>
@@ -147,7 +119,6 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <Navbar />
         </div>
     );
 };

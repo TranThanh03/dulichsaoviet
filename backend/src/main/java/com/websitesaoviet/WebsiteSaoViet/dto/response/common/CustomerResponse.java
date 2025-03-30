@@ -17,4 +17,5 @@ public class CustomerResponse {
     String phone;
     String email;
     LocalDateTime registerTime;
+    String status;
 }

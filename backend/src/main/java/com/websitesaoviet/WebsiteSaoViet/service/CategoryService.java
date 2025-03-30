@@ -1,6 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.CategoryResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.CategoryResponse;
 import com.websitesaoviet.WebsiteSaoViet.mapper.CategoryMapper;
 import com.websitesaoviet.WebsiteSaoViet.repository.CategoryRepository;
 import lombok.AccessLevel;

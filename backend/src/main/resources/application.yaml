@@ -15,6 +15,7 @@ spring:
     username: root
     password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -22,6 +23,25 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: saoviett99@gmail.com
+    password: kcfgjlujzodvfixi
+    fromName: SaoViet
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 jwt:
   signerKey: "q7Tw92RvdkeKfQJl+7mhtwfnQJuJRoseRNLfA3rrPlE+sKvBao2hyhGCu46opa4Q"

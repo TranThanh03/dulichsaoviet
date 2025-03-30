@@ -1,7 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.nimbusds.jose.JOSEException;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.AuthenticationRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.common.AuthenticationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AuthenticationResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.IntrospectResponse;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +26,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
-        var result = authenticationService.authenticate(request);
-        String jwtToken = result.getToken();
+        String jwtToken = authenticationService.authenticate(request);
 
         ResponseCookie cookie = ResponseCookie.from("token", jwtToken)
                 .secure(false)
@@ -71,31 +69,24 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostAuthorize("returnObject.result.authenticated == true")
     @PostMapping("/admin/login")
     public ApiResponse<AuthenticationResponse> authenticateAdmin(
             @RequestBody AuthenticationRequest request, HttpServletResponse response) {
 
-        var result = authenticationService.authenticate(request);
-        String jwtToken = result.getToken();
-        var userRoles = result.getRoles();
+        String jwtToken = authenticationService.authenticateAdmin(request);
 
-        boolean isAdmin = userRoles != null && userRoles.contains("ADMIN");
-
-        if (isAdmin) {
-            ResponseCookie cookie = ResponseCookie.from("tokenAdmin", jwtToken)
-                    .secure(false)
-                    .sameSite("Strict")
-                    .path("/")
-                    .maxAge(60 * 60 * 2)
-                    .build();
-            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-        }
+        ResponseCookie cookie = ResponseCookie.from("tokenAdmin", jwtToken)
+                .secure(false)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(60 * 60 * 2)
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ApiResponse.<AuthenticationResponse>builder()
-                .code(isAdmin ? 9996 : 403)
+                .code(9996)
                 .result(AuthenticationResponse.builder()
-                        .authenticated(isAdmin)
+                        .authenticated(true)
                         .build())
                 .build();
     }
@@ -106,7 +97,7 @@ public class AuthenticationController {
             throws ParseException, JOSEException {
         String token = authenticationService.extractTokenFromHeader(authorizationHeader);
 
-        var result = authenticationService.introspect(token);
+        var result = authenticationService.introspectAdmin(token);
 
         return ApiResponse.<IntrospectResponse>builder()
                 .code(result.isValid() ? 9995 : 4447)

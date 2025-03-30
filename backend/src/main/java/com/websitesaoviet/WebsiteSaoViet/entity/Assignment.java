@@ -32,11 +32,11 @@ public class Assignment {
     @Column(name = "end_date")
     LocalDate endDate;
 
-    @Column(name = "number_of_peoples")
-    int numberOfPeoples;
+    @Column(name = "quantity_people")
+    int quantityPeople;
 
-    @Column(name = "total_peoples")
-    int totalPeoples;
+    @Column(name = "total_people")
+    int totalPeople;
 
     @Column(name = "adult_price")
     Double adultPrice;

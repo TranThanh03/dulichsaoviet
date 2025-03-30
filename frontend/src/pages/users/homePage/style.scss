@@ -1,6 +1,17 @@
 .home-page {
     .space {
         height: 160px;
-        margin-bottom: 280px;
+        margin-bottom: 320px;
+    }
+
+    .slideshow-container {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        border-radius: 30px;
+        top: 235px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 1;
     }
 }

@@ -120,11 +120,6 @@
         text-decoration: underline;
     }
 
-    .comments-section {
-        margin-top: 30px;
-    }
-
-
     .sidebar {
         background-color: #f8f8f8;
         padding: 20px;
@@ -136,17 +131,6 @@
         margin-bottom: 15px;
         color: #333;
         font-weight: bold;
-    }
-
-    .comments-section {
-        margin-top: 40px;
-        border-top: 1px solid #eee;
-        padding-top: 20px;
-    }
-
-    .comments-section h3 {
-        font-size: 1.5em;
-        margin-bottom: 20px;
     }
 
     .comment-form {
@@ -254,24 +238,5 @@
 
     .popular-posts a:hover h4 {
         color: #2980b9;
-    }
-
-    .news-categories a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .news-categories a:hover {
-        color: #2980b9;
-    }
-
-    .news-categories ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .news-categories li {
-        padding-top: 10px;
     }
 }

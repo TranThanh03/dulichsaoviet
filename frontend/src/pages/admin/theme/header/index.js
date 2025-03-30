@@ -78,7 +78,7 @@ const Header = () => {
                                 <p onClick={() => {setShow(!isShow)}}>{fullName}</p>
                                 {isShow && (
                                     <ul id="slidebar">
-                                        <li><Link to="/manage/infor">Thông tin quản trị</Link></li>
+                                        <li><Link to="/manage/infor">Thông tin</Link></li>
                                         <li><Link to="/manage/password">Mật khẩu</Link></li>
                                         <li><span onClick={ handleLogout }>Đăng xuất</span></li>
                                     </ul>

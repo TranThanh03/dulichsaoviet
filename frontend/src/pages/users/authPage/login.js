@@ -93,7 +93,7 @@ const LoginPage = () => {
                             <small>Khách hàng mới? <Link to="/auth/register">Tạo tài khoản</Link></small>
                         </div>
                         <div className="back">
-                            <small><Link to="/">Quay về</Link></small>
+                            <small><Link to="/">Trang chủ</Link></small>
                         </div>
                     </div>
                 </div>

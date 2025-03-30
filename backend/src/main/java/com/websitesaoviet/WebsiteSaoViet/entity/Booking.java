@@ -51,11 +51,14 @@ public class Booking {
     @Column(name = "end_date")
     LocalDate endDate;
 
-    @Column(name = "number_of_days")
-    int numberOfDays;
+    @Column(name = "quantity_day")
+    int quantityDay;
 
-    @Column(name = "number_of_people")
-    int numberOfPeople;
+    @Column(name = "quantity_adult")
+    int quantityAdult;
+
+    @Column(name = "quantity_children")
+    int quantityChildren;
 
     @Column(name = "adult_price")
     Double adultPrice;

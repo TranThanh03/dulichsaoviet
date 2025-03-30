@@ -1,9 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.LatestCustomersResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,18 +15,10 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     Optional<Customer> findCustomerByPhone(String phone);
     Optional<Customer> findCustomerByEmail(String email);
 
-    @Query("SELECT COUNT(DISTINCT c) FROM Customer c JOIN c.roles r WHERE r = 'USER'")
-    long countCustomers();
-
-    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.LatestCustomersResponse(" +
-            "c.code, c.fullName, c.registerTime) " +
-            "FROM Customer c " +
-            "JOIN c.roles r " +
-            "WHERE r = 'USER' " +
-            "ORDER BY c.registerTime DESC "+
-            "LIMIT 5")
-    List<LatestCustomersResponse> getLatestCustomers();
-
-    @Query("SELECT c FROM Customer c JOIN c.roles r WHERE r = 'USER'")
-    Page<Customer> findCustomersWithRoleCustomer(Pageable pageable);
+//    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.LatestCustomersResponse(" +
+//            "c.code, c.fullName, c.registeredTime) " +
+//            "FROM Customer c " +
+//            "ORDER BY c.registeredTime DESC " +
+//            "LIMIT 5")
+//    List<LatestCustomersResponse> getLatestCustomers();
 }

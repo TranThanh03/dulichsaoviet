@@ -5,9 +5,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.AuthenticationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.common.AuthenticationResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.common.AuthenticationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.IntrospectResponse;
+import com.websitesaoviet.WebsiteSaoViet.entity.Admin;
 import com.websitesaoviet.WebsiteSaoViet.entity.InvalidatedToken;
 import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -33,6 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
+    AdminService adminService;
     CustomerService customerService;
     InvalidatedTokenRepository invalidatedTokenRepository;
 
@@ -40,7 +41,7 @@ public class AuthenticationService {
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public String authenticate(AuthenticationRequest request) {
         Customer customer;
 
         if (request.getUsername() != null && !request.getUsername().isEmpty() &&
@@ -61,13 +62,36 @@ public class AuthenticationService {
             }
 
             var token = generateToken(request.getUsername(), customer);
-            var roles = customer.getRoles();
 
-            return AuthenticationResponse.builder()
-                    .token(token)
-                    .authenticated(true)
-                    .roles(roles)
-                    .build();
+            return token;
+        } else {
+            throw new AppException(ErrorCode.NOT_NULL_LOGIN);
+        }
+    }
+
+    public String authenticateAdmin(AuthenticationRequest request) {
+        Admin admin;
+
+        if (request.getUsername() != null && !request.getUsername().isEmpty() &&
+                request.getPassword() != null && !request.getPassword().isEmpty()
+        ) {
+            if (request.getUsername().matches("\\d+")) {
+                admin = adminService.getAdminByPhone(request.getUsername());
+            } else {
+                admin = adminService.getAdminByEmail(request.getUsername());
+            }
+
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+            boolean authenticated = passwordEncoder.matches(request.getPassword(), admin.getPassword());
+
+            if(!authenticated) {
+                throw new AppException(ErrorCode.LOGIN_FAILED);
+            }
+
+            var token = generateTokenAdmin(request.getUsername(), admin);
+
+            return token;
         } else {
             throw new AppException(ErrorCode.NOT_NULL_LOGIN);
         }
@@ -84,8 +108,36 @@ public class AuthenticationService {
                         Instant.now().plusSeconds(3600)
                 ))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("userId", customer.getId())
+                .claim("id", customer.getId())
                 .claim("scope", buildScope(customer))
+                .build();
+
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+
+        JWSObject jwsObject = new JWSObject(header, payload);
+
+        try {
+            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+
+            return jwsObject.serialize();
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String generateTokenAdmin(String username, Admin admin) {
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(username)
+                .issuer("saoviet.com")
+                .issueTime(new Date())
+                .expirationTime(Date.from(
+                        Instant.now().plusSeconds(3600)
+                ))
+                .jwtID(UUID.randomUUID().toString())
+                .claim("id", admin.getId())
+                .claim("scope", buildScopeAdmin(admin))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -108,9 +160,30 @@ public class AuthenticationService {
 
         try {
             verifyToken(token);
-            String userId = getCustomerIdByToken(token);
-            var user = customerService.getCustomerById(userId);
-            fullName = user.getFullName();
+            String customerId = getIdByToken(token);
+            var customer = customerService.getCustomerById(customerId);
+            fullName = customer.getFullName();
+        }
+        catch (AppException e) {
+            isValid = false;
+        }
+
+        return IntrospectResponse.builder()
+                .fullName(fullName)
+                .valid(isValid)
+                .build();
+    }
+
+    public IntrospectResponse introspectAdmin(String token)
+            throws JOSEException, ParseException {
+        boolean isValid = true;
+        String fullName = "";
+
+        try {
+            verifyToken(token);
+            String adminId = getIdByToken(token);
+            var admin = adminService.getAdminById(adminId);
+            fullName = admin.getFullName();
         }
         catch (AppException e) {
             isValid = false;
@@ -158,10 +231,10 @@ public class AuthenticationService {
         return signedJWT;
     }
 
-    public String getCustomerIdByToken(String token) throws ParseException, JOSEException {
+    public String getIdByToken(String token) throws ParseException, JOSEException {
         var signToken = verifyToken(token);
 
-        String id = signToken.getJWTClaimsSet().getClaim("userId").toString();
+        String id = signToken.getJWTClaimsSet().getClaim("id").toString();
 
         return id;
     }
@@ -177,6 +250,15 @@ public class AuthenticationService {
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (!CollectionUtils.isEmpty(customer.getRoles())) {
             customer.getRoles().forEach(stringJoiner::add);
+        }
+
+        return stringJoiner.toString();
+    }
+
+    private String buildScopeAdmin(Admin admin) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(admin.getRoles())) {
+            admin.getRoles().forEach(stringJoiner::add);
         }
 
         return stringJoiner.toString();
