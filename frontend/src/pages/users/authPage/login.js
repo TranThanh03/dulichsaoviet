@@ -54,29 +54,21 @@ const LoginPage = () => {
                     </div>
 
                     <form onSubmit={handleLogin}>
-                        <div className="input-group">
-                            <label htmlFor="username"><b>Tài khoản</b></label>
-                            <input
-                                type="text"
-                                id="username"
-                                name="username"
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput" name="username"
                                 placeholder="SDT hoặc Email"
                                 value={formData.username}
                                 onChange={handleInputChange}
-                                autoFocus
-                            />
+                                autoFocus />
+                            <label for="floatingInputInvalid">Tài khoản</label>
                         </div>
-
-                        <div className="input-group">
-                            <label htmlFor="password"><b>Mật khẩu</b></label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
+                        
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="floatingPassword" name="password"
                                 placeholder="******"
                                 value={formData.password}
-                                onChange={handleInputChange}
-                            />
+                                onChange={handleInputChange} />
+                            <label for="floatingPasswordInvalid">Mật khẩu</label>
                         </div>
         
                         <div className="error-message">

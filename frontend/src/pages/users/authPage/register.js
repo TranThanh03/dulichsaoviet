@@ -2,9 +2,15 @@ import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './register.scss';
 import { CustomerApi } from 'services';
-import Swal from 'sweetalert2';
+import NotifiSuccess from 'component/notifi/success';
 
 const RegisterPage = () => {
+    const [notifi, setNotifi] = useState({
+        title: '',
+        message: '',
+        isActive: false
+    });
+
     const [formData, setFormData] = useState({
         fullName: '',
         phone: '',
@@ -48,20 +54,19 @@ const RegisterPage = () => {
             const response = await CustomerApi.create(formData);
 
             if (response?.code === 1999) {
-                setFormData({
-                    fullName: '',
-                    phone: '',
-                    email: '',
-                    password: '',
-                    repeatpw: ''
+                // setFormData({
+                //     fullName: '',
+                //     phone: '',
+                //     email: '',
+                //     password: '',
+                //     repeatpw: ''
+                // });
+                
+                setNotifi({
+                    title: 'Đăng ký tài khoản thành công',
+                    message: `Vui lòng kiểm tra mail <span id='bold-red'>${response.result.email}</span>`,
+                    isActive: true
                 });
-
-                Swal.fire({
-                    title: 'Thành công',
-                    text: 'Đăng ký tài khoản thành công',
-                    icon: 'success',
-                    confirmButtonText: 'Đóng'
-                })
             } else {
                 let newErrors = {};
                 if (response?.code === 1005 || response?.code === 1008) newErrors.phone = response.message;
@@ -158,6 +163,11 @@ const RegisterPage = () => {
                     </p>
                 </div>
             </div>
+
+            <NotifiSuccess  title={notifi.title}
+                            message={notifi.message}
+                            isActive={notifi.isActive}
+                            onClose={() => setNotifi(prev => ({ ...prev, isActive: false }))}/>
         </div>
     );
 };

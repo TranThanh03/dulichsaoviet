@@ -58,24 +58,24 @@ public class CustomerService {
 
         customer.setStatus(CustomerStatus.INACTIVATE.getValue());
 
-        Customer savedCustomer = customerRepository.save(customer);
+//        Customer savedCustomer = customerRepository.save(customer);
 
-        String emailContent = String.format(
-                "<html><body>" +
-                        "<p>Xin chào,</p>" +
-                        "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
-                        "<a href='http://localhost:3000/customers/activate/%s'>Kích hoạt tài khoản</a>" +
-                        "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
-                        "</body></html>", savedCustomer.getId()
-        );
+//        String emailContent = String.format(
+//                "<html><body>" +
+//                        "<p>Xin chào,</p>" +
+//                        "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
+//                        "<a href='http://localhost:3000/customers/activate/%s'>Kích hoạt tài khoản</a>" +
+//                        "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
+//                        "</body></html>", savedCustomer.getId()
+//        );
+//
+//        mailQueueProducer.sendToQueue(
+//                savedCustomer.getEmail(),
+//                "Kích hoạt tài khoản",
+//                emailContent
+//        );
 
-        mailQueueProducer.sendToQueue(
-                savedCustomer.getEmail(),
-                "Kích hoạt tài khoản",
-                emailContent
-        );
-
-        return customerMapper.toCustomerCreateResponse(savedCustomer);
+        return customerMapper.toCustomerCreateResponse(customer);
     }
 
     public Page<CustomerResponse> getCustomers(Pageable pageable) {
