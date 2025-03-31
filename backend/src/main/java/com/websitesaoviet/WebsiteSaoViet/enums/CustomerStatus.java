@@ -3,8 +3,8 @@ package com.websitesaoviet.WebsiteSaoViet.enums;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CustomerStatus {
-    ACTIVE("Đang hoạt động"),
-    INACTIVE("Chưa kích hoạt"),
+    ACTIVATE("Đang hoạt động"),
+    INACTIVATE("Chưa kích hoạt"),
     BLOCKED("Bị chặn");
 
     private final String value;

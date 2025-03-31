@@ -56,7 +56,7 @@ public class CustomerService {
         roles.add(Role.USER.name());
         customer.setRoles(roles);
 
-        customer.setStatus(CustomerStatus.INACTIVE.getValue());
+        customer.setStatus(CustomerStatus.INACTIVATE.getValue());
 
         Customer savedCustomer = customerRepository.save(customer);
 
@@ -64,7 +64,7 @@ public class CustomerService {
                 "<html><body>" +
                         "<p>Xin chào,</p>" +
                         "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
-                        "<a href='http://localhost:3000/customers/active/%s'>Kích hoạt tài khoản</a>" +
+                        "<a href='http://localhost:3000/customers/activate/%s'>Kích hoạt tài khoản</a>" +
                         "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
                         "</body></html>", savedCustomer.getId()
         );
@@ -88,33 +88,42 @@ public class CustomerService {
     }
 
     public CustomerResponse updateCustomer(String id, CustomerUpdateRequest request) {
-        Customer admin = customerRepository.findById(id)
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
 
-        if(customerRepository.existsCustomerByPhone(request.getPhone()) && !admin.getPhone().equals(request.getPhone())) {
+        if(customerRepository.existsCustomerByPhone(request.getPhone()) && !customer.getPhone().equals(request.getPhone())) {
             throw new AppException(ErrorCode.PHONENUMBER_EXISTED);
         }
-        else if (customerRepository.existsCustomerByEmail(request.getEmail()) && !admin.getEmail().equals(request.getEmail())) {
+        else if (customerRepository.existsCustomerByEmail(request.getEmail()) && !customer.getEmail().equals(request.getEmail())) {
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
 
-        customerMapper.updateCustomer(admin, request);
+        customerMapper.updateCustomer(customer, request);
 
-        return customerMapper.toCustomerResponse(customerRepository.save(admin));
+        return customerMapper.toCustomerResponse(customerRepository.save(customer));
     }
 
     public void changePassword(String id, PasswordChangeRequest request) {
-        Customer admin = customerRepository.findById(id)
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-        if (!passwordEncoder.matches(request.getCurrentPassword(), admin.getPassword())) {
+        if (!passwordEncoder.matches(request.getCurrentPassword(), customer.getPassword())) {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
 
-        admin.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        customerRepository.save(admin);
+        customer.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        customerRepository.save(customer);
+    }
+
+    public void activateCustomer(String id) {
+        Customer customer = customerRepository.findByIdAndStatus(id, CustomerStatus.INACTIVATE.getValue())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
+
+        customer.setStatus(CustomerStatus.ACTIVATE.getValue());
+
+        customerRepository.save(customer);
     }
 
     public Customer getCustomerByPhone(String phone) {

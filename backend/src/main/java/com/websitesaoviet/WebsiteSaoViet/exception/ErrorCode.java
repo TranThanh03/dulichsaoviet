@@ -24,7 +24,8 @@ public enum ErrorCode {
     INVALID_PASSWORD(1015, "Mật khẩu không hợp lệ!", HttpStatus.OK),
     ADMIN_NOT_EXITED(1016, "Quản trị viên không tồn tại!", HttpStatus.OK),
     USER_NOT_EXITED(1017, "Khách hàng không tồn tại!", HttpStatus.OK),
-
+    INACTIVATE(1018, "Tài khoản chưa kích hoạt!", HttpStatus.OK),
+    BLOCKED(1019, "Tài khoản đã bị chặn!", HttpStatus.OK),
 
 
     //    TOUR_NOT_EXITED(1011, "Tour không tồn tại!", HttpStatus.OK),

@@ -122,6 +122,18 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PatchMapping("/activate/{id}")
+    ResponseEntity<ApiResponse<String>> activateCustomer(@PathVariable String id) {
+        customerService.activateCustomer(id);
+
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(1992)
+                .message("Kích hoạt thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @GetMapping("/latest")
 //    ResponseEntity<ApiResponse<List<LatestUsersResponse>>> getLatestUsers() {

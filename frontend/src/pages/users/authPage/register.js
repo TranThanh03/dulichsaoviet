@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './register.scss';
 import { CustomerApi } from 'services';
 import Swal from 'sweetalert2';
@@ -13,7 +13,6 @@ const RegisterPage = () => {
         repeatpw: ''
     });
 
-    const navigate = useNavigate();
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
@@ -62,15 +61,13 @@ const RegisterPage = () => {
                     text: 'Đăng ký tài khoản thành công',
                     icon: 'success',
                     confirmButtonText: 'Đóng'
-                }).then(() => {
-                    navigate('/auth/login');
-                });
+                })
             } else {
                 let newErrors = {};
-                if (response?.code === 1001 || response?.code === 1004) newErrors.phone = response.message;
-                if (response?.code === 1002 || response?.code === 1005) newErrors.email = response.message;
-                if (response?.code === 1003) newErrors.password = response.message;
-                if (response?.code === 1006 || response?.code === 1007) newErrors.fullName = response.message;
+                if (response?.code === 1005 || response?.code === 1008) newErrors.phone = response.message;
+                if (response?.code === 1006 || response?.code === 1009) newErrors.email = response.message;
+                if (response?.code === 1007) newErrors.password = response.message;
+                if (response?.code === 1010 || response?.code === 1011) newErrors.fullName = response.message;
 
                 setErrors(newErrors);
             }

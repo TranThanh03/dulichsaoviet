@@ -108,6 +108,10 @@ const RenderRouter = () => {
             component: <usersPage.SearchPage />
         },
         {
+            path: ROUTERS.USER.ACTIVATE,
+            component: <usersPage.ActivatePage />
+        },
+        {
             path: ROUTERS.ADMIN.HOME,
             component: <adminPage.HomePage />
         },

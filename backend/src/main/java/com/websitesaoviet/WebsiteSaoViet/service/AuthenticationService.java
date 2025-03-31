@@ -10,6 +10,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.common.IntrospectResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Admin;
 import com.websitesaoviet.WebsiteSaoViet.entity.InvalidatedToken;
 import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
+import com.websitesaoviet.WebsiteSaoViet.enums.CustomerStatus;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.repository.InvalidatedTokenRepository;
@@ -59,6 +60,10 @@ public class AuthenticationService {
 
             if(!authenticated) {
                 throw new AppException(ErrorCode.LOGIN_FAILED);
+            } else if (customer.getStatus().equals(CustomerStatus.INACTIVATE.getValue())) {
+                throw new AppException(ErrorCode.INACTIVATE);
+            } else if (customer.getStatus().equals(CustomerStatus.BLOCKED.getValue())) {
+                throw new AppException(ErrorCode.BLOCKED);
             }
 
             var token = generateToken(request.getUsername(), customer);
@@ -210,7 +215,7 @@ public class AuthenticationService {
         invalidatedTokenRepository.save(invalidatedToken);
     }
 
-    private SignedJWT verifyToken(String token)
+    public SignedJWT verifyToken(String token)
             throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 

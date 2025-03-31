@@ -72,7 +72,13 @@ const CustomerApi = {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
-    }
+    },
+    activate: (id) => {
+        return axiosInstance.patch(`/api/v1/customers/activate/${id}`);
+    },
+    activateByAdmin: (id) => {
+        return axiosInstanceAdmin.patch(`/api/v1/customers/activate/${id}`);
+    },
 };
 
 export default CustomerApi;

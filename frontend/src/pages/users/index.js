@@ -19,3 +19,4 @@ export { default as OrderPage } from './orderPage/index';
 export { default as MessagePage } from './orderPage/message';
 export { default as CalendarPage } from './calendarPage/index';
 export { default as SearchPage } from './tourPage/search';
+export { default as ActivatePage } from './activatePage/index';

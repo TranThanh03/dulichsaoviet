@@ -20,6 +20,7 @@ export const ROUTERS = {
         ORDERSMESSAGE: "orders/message",
         CALENDARS: "/calendars/index",
         SEARCH: "/tours/search",
+        ACTIVATE: "/customers/activate/:id",
     },
     ADMIN: {
         HOME: "/manage",

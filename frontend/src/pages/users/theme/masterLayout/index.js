@@ -8,7 +8,7 @@ const MasterLayout = ({ children, ...props }) => {
     const location = useLocation();
     const path = location.pathname;
 
-    const isValidPath = !path.includes("/auth") && !path.includes("/error");
+    const isValidPath = !path.includes("/auth") && !path.includes("/error") && !path.includes("/customers/activate");
 
     return (
         <div className="page-saoviet" {...props}>

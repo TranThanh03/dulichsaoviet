@@ -25,13 +25,17 @@ public class SecurityConfig {
             "/auth/introspect",
             "/tours", "/tours/category", "/tours/category/{id:\\d}", "/tours/new", "/tours/{id:[A-Z]\\d+}", "/tours/search",
             "/guides", "/guides/{id:[A-Z]{3}\\d+}", "/guides/evaluate",
-            "/assignments/guide/{id:[A-Z]{3}\\d+}"
+            "/assignments/guide/{id:[A-Z]{3}\\d+}",
     };
 
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login", "/auth/admin/login", "/auth/register",
             "/customers",
             "/payment/momo/callback/**",
+    };
+
+    private final String[] PATCH_PUBLIC_ENDPOINTS = {
+            "/customers/activate/{id}",
     };
 
     @Bean
@@ -48,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, GET_PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, POST_PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.PATCH, PATCH_PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
@@ -74,7 +79,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setExposedHeaders(List.of("Authorization"));

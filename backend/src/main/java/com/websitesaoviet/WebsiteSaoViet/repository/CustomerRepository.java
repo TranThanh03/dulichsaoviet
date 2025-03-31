@@ -2,10 +2,8 @@ package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,6 +12,7 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     boolean existsCustomerByEmail(String email);
     Optional<Customer> findCustomerByPhone(String phone);
     Optional<Customer> findCustomerByEmail(String email);
+    Optional<Customer> findByIdAndStatus(String id, String status);
 
 //    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.LatestCustomersResponse(" +
 //            "c.code, c.fullName, c.registeredTime) " +
