@@ -50,8 +50,7 @@ const handleLogout = async () => {
     try {
         const response = await AuthApi.logoutAdmin();
 
-        if (response.code === 9997) {
-            document.cookie = "tokenAdmin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        if (response.code === 9994) {
             window.location.href = "/manage/auth/login";
         }
     } catch (error) {
@@ -61,7 +60,7 @@ const handleLogout = async () => {
 
 const Header = () => {
     const [isShow, setShow] = useState(false);
-    const { fullName } = useContext(AuthContext);
+    const { authenticated } = useContext(AuthContext);
 
     return (
         <div className="header-manage" style={{ backgroundImage: `url(${background})` }}>
@@ -72,10 +71,10 @@ const Header = () => {
                 </div>
                 <div className="content-right">
                     <div className="icon-account">
-                        {fullName != null && (
+                        {authenticated && (
                             <div className="account-info">
                                 <img src={userIcon} alt="Tài khoản" onClick={() => {setShow(!isShow)}} />
-                                <p onClick={() => {setShow(!isShow)}}>{fullName}</p>
+                                <p onClick={() => {setShow(!isShow)}}>Tai khoan</p>
                                 {isShow && (
                                     <ul id="slidebar">
                                         <li><Link to="/manage/infor">Thông tin</Link></li>

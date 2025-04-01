@@ -1,6 +1,5 @@
 package com.websitesaoviet.WebsiteSaoViet.configuration;
 
-import com.nimbusds.jose.JOSEException;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
@@ -15,7 +14,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.text.ParseException;
 import java.util.Objects;
 
 @Component
@@ -31,10 +29,7 @@ public class CustomJwtDecoder implements JwtDecoder {
 
     @Override
     public Jwt decode(String token) throws JwtException {
-        try {
-            authenticationService.verifyToken(token);
-        }
-        catch (AppException | ParseException | JOSEException e) {
+        if (!authenticationService.introspect(token)) {
             throw new AppException(ErrorCode.TOKEN_INVALID);
         }
 

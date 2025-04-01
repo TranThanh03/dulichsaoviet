@@ -10,7 +10,6 @@ const handleLogout = async () => {
         const response = await AuthApi.logout();
 
         if (response.code === 9997) {
-            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             window.location.href = "/";
         }
     } catch (error) {
@@ -20,7 +19,7 @@ const handleLogout = async () => {
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [fullName, setFullName] = useState();
+    const [authenticated, setAuthenticated] = useState(false);
     const [isShow, setShow] = useState(false);
     const navigate = useNavigate();
     const [placeholder, setPlaceholder] = useState("Tìm kiếm Tours");
@@ -33,8 +32,8 @@ const Header = () => {
                 if (token) {
                     const response = await AuthApi.introspect();
 
-                    if (response?.result?.valid) {
-                        setFullName(response.result.fullName);
+                    if (response?.code === 9998) {
+                        setAuthenticated(response?.result);
                     }
                 }
             } catch (error) {}
@@ -82,25 +81,10 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className="icon-account">
-                        {fullName == null ? (
-                            <div>
-                                <img src={userIcon} alt="account" onClick={() => setShow(!isShow)} />
-                                <p onClick={() => setShow(!isShow)}>Tài khoản</p>
-                                {isShow && (
-                                    <ul id="slidebar">
-                                        <li>
-                                            <Link to="/auth/login">Đăng nhập</Link>
-                                        </li>
-                                        <li>
-                                            <Link to="/auth/register">Đăng ký</Link>
-                                        </li>
-                                    </ul>
-                                )}
-                            </div>
-                        ) : (
+                        {authenticated ? (
                             <div className="account-info">
                                 <img src={userIcon} alt="Tài khoản" onClick={() => setShow(!isShow)} />
-                                <p onClick={() => setShow(!isShow)}>{fullName}</p>
+                                <p onClick={() => setShow(!isShow)}>Tài khoản</p>
                                 {isShow && (
                                     <ul id="slidebar">
                                         <li>
@@ -111,6 +95,21 @@ const Header = () => {
                                         </li>
                                         <li>
                                             <span onClick={handleLogout}>Đăng xuất</span>
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
+                        ) : (
+                            <div>
+                                <img src={userIcon} alt="account" onClick={() => setShow(!isShow)} />
+                                <p onClick={() => setShow(!isShow)}>Tài khoản</p>
+                                {isShow && (
+                                    <ul id="slidebar">
+                                        <li>
+                                            <Link to="/auth/login">Đăng nhập</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/auth/register">Đăng ký</Link>
                                         </li>
                                     </ul>
                                 )}

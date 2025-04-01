@@ -6,7 +6,6 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.common.AuthenticationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.common.IntrospectResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Admin;
 import com.websitesaoviet.WebsiteSaoViet.entity.InvalidatedToken;
 import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
@@ -66,9 +65,7 @@ public class AuthenticationService {
                 throw new AppException(ErrorCode.BLOCKED);
             }
 
-            var token = generateToken(request.getUsername(), customer);
-
-            return token;
+            return generateToken(request.getUsername(), customer);
         } else {
             throw new AppException(ErrorCode.NOT_NULL_LOGIN);
         }
@@ -94,9 +91,7 @@ public class AuthenticationService {
                 throw new AppException(ErrorCode.LOGIN_FAILED);
             }
 
-            var token = generateTokenAdmin(request.getUsername(), admin);
-
-            return token;
+            return generateTokenAdmin(request.getUsername(), admin);
         } else {
             throw new AppException(ErrorCode.NOT_NULL_LOGIN);
         }
@@ -158,46 +153,13 @@ public class AuthenticationService {
         }
     }
 
-    public IntrospectResponse introspect(String token)
-            throws JOSEException, ParseException {
-        boolean isValid = true;
-        String fullName = "";
-
+    public Boolean introspect(String token) {
         try {
             verifyToken(token);
-            String customerId = getIdByToken(token);
-            var customer = customerService.getCustomerById(customerId);
-            fullName = customer.getFullName();
+            return true;
+        } catch (JOSEException | ParseException e) {
+            return false;
         }
-        catch (AppException e) {
-            isValid = false;
-        }
-
-        return IntrospectResponse.builder()
-                .fullName(fullName)
-                .valid(isValid)
-                .build();
-    }
-
-    public IntrospectResponse introspectAdmin(String token)
-            throws JOSEException, ParseException {
-        boolean isValid = true;
-        String fullName = "";
-
-        try {
-            verifyToken(token);
-            String adminId = getIdByToken(token);
-            var admin = adminService.getAdminById(adminId);
-            fullName = admin.getFullName();
-        }
-        catch (AppException e) {
-            isValid = false;
-        }
-
-        return IntrospectResponse.builder()
-                .fullName(fullName)
-                .valid(isValid)
-                .build();
     }
 
     public void logout(String token)
@@ -215,7 +177,7 @@ public class AuthenticationService {
         invalidatedTokenRepository.save(invalidatedToken);
     }
 
-    public SignedJWT verifyToken(String token)
+    private SignedJWT verifyToken(String token)
             throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
@@ -239,9 +201,7 @@ public class AuthenticationService {
     public String getIdByToken(String token) throws ParseException, JOSEException {
         var signToken = verifyToken(token);
 
-        String id = signToken.getJWTClaimsSet().getClaim("id").toString();
-
-        return id;
+        return signToken.getJWTClaimsSet().getClaim("id").toString();
     }
 
     public String extractTokenFromHeader(String authorizationHeader) {

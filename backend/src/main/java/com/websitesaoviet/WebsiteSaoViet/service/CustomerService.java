@@ -58,24 +58,24 @@ public class CustomerService {
 
         customer.setStatus(CustomerStatus.INACTIVATE.getValue());
 
-//        Customer savedCustomer = customerRepository.save(customer);
+        Customer savedCustomer = customerRepository.save(customer);
 
-//        String emailContent = String.format(
-//                "<html><body>" +
-//                        "<p>Xin chào,</p>" +
-//                        "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
-//                        "<a href='http://localhost:3000/customers/activate/%s'>Kích hoạt tài khoản</a>" +
-//                        "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
-//                        "</body></html>", savedCustomer.getId()
-//        );
-//
-//        mailQueueProducer.sendToQueue(
-//                savedCustomer.getEmail(),
-//                "Kích hoạt tài khoản",
-//                emailContent
-//        );
+        String emailContent = String.format(
+                "<html><body>" +
+                        "<p>Xin chào,</p>" +
+                        "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
+                        "<a href='http://localhost:3000/customers/activate/%s'>Kích hoạt tài khoản</a>" +
+                        "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
+                        "</body></html>", savedCustomer.getId()
+        );
 
-        return customerMapper.toCustomerCreateResponse(customer);
+        mailQueueProducer.sendToQueue(
+                savedCustomer.getEmail(),
+                "Kích hoạt tài khoản",
+                emailContent
+        );
+
+        return customerMapper.toCustomerCreateResponse(savedCustomer);
     }
 
     public Page<CustomerResponse> getCustomers(Pageable pageable) {
@@ -119,6 +119,24 @@ public class CustomerService {
 
     public void activateCustomer(String id) {
         Customer customer = customerRepository.findByIdAndStatus(id, CustomerStatus.INACTIVATE.getValue())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
+
+        customer.setStatus(CustomerStatus.ACTIVATE.getValue());
+
+        customerRepository.save(customer);
+    }
+
+    public void blockCustomer(String id) {
+        Customer customer = customerRepository.findByIdAndStatus(id, CustomerStatus.ACTIVATE.getValue())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
+
+        customer.setStatus(CustomerStatus.BLOCKED.getValue());
+
+        customerRepository.save(customer);
+    }
+
+    public void unblockCustomer(String id) {
+        Customer customer = customerRepository.findByIdAndStatus(id, CustomerStatus.BLOCKED.getValue())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED));
 
         customer.setStatus(CustomerStatus.ACTIVATE.getValue());

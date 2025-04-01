@@ -15,7 +15,7 @@ const MasterLayout = ({ children }) => {
     const isLoginPage = path === "/manage/auth/login";
     const isValidPath = !path.includes("/manage/auth") && !path.includes("/error");
 
-    const [fullName, setFullName] = useState(null);
+    const [authenticated, setAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -31,10 +31,11 @@ const MasterLayout = ({ children }) => {
                 if (tokenAdmin) {
                     const response = await AuthApi.introspectAdmin();
 
-                    if (response?.result?.valid) {
-                        setFullName(response.result.fullName);
+                    if (response?.code === 9995) {
+                        setAuthenticated(response?.result);
                         setIsLoading(false);
-                    } else {
+                    }
+                    else {
                         navigate("/manage/auth/login");
                     }
                 }
@@ -54,9 +55,9 @@ const MasterLayout = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ fullName }}>
+        <AuthContext.Provider value={{ authenticated }}>
             <div className="page-saoviet">
-                {!isLoginPage && isValidPath && <Header fullName={fullName} />}
+                {!isLoginPage && isValidPath && <Header authenticated={authenticated} />}
                 {children}
                 {!isLoginPage && isValidPath && <Footer />}
             </div>

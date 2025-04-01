@@ -7,6 +7,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.CustomerUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.CustomerResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.CustomerCreateResponse;
+import com.websitesaoviet.WebsiteSaoViet.enums.CustomerStatus;
 import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
 import com.websitesaoviet.WebsiteSaoViet.service.CustomerService;
 import jakarta.validation.Valid;
@@ -129,6 +130,32 @@ public class CustomerController {
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(1992)
                 .message("Kích hoạt thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/block/{id}")
+    ResponseEntity<ApiResponse<String>> blockCustomer(@PathVariable String id) {
+        customerService.blockCustomer(id);
+
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(1991)
+                .message("Chặn tài khoản thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/unblock/{id}")
+    ResponseEntity<ApiResponse<String>> unblockCustomer(@PathVariable String id) {
+        customerService.unblockCustomer(id);
+
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(1990)
+                .message("Bỏ chặn tài khoản thành công.")
                 .build();
 
         return ResponseEntity.ok(apiResponse);
