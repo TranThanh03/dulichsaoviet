@@ -33,7 +33,7 @@ public class CustomerService {
     CustomerRepository customerRepository;
     CustomerMapper customerMapper;
     SequenceService sequenceService;
-    MailQueueProducer mailQueueProducer;
+    MailService mailService;
 
     @Transactional
     public CustomerCreateResponse createCustomer(CustomerCreationRequest request) {
@@ -69,10 +69,10 @@ public class CustomerService {
                         "</body></html>", savedCustomer.getId()
         );
 
-        mailQueueProducer.sendToQueue(
-                savedCustomer.getEmail(),
-                "Kích hoạt tài khoản",
-                emailContent
+        mailService.sendToQueue(
+            savedCustomer.getEmail(),
+            "Kích hoạt tài khoản",
+            emailContent
         );
 
         return customerMapper.toCustomerCreateResponse(savedCustomer);
@@ -83,7 +83,7 @@ public class CustomerService {
     }
 
     public CustomerResponse getCustomerById(String id) {
-        return  customerMapper.toCustomerResponse(customerRepository.findById(id)
+        return customerMapper.toCustomerResponse(customerRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXITED)));
     }
 
@@ -101,6 +101,14 @@ public class CustomerService {
         customerMapper.updateCustomer(customer, request);
 
         return customerMapper.toCustomerResponse(customerRepository.save(customer));
+    }
+
+    public void deleteCustomer(String id) {
+        if (!customerRepository.existsById(id)) {
+            throw new AppException(ErrorCode.USER_NOT_EXITED);
+        }
+
+        customerRepository.deleteById(id);
     }
 
     public void changePassword(String id, PasswordChangeRequest request) {

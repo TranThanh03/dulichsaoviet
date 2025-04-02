@@ -30,6 +30,9 @@ public class Tour {
     @Column(name = "destination")
     String destination;
 
+    @Column(name = "area")
+    String area;
+
     @ElementCollection
     @CollectionTable(name = "tour_images", joinColumns = @JoinColumn(name = "tour_id"))
     @Column(name = "image")
@@ -40,14 +43,8 @@ public class Tour {
     @Column(name = "itinerary")
     List<String> itinerary;
 
-    @Column(name = "introduce", columnDefinition = "LONGTEXT")
-    String introduce;
-
     @Column(name = "description", columnDefinition = "LONGTEXT")
     String description;
-
-    @Column(name = "category_id")
-    int categoryId;
 
     @Column(name = "quantity_day")
     int quantityDay;

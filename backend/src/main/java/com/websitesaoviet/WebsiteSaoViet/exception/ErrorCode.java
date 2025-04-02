@@ -26,16 +26,28 @@ public enum ErrorCode {
     USER_NOT_EXITED(1017, "Khách hàng không tồn tại!", HttpStatus.OK),
     INACTIVATE(1018, "Tài khoản chưa kích hoạt!", HttpStatus.OK),
     BLOCKED(1019, "Tài khoản đã bị chặn!", HttpStatus.OK),
+    EMAIL_SEND_FAILED(1020, "Lỗi gửi mail!", HttpStatus.OK),
 
+    DAY_INVALID(1021, "Số ngày phải lớn hơn không!", HttpStatus.OK),
+    TOUR_NOT_EXITED(1022, "Tour không tồn tại!", HttpStatus.OK),
 
-    //    TOUR_NOT_EXITED(1011, "Tour không tồn tại!", HttpStatus.OK),
-//    PEOPLE_INVALID(1012, "Số lượng người phải lớn hơn 0!", HttpStatus.OK),
+    STARTDATE_NOT_NULL(1023, "Ngày khởi hành không được bỏ trống!", HttpStatus.OK),
+
+    ENDDATE_NOT_NULL(1024, "Ngày kết thúc không được bỏ trống!", HttpStatus.OK),
+
+    PEOPLE_INVALID(1025, "Số người phải lớn hơn 0!", HttpStatus.OK),
+
+    PRICE_INVALID(1026, "Giá tiền phải lớn hơn 0!", HttpStatus.OK),
+    STARTDATE_INVALID(1027, "Ngày khởi hành không được trước ngày " +
+            LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "!",
+            HttpStatus.OK),
+    SCHEDULE_NOT_EXITED(1028, "Lịch trình không tồn tại!", HttpStatus.OK),
+    SCHEDULE_IN_PROGRESS(1029, "Lịch trình đang diễn ra!", HttpStatus.OK),
+
 //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
 //    GUIDE_ASSIGNED(1014, "Hướng dẫn viên này bị trùng lịch phân công!", HttpStatus.OK),
-//    STARTDATE_NOT_NULL(1015, "Ngày khởi hành không được bỏ trống!", HttpStatus.OK),
-//    ENDDATE_NOT_NULL(1016, "Ngày kết thúc không được bỏ trống!", HttpStatus.OK),
-//    STARTDATE_INVALID(1017, "Ngày khởi hành không được trước ngày " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "!", HttpStatus.OK),
-//    ENDDATE_INVALID(1018, "Ngày kết thúc không được trước ngày khởi hành!", HttpStatus.OK),
+
+
 //    GUIDE_NOT_EXITED(1019, "Hướng dẫn viên không tồn tại!", HttpStatus.OK),
 //    ORDER_NOT_EXITED(1020, "Lịch đặt không tồn tại!", HttpStatus.OK),
 //    PAYMENT_NOT_EXITED(1021, "Hóa đơn không tồn tại!", HttpStatus.OK),

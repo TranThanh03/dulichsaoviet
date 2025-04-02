@@ -1,23 +1,16 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
-import com.nimbusds.jose.JOSEException;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.AdminUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.EmailRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.common.PasswordChangeRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AdminResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
-import com.websitesaoviet.WebsiteSaoViet.service.AdminService;
-import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
-import com.websitesaoviet.WebsiteSaoViet.service.MailQueueProducer;
-import jakarta.validation.Valid;
+import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
+import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
+import com.websitesaoviet.WebsiteSaoViet.service.MailService;
+import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -26,15 +19,27 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 
 public class MailController {
-    MailQueueProducer mailQueueProducer;
+     MailService mailService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/send")
-    public String sendBulkMail(@RequestBody List<EmailRequest> emailRequests) {
-        for (EmailRequest email : emailRequests) {
-            mailQueueProducer.sendToQueue(email.getTo(), email.getSubject(), email.getText());
-        }
+     @PreAuthorize("hasRole('ADMIN')")
+     @PostMapping("/send")
+     public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String htmlContent) {
+         try {
+             mailService.sendMail(to, subject, htmlContent);
 
-        return "Emails added to queue!";
-    }
+             return "Email đã gửi thành công";
+         } catch (MessagingException e) {
+             throw new AppException(ErrorCode.EMAIL_SEND_FAILED);
+         }
+     }
+
+     @PreAuthorize("hasRole('ADMIN')")
+     @PostMapping("/queue")
+     public String queueEmail(@RequestBody List<EmailRequest> emailRequests) {
+         for (EmailRequest email : emailRequests) {
+             mailService.sendToQueue(email.getTo(), email.getSubject(), email.getText());
+         }
+
+         return "Emails added to queue!";
+     }
 }
