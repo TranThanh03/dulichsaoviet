@@ -34,7 +34,7 @@ public class AdminController {
         String id = authenticationService.getIdByToken(token);
 
         ApiResponse<AdminResponse> apiResponse = ApiResponse.<AdminResponse>builder()
-                .code(8999)
+                .code(1200)
                 .result(adminService.getAdminById(id))
                 .build();
 
@@ -45,7 +45,7 @@ public class AdminController {
     @PutMapping("/{id}")
     ResponseEntity<ApiResponse<AdminResponse>> updateAdmin(@PathVariable String id, @RequestBody @Valid AdminUpdateRequest request) {
         ApiResponse<AdminResponse> apiResponse = ApiResponse.<AdminResponse>builder()
-                .code(8998)
+                .code(1201)
                 .message("Cập nhật thông tin khách hàng thành công.")
                 .result(adminService.updateAdmin(id, request))
                 .build();
@@ -59,7 +59,7 @@ public class AdminController {
         adminService.changePassword(id, request);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(8997)
+                .code(1202)
                 .message("Thay đổi mật khẩu thành công.")
                 .build();
 

@@ -35,7 +35,7 @@ public class CustomerController {
     @PostMapping()
     ResponseEntity<ApiResponse<CustomerCreateResponse>> createUser(@RequestBody @Valid CustomerCreationRequest request) {
         ApiResponse<CustomerCreateResponse> apiResponse = ApiResponse.<CustomerCreateResponse>builder()
-                .code(1200)
+                .code(1300)
                 .message("Thêm khách hàng mới thành công.")
                 .result(customerService.createCustomer(request))
                 .build();
@@ -53,7 +53,7 @@ public class CustomerController {
         Page<CustomerResponse> usersPage = customerService.getCustomers(pageable);
 
         ApiResponse<Page<CustomerResponse>> apiResponse = ApiResponse.<Page<CustomerResponse>>builder()
-                .code(1201)
+                .code(1301)
                 .result(usersPage)
                 .build();
 
@@ -63,7 +63,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     ResponseEntity<ApiResponse<CustomerResponse>> getUserById(@PathVariable String id) {
         ApiResponse<CustomerResponse> apiResponse = ApiResponse.<CustomerResponse>builder()
-                .code(1202)
+                .code(1302)
                 .result(customerService.getCustomerById(id))
                 .build();
 
@@ -77,7 +77,7 @@ public class CustomerController {
         String id = authenticationService.getIdByToken(token);
 
         ApiResponse<CustomerResponse> apiResponse = ApiResponse.<CustomerResponse>builder()
-                .code(1203)
+                .code(1303)
                 .result(customerService.getCustomerById(id))
                 .build();
 
@@ -87,7 +87,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     ResponseEntity<ApiResponse<CustomerResponse>> updateUser(@PathVariable String id, @RequestBody @Valid CustomerUpdateRequest request) {
         ApiResponse<CustomerResponse> apiResponse = ApiResponse.<CustomerResponse>builder()
-                .code(1204)
+                .code(1304)
                 .message("Cập nhật thông tin khách hàng thành công.")
                 .result(customerService.updateCustomer(id, request))
                 .build();
@@ -101,7 +101,7 @@ public class CustomerController {
         customerService.deleteCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1205)
+                .code(1305)
                 .message("Xóa khách hàng thành công.")
                 .build();
 
@@ -113,7 +113,7 @@ public class CustomerController {
         customerService.changePassword(id, request);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1206)
+                .code(1306)
                 .message("Thay đổi mật khẩu thành công.")
                 .build();
 
@@ -125,7 +125,7 @@ public class CustomerController {
         customerService.activateCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1207)
+                .code(1307)
                 .message("Kích hoạt thành công.")
                 .build();
 
@@ -138,7 +138,7 @@ public class CustomerController {
         customerService.blockCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1208)
+                .code(1308)
                 .message("Chặn tài khoản thành công.")
                 .build();
 
@@ -151,7 +151,7 @@ public class CustomerController {
         customerService.unblockCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1209)
+                .code(1309)
                 .message("Bỏ chặn tài khoản thành công.")
                 .build();
 

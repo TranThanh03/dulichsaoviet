@@ -31,7 +31,7 @@ public class TourController {
     @PostMapping()
     ResponseEntity<ApiResponse<TourResponse>> createTour(@RequestBody @Valid TourCreationRequest request) {
         ApiResponse<TourResponse> apiResponse = ApiResponse.<TourResponse>builder()
-                .code(1300)
+                .code(1500)
                 .message("Thêm tour mới thành công.")
                 .result(tourService.createTour(request))
                 .build();
@@ -48,7 +48,7 @@ public class TourController {
         Page<TourResponse> toursPage = tourService.getTours(pageable);
 
         ApiResponse<Page<TourResponse>> apiResponse = ApiResponse.<Page<TourResponse>>builder()
-                .code(1301)
+                .code(1501)
                 .result(toursPage)
                 .build();
 
@@ -58,17 +58,18 @@ public class TourController {
     @GetMapping("/{id}")
     ResponseEntity<ApiResponse<TourResponse>> getTourById(@PathVariable String id) {
         ApiResponse<TourResponse> apiResponse = ApiResponse.<TourResponse>builder()
-                .code(1302)
+                .code(1502)
                 .result(tourService.getTourById(id))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<ApiResponse<TourResponse>> updateUser(@PathVariable String id, @RequestBody @Valid TourUpdateRequest request) {
         ApiResponse<TourResponse> apiResponse = ApiResponse.<TourResponse>builder()
-                .code(1303)
+                .code(1503)
                 .message("Cập nhật thông tin tour thành công.")
                 .result(tourService.updateTour(id, request))
                 .build();
@@ -87,7 +88,7 @@ public class TourController {
         tourService.deleteTour(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1304)
+                .code(1504)
                 .message("Xóa tour thành công.")
                 .build();
 

@@ -13,10 +13,15 @@ public enum ErrorCode {
     TOKEN_INVALID(1004, "Token invalid!", HttpStatus.OK),
     PHONENUMBER_EXISTED(1005, "Số điện thoại đã tồn tại!", HttpStatus.OK),
     EMAIL_EXISTED(1006, "Email đã tồn tại!", HttpStatus.OK),
+
     PASSWORD_INVALID(1007, "Mật khẩu có độ dài từ 8 ký tự trở lên!", HttpStatus.OK),
+
     PHONENUMBER_INVALID(1008, "Số điện thoại phải có đúng 10 chữ số!", HttpStatus.OK),
+
     EMAIL_INVALID(1009, "Email phải đúng định dạng 'example@example.com'!", HttpStatus.OK),
+
     FULLNAME_INVALID (1010,"Họ tên không chứa số hoặc ký tự đặc biệt!", HttpStatus.OK),
+
     FULLNAME_LENGTH_INVALID(1011, "Họ tên có độ dài trong khoảng 5 đến 50 ký tự!", HttpStatus.OK),
     NOT_NULL_LOGIN(1012, "Vui lòng nhập thông tin để đăng nhập!", HttpStatus.OK),
     ACCOUNT_NOT_EXITED(1013, "Tài khoản không tồn tại!", HttpStatus.OK),
@@ -43,6 +48,17 @@ public enum ErrorCode {
             HttpStatus.OK),
     SCHEDULE_NOT_EXITED(1028, "Lịch trình không tồn tại!", HttpStatus.OK),
     SCHEDULE_IN_PROGRESS(1029, "Lịch trình đang diễn ra!", HttpStatus.OK),
+
+    DISCOUNT_INVALID(1030, "Giá khuyến mãi phải lớn hơn 0!", HttpStatus.OK),
+
+    PROMOTION_STARTDATE_NOT_NULL(1031, "Ngày bắt đầu không được bỏ trống!", HttpStatus.OK),
+
+    QUANTITY_INVALID(1032, "Số lượng phải lớn hơn 0!", HttpStatus.OK),
+    PROMOTION_STARTDATE_INVALID(1033, "Ngày bắt đầu không được trước ngày " +
+            LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "!",
+            HttpStatus.OK),
+    PROMOTION_ENDDATE_INVALID(1034, "Ngày kết thúc không được trước ngày bắt đầu!", HttpStatus.OK),
+    PROMOTION_NOT_EXITED(1035, "Khuyến mãi không tồn tại!", HttpStatus.OK),
 
 //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
 //    GUIDE_ASSIGNED(1014, "Hướng dẫn viên này bị trùng lịch phân công!", HttpStatus.OK),

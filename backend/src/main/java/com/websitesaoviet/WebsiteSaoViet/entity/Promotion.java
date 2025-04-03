@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "promotion")
@@ -18,6 +19,12 @@ public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
+    @Column(name = "code")
+    String code;
+
+    @Column(name = "title")
+    String title;
 
     @Column(name = "description")
     String description;
@@ -33,4 +40,10 @@ public class Promotion {
 
     @Column(name = "quantity")
     int quantity;
+
+    @Column(name = "status")
+    String status;
+
+    @Column(name = "created_time")
+    LocalDateTime createdTime;
 }

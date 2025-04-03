@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Mar 31, 2025 at 09:08 PM
+-- Generation Time: Apr 03, 2025 at 09:51 PM
 -- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
@@ -61,25 +61,6 @@ CREATE TABLE `admin_roles` (
 
 INSERT INTO `admin_roles` (`id`, `role`) VALUES
 ('22982e77-6ba9-4a8e-b099-3e3fd96a1584', 'ADMIN');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `assignment`
---
-
-CREATE TABLE `assignment` (
-  `id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `adult_price` double DEFAULT NULL,
-  `children_price` double DEFAULT NULL,
-  `code` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
-  `start_date` date DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
-  `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
-  `quantity_people` int DEFAULT NULL,
-  `total_people` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 -- --------------------------------------------------------
 
@@ -167,6 +148,13 @@ CREATE TABLE `customer` (
   `status` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id`, `code`, `email`, `full_name`, `password`, `phone`, `registered_time`, `status`) VALUES
+('0371691d-4050-438b-ba33-f3ac1207b793', 'KH2025000001', 'thanhhkh3@gmail.com', 'Trần Thành', '$2a$10$XEoBS09iLESDFzmvN1aXA.RTbnoje9DkwddBhJMelEAvPwrtJJs0u', '0825702210', '2025-04-02 23:03:45.926337', 'Đang hoạt động');
+
 -- --------------------------------------------------------
 
 --
@@ -178,17 +166,12 @@ CREATE TABLE `customer_roles` (
   `role` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `images`
+-- Dumping data for table `customer_roles`
 --
 
-CREATE TABLE `images` (
-  `id` bigint NOT NULL,
-  `image_url` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
-  `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+INSERT INTO `customer_roles` (`id`, `role`) VALUES
+('0371691d-4050-438b-ba33-f3ac1207b793', 'USER');
 
 -- --------------------------------------------------------
 
@@ -216,7 +199,11 @@ CREATE TABLE `promotion` (
   `discount` double DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `quantity` int DEFAULT NULL,
-  `start_date` date DEFAULT NULL
+  `start_date` date DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `created_time` datetime(6) DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 -- --------------------------------------------------------
@@ -231,6 +218,25 @@ CREATE TABLE `review` (
   `customer_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `rating` int DEFAULT NULL,
   `time_stamp` datetime(6) DEFAULT NULL,
+  `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schedule`
+--
+
+CREATE TABLE `schedule` (
+  `id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `adult_price` double DEFAULT NULL,
+  `children_price` double DEFAULT NULL,
+  `code` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `quantity_people` int DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `total_people` int DEFAULT NULL,
   `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
@@ -252,7 +258,8 @@ CREATE TABLE `sequence` (
 --
 
 INSERT INTO `sequence` (`id`, `last_number`, `type`, `year`) VALUES
-(1, 56, 'customer', 2025);
+(1, 1, 'customer', 2025),
+(2, 1, 'tour', 2025);
 
 -- --------------------------------------------------------
 
@@ -265,6 +272,18 @@ CREATE TABLE `token` (
   `expiry_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
+--
+-- Dumping data for table `token`
+--
+
+INSERT INTO `token` (`id`, `expiry_time`) VALUES
+('1fe094d6-63ec-489c-8045-52fa9f1d3a05', '2025-04-01 17:09:28'),
+('5cc5c9de-8661-48d0-bdbe-16b351ca6312', '2025-04-01 18:44:12'),
+('a5f5e5ee-9957-4330-824d-d4cfd549052b', '2025-04-01 18:21:12'),
+('ae6a55e7-11b6-4c58-a16d-4c94ac2fd8f6', '2025-04-01 18:28:30'),
+('b33acd3d-2b3e-489e-a60a-30a3d08d9b14', '2025-04-01 16:14:05'),
+('c14d7fd7-2577-4cdc-874f-3b0d028288a6', '2025-04-01 18:31:35');
+
 -- --------------------------------------------------------
 
 --
@@ -273,16 +292,22 @@ CREATE TABLE `token` (
 
 CREATE TABLE `tour` (
   `id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `category_id` int DEFAULT NULL,
   `code` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `created_time` datetime(6) DEFAULT NULL,
   `description` longtext COLLATE utf8mb4_vietnamese_ci,
   `destination` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
-  `introduce` longtext COLLATE utf8mb4_vietnamese_ci,
   `name` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `quantity_day` int DEFAULT NULL,
-  `quantity_order` int DEFAULT NULL
+  `quantity_order` int DEFAULT NULL,
+  `area` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `tour`
+--
+
+INSERT INTO `tour` (`id`, `code`, `created_time`, `description`, `destination`, `name`, `quantity_day`, `quantity_order`, `area`) VALUES
+('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'T2025000001', '2025-04-04 01:30:51.200075', 'Tour khám phá Hà Giang 3 ngày 2 đêm với cảnh đẹp thiên nhiên và trải nghiệm văn hóa dân tộc.', 'Hà Giang, Việt Nam', 'Tour khám phá Hà Giang', 3, 0, 'Vùng núi phía Bắc');
 
 -- --------------------------------------------------------
 
@@ -295,6 +320,14 @@ CREATE TABLE `tour_images` (
   `image` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
+--
+-- Dumping data for table `tour_images`
+--
+
+INSERT INTO `tour_images` (`tour_id`, `image`) VALUES
+('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854199/saoviet/o3tufqj6ama66vekmdpy.jpg'),
+('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854102/saoviet/jwel4yzvsnkhpodz1pab.jpg');
+
 -- --------------------------------------------------------
 
 --
@@ -305,6 +338,14 @@ CREATE TABLE `tour_itineraries` (
   `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `itinerary` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `tour_itineraries`
+--
+
+INSERT INTO `tour_itineraries` (`tour_id`, `itinerary`) VALUES
+('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Ngày 1: Hà Nội - Hà Giang'),
+('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Ngày 2: Hà Giang - Đồng Văn');
 
 --
 -- Indexes for dumped tables
@@ -324,13 +365,6 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `admin_roles`
   ADD KEY `FKgp47bc0lu5j4h6tcaeosqwytp` (`id`);
-
---
--- Indexes for table `assignment`
---
-ALTER TABLE `assignment`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UK8gceg7j616jbkvgdrvdv3pcs4` (`code`);
 
 --
 -- Indexes for table `booking`
@@ -367,12 +401,6 @@ ALTER TABLE `customer_roles`
   ADD KEY `FK6vg2k9wl18ly4cp6x8ouddvug` (`id`);
 
 --
--- Indexes for table `images`
---
-ALTER TABLE `images`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `invoice`
 --
 ALTER TABLE `invoice`
@@ -389,6 +417,13 @@ ALTER TABLE `promotion`
 --
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `schedule`
+--
+ALTER TABLE `schedule`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UKmfoqwlcsgf6qa1v6lauq33taq` (`code`);
 
 --
 -- Indexes for table `sequence`
@@ -433,16 +468,10 @@ ALTER TABLE `category`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `images`
---
-ALTER TABLE `images`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `sequence`
 --
 ALTER TABLE `sequence`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

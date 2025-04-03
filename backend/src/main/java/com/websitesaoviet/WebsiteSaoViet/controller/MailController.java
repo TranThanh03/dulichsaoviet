@@ -26,7 +26,7 @@ public class MailController {
      public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String htmlContent) {
          try {
              mailService.sendMail(to, subject, htmlContent);
-
+            //1400
              return "Email đã gửi thành công";
          } catch (MessagingException e) {
              throw new AppException(ErrorCode.EMAIL_SEND_FAILED);

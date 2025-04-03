@@ -31,7 +31,7 @@ public class ScheduleController {
     @PostMapping()
     ResponseEntity<ApiResponse<ScheduleResponse>> createSchedule(@RequestBody @Valid ScheduleCreationRequest request) {
         ApiResponse<ScheduleResponse> apiResponse = ApiResponse.<ScheduleResponse>builder()
-                .code(1400)
+                .code(1600)
                 .message("Thêm lịch trình mới thành công.")
                 .result(scheduleService.createSchedule(request))
                 .build();
@@ -49,7 +49,7 @@ public class ScheduleController {
         Page<ScheduleResponse> schedulesPage = scheduleService.getSchedules(pageable);
 
         ApiResponse<Page<ScheduleResponse>> apiResponse = ApiResponse.<Page<ScheduleResponse>>builder()
-                .code(1401)
+                .code(1601)
                 .result(schedulesPage)
                 .build();
 
@@ -59,7 +59,7 @@ public class ScheduleController {
     @GetMapping("/{id}")
     ResponseEntity<ApiResponse<ScheduleResponse>> getScheduleById(@PathVariable String id) {
         ApiResponse<ScheduleResponse> apiResponse = ApiResponse.<ScheduleResponse>builder()
-                .code(1402)
+                .code(1602)
                 .result(scheduleService.getScheduleById(id))
                 .build();
 
@@ -70,7 +70,7 @@ public class ScheduleController {
     ResponseEntity<ApiResponse<List<ScheduleSummaryResponse>>> getSchedulesByTourId(@PathVariable String id) {
 
         ApiResponse<List<ScheduleSummaryResponse>> apiResponse = ApiResponse.<List<ScheduleSummaryResponse>>builder()
-                .code(1403)
+                .code(1603)
                 .result(scheduleService.getSchedulesByTourId(id))
                 .build();
 
@@ -87,7 +87,7 @@ public class ScheduleController {
         scheduleService.deleteSchedule(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1404)
+                .code(1604)
                 .message("Xóa lịch trình thành công.")
                 .build();
 
