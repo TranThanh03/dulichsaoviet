@@ -23,11 +23,8 @@ public class Checkout {
     @Column(name = "code")
     String code;
 
-    @Column(name = "order_id")
-    String orderId;
-
-    @Column(name = "amount")
-    Double amount;
+    @Column(name = "booking_id")
+    String bookingId;
 
     @Column(name = "method")
     String method;

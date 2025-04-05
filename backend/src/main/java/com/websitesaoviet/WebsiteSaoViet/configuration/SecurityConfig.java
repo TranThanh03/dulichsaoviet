@@ -30,7 +30,7 @@ public class SecurityConfig {
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login", "/auth/admin/login", "/auth/register",
             "/customers",
-            "/payment/momo/callback/**",
+            "/checkout/momo/callback/**",
     };
 
     private final String[] PATCH_PUBLIC_ENDPOINTS = {

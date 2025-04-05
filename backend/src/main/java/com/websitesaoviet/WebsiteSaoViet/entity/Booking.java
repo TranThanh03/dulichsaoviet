@@ -39,11 +39,11 @@ public class Booking {
     @Column(name = "tour_name")
     String tourName;
 
-    @Column(name = "assignment_id")
-    String assignmentId;
+    @Column(name = "schedule_id")
+    String scheduleId;
 
-    @Column(name = "assignment_code")
-    String assignmentCode;
+    @Column(name = "schedule_code")
+    String scheduleCode;
 
     @Column(name = "start_date")
     LocalDate startDate;

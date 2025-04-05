@@ -61,6 +61,10 @@ public class PromotionService {
                 .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_EXITED)));
     }
 
+    public Promotion getAvailablePromotionById(String id) {
+        return promotionRepository.findAvailablePromotionById(id);
+    }
+
     public PromotionResponse updatePromotion(String id, PromotionUpdateRequest request) {
         Promotion promotion = promotionRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_EXITED));
@@ -86,5 +90,13 @@ public class PromotionService {
         }
 
         promotionRepository.deleteById(id);
+    }
+
+    public void minusQuantity(String id, int quantity) {
+        try {
+            promotionRepository.minusQuantity(id, quantity);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.PROMOTION_NOT_EXITED);
+        }
     }
 }

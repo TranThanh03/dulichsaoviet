@@ -4,6 +4,8 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryRespon
 import com.websitesaoviet.WebsiteSaoViet.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,19 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
     @Transactional
     @Modifying
     void deleteAllByTourId(String tourId);
+
+    @Query("SELECT COUNT(s) > 0 FROM Schedule s WHERE s.id = :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople + :people <= s.totalPeople")
+    boolean existsScheduleByQuantityPeople(@Param("id") String id, @Param("people") int people);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Schedule s SET s.quantityPeople = s.quantityPeople + :people WHERE s.id = :id")
+    void addQuantityPeople(@Param("id") String id, @Param("people") int people);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Schedule s SET s.quantityPeople = s.quantityPeople - :people WHERE s.id = :id")
+    void minusQuantityPeople(@Param("id") String id, @Param("people") int people);
 
 //    @Query("SELECT COUNT(s) FROM")
 //    boolean existsScheduleByIdAndPeople(String tourId, int people);

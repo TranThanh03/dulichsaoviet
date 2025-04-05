@@ -1,6 +1,5 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
-import com.nimbusds.jose.JOSEException;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.common.PasswordChangeRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.CustomerCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.CustomerUpdateRequest;
@@ -21,8 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
 @RestController
 @RequestMapping("/customers")
 @RequiredArgsConstructor
@@ -33,7 +30,7 @@ public class CustomerController {
     AuthenticationService authenticationService;
 
     @PostMapping()
-    ResponseEntity<ApiResponse<CustomerCreateResponse>> createUser(@RequestBody @Valid CustomerCreationRequest request) {
+    ResponseEntity<ApiResponse<CustomerCreateResponse>> createCustomer(@RequestBody @Valid CustomerCreationRequest request) {
         ApiResponse<CustomerCreateResponse> apiResponse = ApiResponse.<CustomerCreateResponse>builder()
                 .code(1300)
                 .message("Thêm khách hàng mới thành công.")
@@ -45,7 +42,7 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
-    ResponseEntity<ApiResponse<Page<CustomerResponse>>> getUsers(
+    ResponseEntity<ApiResponse<Page<CustomerResponse>>> getCustomers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
@@ -61,7 +58,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<ApiResponse<CustomerResponse>> getUserById(@PathVariable String id) {
+    ResponseEntity<ApiResponse<CustomerResponse>> getCustomerById(@PathVariable String id) {
         ApiResponse<CustomerResponse> apiResponse = ApiResponse.<CustomerResponse>builder()
                 .code(1302)
                 .result(customerService.getCustomerById(id))
@@ -71,8 +68,7 @@ public class CustomerController {
     }
 
     @GetMapping("/infor")
-    ResponseEntity<ApiResponse<CustomerResponse>> getUserByToken(@RequestHeader("Authorization") String authorizationHeader)
-            throws ParseException, JOSEException {
+    ResponseEntity<ApiResponse<CustomerResponse>> getCustomerByToken(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authenticationService.extractTokenFromHeader(authorizationHeader);
         String id = authenticationService.getIdByToken(token);
 
@@ -85,7 +81,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<CustomerResponse>> updateUser(@PathVariable String id, @RequestBody @Valid CustomerUpdateRequest request) {
+    ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@PathVariable String id, @RequestBody @Valid CustomerUpdateRequest request) {
         ApiResponse<CustomerResponse> apiResponse = ApiResponse.<CustomerResponse>builder()
                 .code(1304)
                 .message("Cập nhật thông tin khách hàng thành công.")

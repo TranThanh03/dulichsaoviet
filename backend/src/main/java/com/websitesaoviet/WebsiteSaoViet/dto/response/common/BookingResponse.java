@@ -11,15 +11,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PromotionResponse {
+public class BookingResponse {
     String id;
     String code;
-    String title;
-    String description;
-    Double discount;
+    String customerId;
+    String customerCode;
+    String tourId;
+    String tourCode;
+    String tourName;
+    String scheduleId;
+    String scheduleCode;
     LocalDate startDate;
     LocalDate endDate;
-    int quantity;
+    int quantityDay;
+    int quantityAdult;
+    int quantityChildren;
+    Double adultPrice;
+    Double childrenPrice;
+    Double discount;
+    Double totalPrice;
+    LocalDateTime bookingTime;
     String status;
-    LocalDateTime createdTime;
 }

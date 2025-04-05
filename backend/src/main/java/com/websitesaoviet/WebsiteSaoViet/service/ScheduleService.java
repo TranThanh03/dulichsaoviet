@@ -84,19 +84,25 @@ public class ScheduleService {
         scheduleRepository.deleteAllByTourId(tourId);
     }
 
-//    public boolean existsSchedule(String id, int people) {
-//        return scheduleRepository.existsScheduleByNumberPeople(id, people);
-//    }
-//
-//    @Transactional
-//    public void addQuantityPeople(String id, int people) {
-//        scheduleRepository.addQuantityPeople(id, people);
-//    }
-//
-//    @Transactional
-//    public void minusQuantityPeople(String id, int people) {
-//        scheduleRepository.minusQuantityPeople(id, people);
-//    }
+    public boolean existsScheduleByQuantityPeople(String id, int people) {
+        return scheduleRepository.existsScheduleByQuantityPeople(id, people);
+    }
+
+    public void addQuantityPeople(String id, int people) {
+        try {
+            scheduleRepository.addQuantityPeople(id, people);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.SCHEDULE_NOT_EXITED);
+        }
+    }
+
+    public void minusQuantityPeople(String id, int people) {
+        try {
+            scheduleRepository.minusQuantityPeople(id, people);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.SCHEDULE_NOT_EXITED);
+        }
+    }
 
     public String getNextCode(String type) {
         int nextCode = sequenceService.getNextNumber(type.toLowerCase());

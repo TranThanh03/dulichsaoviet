@@ -59,15 +59,11 @@ public enum ErrorCode {
             HttpStatus.OK),
     PROMOTION_ENDDATE_INVALID(1034, "Ngày kết thúc không được trước ngày bắt đầu!", HttpStatus.OK),
     PROMOTION_NOT_EXITED(1035, "Khuyến mãi không tồn tại!", HttpStatus.OK),
+    SCHEDULE_PEOPLE_INVALID(1036, "Số lượng người vượt quá số lượng người tối đa!", HttpStatus.OK),
 
 //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
-//    GUIDE_ASSIGNED(1014, "Hướng dẫn viên này bị trùng lịch phân công!", HttpStatus.OK),
-
-
-//    GUIDE_NOT_EXITED(1019, "Hướng dẫn viên không tồn tại!", HttpStatus.OK),
 //    ORDER_NOT_EXITED(1020, "Lịch đặt không tồn tại!", HttpStatus.OK),
 //    PAYMENT_NOT_EXITED(1021, "Hóa đơn không tồn tại!", HttpStatus.OK),
-//    ASSIGNMENT_PEOPLE_INVALID(1022, "Số lượng người đặt vượt quá số lượng người tối đa!" , HttpStatus.OK),
     PAYMENT_MOMO_FALIED(1023, "Không thể thanh toán bằng Momo!", HttpStatus.OK),
 //    RESULT_MOMO_FALIED(1024, "Thanh toán qua MoMo thất bại!", HttpStatus.OK),
 //    INVALID_ORDER(1025, "Lịch đặt không hợp lệ!", HttpStatus.OK),

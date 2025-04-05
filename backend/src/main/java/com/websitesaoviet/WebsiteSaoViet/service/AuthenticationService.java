@@ -198,10 +198,14 @@ public class AuthenticationService {
         return signedJWT;
     }
 
-    public String getIdByToken(String token) throws ParseException, JOSEException {
-        var signToken = verifyToken(token);
+    public String getIdByToken(String token) {
+        try {
+            var signToken = verifyToken(token);
 
-        return signToken.getJWTClaimsSet().getClaim("id").toString();
+            return signToken.getJWTClaimsSet().getClaim("id").toString();
+        } catch (ParseException | JOSEException e) {
+            return null;
+        }
     }
 
     public String extractTokenFromHeader(String authorizationHeader) {
