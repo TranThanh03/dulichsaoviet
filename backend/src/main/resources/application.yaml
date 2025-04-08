@@ -50,7 +50,13 @@ momo:
   partnerCode: "MOMOBKUN20180529"
   accessKey: "klm05TvNBzhg7h7j"
   secretKey: "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa"
-  url: "https://a19a-113-23-44-70.ngrok-free.app"
+
+vnpay:
+  tmnCode: "N1XOQX99"
+  hashSecret: "VFXDH25HO55AOL3CB0IUGYX1XKLSAOXF"
+
+base:
+  url: "https://ed1c-118-71-192-193.ngrok-free.app"
 
 app:
   name: SaoViet

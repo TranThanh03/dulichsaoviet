@@ -59,17 +59,22 @@ public enum ErrorCode {
             HttpStatus.OK),
     PROMOTION_ENDDATE_INVALID(1034, "Ngày kết thúc không được trước ngày bắt đầu!", HttpStatus.OK),
     PROMOTION_NOT_EXITED(1035, "Khuyến mãi không tồn tại!", HttpStatus.OK),
-    SCHEDULE_PEOPLE_INVALID(1036, "Số lượng người vượt quá số lượng người tối đa!", HttpStatus.OK),
+    PROMOTION_CODE_AVAILABLE(1036, "Mã khuyến mãi đã tồn tại!", HttpStatus.OK),
+    SCHEDULE_PEOPLE_INVALID(1037, "Số lượng người vượt quá số lượng người tối đa!", HttpStatus.OK),
 
-//    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
+    DATE_INVALID(1038, "Thời gian không hợp lệ!" , HttpStatus.OK),
+
+    PAYMENT_MOMO_FALIED(1039, "Không thể thanh toán bằng Momo!", HttpStatus.OK),
+    PAYMENT_VNPAY_FALIED(1040, "Không thể thanh toán bằng Vnpay!", HttpStatus.OK),
+
+    //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
 //    ORDER_NOT_EXITED(1020, "Lịch đặt không tồn tại!", HttpStatus.OK),
 //    PAYMENT_NOT_EXITED(1021, "Hóa đơn không tồn tại!", HttpStatus.OK),
-    PAYMENT_MOMO_FALIED(1023, "Không thể thanh toán bằng Momo!", HttpStatus.OK),
 //    RESULT_MOMO_FALIED(1024, "Thanh toán qua MoMo thất bại!", HttpStatus.OK),
 //    INVALID_ORDER(1025, "Lịch đặt không hợp lệ!", HttpStatus.OK),
 //    ORDER_PROCESSING(1026, "Tồn tại lịch đặt đang xử lý!", HttpStatus.OK),
 //    GUIDE_PRICE_INVALID(1027, "Giá hướng dẫn viên phải lớn hơn 0!", HttpStatus.OK),
-    DATE_INVALID(1029, "Thời gian không hợp lệ!" , HttpStatus.OK),
+
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

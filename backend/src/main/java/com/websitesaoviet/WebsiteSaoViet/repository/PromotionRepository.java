@@ -25,6 +25,8 @@ public interface PromotionRepository extends JpaRepository<Promotion, String> {
             "WHERE p.id = :id AND p.status = 'Đang diễn ra' AND p.quantity > 0")
     Promotion findAvailablePromotionById(@Param("id") String id);
 
+    boolean existsByCode(String code);
+
     @Transactional
     @Modifying
     @Query("UPDATE Promotion p SET p.quantity = p.quantity - :quantity WHERE p.id = :id")

@@ -5,8 +5,6 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.common.CheckoutResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Checkout;
 import com.websitesaoviet.WebsiteSaoViet.enums.CheckoutStatus;
 import com.websitesaoviet.WebsiteSaoViet.enums.MethodPayment;
-import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
-import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.mapper.CheckoutMapper;
 import com.websitesaoviet.WebsiteSaoViet.repository.CheckoutRepository;
 import lombok.AccessLevel;
@@ -27,13 +25,14 @@ public class CheckoutService {
     CheckoutMapper checkoutMapper;
     CheckoutRepository checkoutRepository;
     ScheduleService scheduleService;
-    MomoPaymentService momoPaymentService;
+    MomoService momoService;
+    VnpayService vnpayService;
     PromotionService promotionService;
     BookingService bookingService;
 
     @NonFinal
-    @Value("${momo.url}")
-    protected String momoUrl;
+    @Value("${base.url}")
+    protected String baseUrl;
 
     public CheckoutResponse createCheckout(String bookingId, String checkoutCode, String method,
                                            LocalDateTime currentTime, String status) {
@@ -74,35 +73,73 @@ public class CheckoutService {
 //    }
 
     public String processMomoCheckout(String orderId, String customerId, Double amount, CheckoutProcessionRequest request) {
-        String ipnUrl = momoUrl + "/api/v1/checkout/momo/callback";
+        String ipnUrl = baseUrl + "/api/v1/checkouts/momo/callback";
         String redirectUrl = "http://localhost:3000/booking/message";
         String promotionId = request.getPromotionId().trim();
 
         String extraData = "scheduleId=" + request.getScheduleId() + ";customerId=" + customerId + ";quantityAdult=" + request.getQuantityAdult() + ";quantityChildren=" + request.getQuantityChildren() + ";promotionId=" + promotionId;
         int amountInt = amount.intValue();
 
-        return momoPaymentService.createPayment(amountInt, orderId, ipnUrl, redirectUrl, extraData);
+        return momoService.createPayment(amountInt, orderId, ipnUrl, redirectUrl, extraData);
     }
 
-    public void resultMoMoCheckout(String bookingCode, String checkoutCode, String customerId,
+    public String processVnpayCheckout(String orderId, String customerId, Double amount, CheckoutProcessionRequest request) {
+        String ipnUrl = baseUrl + "/api/v1/checkouts/vnpay/callback";
+        String redirectUrl = "http://localhost:3000/booking/message";
+        String promotionId = request.getPromotionId().trim();
+
+        String extraData = "scheduleId=" + request.getScheduleId() + ";customerId=" + customerId + ";quantityAdult=" + request.getQuantityAdult() + ";quantityChildren=" + request.getQuantityChildren() + ";promotionId=" + promotionId;
+        int amountInt = amount.intValue();
+
+        return vnpayService.createPayment(amountInt, orderId, ipnUrl, redirectUrl, extraData);
+    }
+
+    public void resultMomoCheckout(String bookingCode, String checkoutCode, String customerId,
                                    String scheduleId, int quantityAdult, int quantityChildren,
                                    Double amount, String promotionId) {
+
         String method = MethodPayment.MOMO.getValue();
         LocalDateTime currentTime = LocalDateTime.now();
         String status = CheckoutStatus.PAID.getValue();
         int people = quantityAdult + quantityChildren;
-        var promotion = promotionService.getPromotionById(promotionId);
-        Double discount = promotion.getDiscount();
+        Double discount = 0.0;
+
+        if (!promotionId.trim().equals("")) {
+            var promotion = promotionService.getPromotionById(promotionId);
+
+            discount = promotion.getDiscount();
+            promotionService.minusQuantity(promotionId, 1);
+        }
 
         var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, discount);
 
         createCheckout(newBooking.getId(), checkoutCode, method, currentTime, status);
 
         scheduleService.addQuantityPeople(scheduleId, people);
+    }
 
-        if (discount != null && discount > 0) {
+    public void resultVnpayCheckout(String bookingCode, String checkoutCode, String customerId,
+                                   String scheduleId, int quantityAdult, int quantityChildren,
+                                   Double amount, String promotionId) {
+
+        String method = MethodPayment.VNPAY.getValue();
+        LocalDateTime currentTime = LocalDateTime.now();
+        String status = CheckoutStatus.PAID.getValue();
+        int people = quantityAdult + quantityChildren;
+        Double discount = 0.0;
+
+        if (!promotionId.trim().equals("")) {
+            var promotion = promotionService.getPromotionById(promotionId);
+
+            discount = promotion.getDiscount();
             promotionService.minusQuantity(promotionId, 1);
         }
+
+        var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, discount);
+
+        createCheckout(newBooking.getId(), checkoutCode, method, currentTime, status);
+
+        scheduleService.addQuantityPeople(scheduleId, people);
     }
 
     public String resultCashCheckout(String bookingCode, String customerId, Double amount, CheckoutProcessionRequest request) {
@@ -128,7 +165,7 @@ public class CheckoutService {
 
             return String.format("Vui lòng đến quầy thanh toán trước %s!", formattedTime);
         } else {
-            return String.format("Vui lòng thay đổi phương thức thanh toán khác!");
+            return "Vui lòng thay đổi phương thức thanh toán khác!";
         }
     }
 

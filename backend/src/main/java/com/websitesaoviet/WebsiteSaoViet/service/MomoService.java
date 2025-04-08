@@ -20,7 +20,7 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class MomoPaymentService {
+public class MomoService {
     @NonFinal
     @Value("${momo.partnerCode}")
     protected String partnerCode;

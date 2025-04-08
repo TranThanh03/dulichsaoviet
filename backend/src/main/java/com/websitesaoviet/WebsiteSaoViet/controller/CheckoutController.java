@@ -9,11 +9,13 @@ import com.websitesaoviet.WebsiteSaoViet.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,11 +23,10 @@ import java.util.Random;
 @RequestMapping("/checkouts")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-
+@Slf4j
 public class CheckoutController {
     CheckoutService checkoutService;
     ScheduleService scheduleService;
-    BookingService bookingService;
     AuthenticationService authenticationService;
     PromotionService promotionService;
 
@@ -72,10 +73,10 @@ public class CheckoutController {
                 responseCode = 1901;
                 checkoutUrl = checkoutService.processMomoCheckout(orderId, customerId, amount, request);
                 break;
-//            case "vnpay":
-//                responseCode = 1902;
-//                checkoutUrl = checkoutService.processVnpayCheckout(orderId, customerId, request);
-//                break;
+            case "vnpay":
+                responseCode = 1902;
+                checkoutUrl = checkoutService.processVnpayCheckout(orderId, customerId, amount, request);
+                break;
             case "cash":
                 responseCode = 1903;
                 checkoutUrl =  checkoutService.resultCashCheckout(orderId, customerId, amount, request);
@@ -113,24 +114,70 @@ public class CheckoutController {
             if (resultCode == 0) {
                 String extraData = jsonData.optString("extraData", "");
                 String[] extraParams = extraData.split(";");
-                String scheduleId = extraParams.length > 0 ? extraParams[0].split("=")[1] : "";
-                String customerId = extraParams.length > 1 ? extraParams[1].split("=")[1] : "";
-                int quantityAdult = extraParams.length > 2 ? Integer.parseInt(extraParams[2].split("=")[1]) : 0;
-                int quantityChildren = extraParams.length > 3 ? Integer.parseInt(extraParams[3].split("=")[1]) : 0;
-                String promotionId = extraParams.length > 4 ? extraParams[4].split("=")[1] : "";
+
+                String scheduleId = (extraParams.length > 0 && extraParams[0].contains("=")) ? extraParams[0].split("=", 2)[1] : "";
+                String customerId = (extraParams.length > 1 && extraParams[1].contains("=")) ? extraParams[1].split("=", 2)[1] : "";
+                int quantityAdult = (extraParams.length > 2 && extraParams[2].contains("=")) ? Integer.parseInt(extraParams[2].split("=", 2)[1]) : 0;
+                int quantityChildren = (extraParams.length > 3 && extraParams[3].contains("=")) ? Integer.parseInt(extraParams[3].split("=", 2)[1]) : 0;
+                String promotionId = (extraParams.length > 4 && extraParams[4].contains("=")) ? extraParams[4].split("=", 2)[1] : "";
 
                 Double amount = jsonData.optDouble("amount", 0);
 
-                checkoutService.resultMoMoCheckout(bookingCode, checkoutCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId);
+                checkoutService.resultMomoCheckout(bookingCode, checkoutCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId);
 
                 return ResponseEntity.ok("OK");
             }
 
             return ResponseEntity.badRequest().body("ERROR");
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Callback processing error");
         }
     }
+
+    @GetMapping("/vnpay/callback")
+    public ResponseEntity<String> handleVnpayCallback(@RequestParam Map<String, String> params) {
+        try {
+            String bookingCode = params.get("vnp_TxnRef");
+            String checkoutCode = params.get("vnp_TransactionNo");
+            String vnp_ResponseCode = params.get("vnp_ResponseCode");
+            String vnp_OrderInfo = params.get("vnp_OrderInfo");
+            String vnp_Amount = params.get("vnp_Amount");
+
+            if (bookingCode.isEmpty() || checkoutCode.isEmpty()) {
+                return ResponseEntity.badRequest().body("Missing required fields");
+            }
+
+            if ("00".equals(vnp_ResponseCode)) {
+                String[] orderInfoParts = vnp_OrderInfo.split(";");
+
+                Map<String, String> extraData = new HashMap<>();
+                for (int i = 1; i < orderInfoParts.length; i++) {
+                    String[] kv = orderInfoParts[i].split("=");
+                    if (kv.length == 2) {
+                        extraData.put(kv[0], kv[1]);
+                    }
+                }
+
+                String scheduleId = extraData.getOrDefault("scheduleId", "");
+                String customerId = extraData.getOrDefault("customerId", "");
+                int quantityAdult = Integer.parseInt(extraData.getOrDefault("quantityAdult", "0"));
+                int quantityChildren = Integer.parseInt(extraData.getOrDefault("quantityChildren", "0"));
+                String promotionId = extraData.getOrDefault("promotionId", "");
+
+                Double amount = Double.parseDouble(vnp_Amount) / 100;
+
+                checkoutService.resultVnpayCheckout(bookingCode, checkoutCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId);
+
+                return ResponseEntity.ok("OK");
+            }
+
+            return ResponseEntity.badRequest().body("ERROR");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Callback error");
+        }
+    }
+
 
 //    @GetMapping("/status/{id}")
 //    public ResponseEntity<ApiResponse<CheckoutStatusResponse>> getStatusByCheckoutId(@PathVariable String id){
@@ -142,69 +189,6 @@ public class CheckoutController {
 //        return ResponseEntity.ok(apiResponse);
 //    }
 //
-//    @PostMapping("/process/later/{userBookingId}")
-//    ResponseEntity<ApiResponse<UrlCheckoutResponse>> processCheckoutLater(@PathVariable String userBookingId, @RequestBody UserCheckoutLaterRequest request) {
-//        String checkoutUrl = "";
-//        var booking = bookingService.getBookingById(userBookingId);
-//
-//        if (scheduleService.existsSchedule(booking.getScheduleId(), booking.getNumberOfPeople())) {
-//            throw new AppException(ErrorCode.ASSIGNMENT_PEOPLE_INVALID);
-//        }
-//
-//        Random random = new Random();
-//        String bookingId = System.currentTimeMillis() + "" + random.nextInt(1000);
-//        int amount = booking.getTotalPrice();
-//
-//        switch (request.getMethod()) {
-//            case "momo":
-//                checkoutUrl = checkoutService.processMomoCheckoutLater(orderId, userBookingId, amount);
-//                break;
-//            case "vnpay":
-//
-//                break;
-//            default:
-//                return null;
-//        }
-//
-//        ApiResponse<UrlCheckoutResponse> apiResponse = ApiResponse.<UrlCheckoutResponse>builder()
-//                .code(1900)
-//                .result(
-//                        UrlCheckoutResponse.builder()
-//                                .checkoutUrl(checkoutUrl)
-//                                .build()
-//                )
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
-//    @PostMapping("/momo/callback/later")
-//    public ResponseEntity<String> handleMomoCallbackLater(@RequestBody Map<String, Object> data) {
-//        try {
-//            JSONObject jsonData = new JSONObject(data);
-//
-//            String extraData = jsonData.optString("extraData", "");
-//            String[] extraParams = extraData.split(";");
-//            String userBookingId = extraParams.length > 1 ? extraParams[1].split("=")[1] : "";
-//
-//            String transId = jsonData.optString("transId", "");
-//            int amount = jsonData.optInt("amount", 0);
-//            int resultCode = jsonData.optInt("resultCode", -1);
-//
-//            if (userBookingId.isEmpty() || transId.isEmpty()) {
-//                return ResponseEntity.badRequest().body("Missing required fields");
-//            }
-//
-//            if (resultCode == 0) {
-//                checkoutService.resultMoMoCheckoutLater(userBookingId, transId, amount);
-//                return ResponseEntity.ok("OK");
-//            }
-//
-//            return ResponseEntity.badRequest().body("ERROR");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Callback processing error");
-//        }
-//    }
 
     //    @PutMapping("/{id}")
 //    ResponseEntity<ApiResponse<CheckoutResponse>> updateCheckout(@PathVariable String id, @RequestBody CheckoutUpdateRequest request) {

@@ -33,6 +33,10 @@ public class PromotionService {
         LocalDate today = LocalDate.now();
         LocalDate minStartDate = today.plusDays(1);
 
+        if (promotionRepository.existsByCode(request.getCode().toUpperCase())) {
+            throw new AppException(ErrorCode.PROMOTION_CODE_AVAILABLE);
+        }
+
         if (request.getStartDate().isBefore(minStartDate)) {
             throw new AppException(ErrorCode.PROMOTION_STARTDATE_INVALID);
         }
@@ -42,6 +46,7 @@ public class PromotionService {
 
         Promotion promotion = promotionMapper.createPromotion(request);
 
+        promotion.setCode(request.getCode().toUpperCase());
         promotion.setStatus(CommonStatus.NOT_STARTED.getValue());
         promotion.setCreatedTime(currentTime);
 
@@ -72,12 +77,18 @@ public class PromotionService {
         LocalDate today = LocalDate.now();
         LocalDate minStartDate = today.plusDays(1);
 
+        if (promotionRepository.existsByCode(request.getCode().toUpperCase())) {
+            throw new AppException(ErrorCode.PROMOTION_CODE_AVAILABLE);
+        }
+
         if (request.getStartDate().isBefore(minStartDate)) {
             throw new AppException(ErrorCode.PROMOTION_STARTDATE_INVALID);
         }
         else if (request.getEndDate().isBefore(request.getStartDate())) {
             throw new AppException(ErrorCode.PROMOTION_ENDDATE_INVALID);
         }
+
+        promotion.setCode(request.getCode().toUpperCase());
 
         promotionMapper.updatePromotion(promotion, request);
 
