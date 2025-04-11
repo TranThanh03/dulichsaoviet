@@ -4,17 +4,18 @@ import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.json.JSONObject;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -24,37 +25,23 @@ public class MomoService {
     @NonFinal
     @Value("${momo.partnerCode}")
     protected String partnerCode;
+
     @NonFinal
     @Value("${momo.accessKey}")
     protected String accessKey;
+
     @NonFinal
     @Value("${momo.secretKey}")
     protected String secretKey;
 
-    private String generateSignature(String rawHash) {
-        try {
-            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-            sha256Hmac.init(secretKeySpec);
-            byte[] signedBytes = sha256Hmac.doFinal(rawHash.getBytes(StandardCharsets.UTF_8));
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : signedBytes) {
-                hexString.append(String.format("%02x", b));
-            }
-            return hexString.toString();
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.PAYMENT_MOMO_FALIED);
-        }
-    }
-
-    public String createPayment(int amount, String orderId, String ipnUrl, String redirectUrl, String extraData) {
+    public String createPayment(int amount, String orderId, String redirectUrl, String ipnUrl, String extraData) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             Random random = new Random();
             String requestId = System.currentTimeMillis() + "" + random.nextInt(1000);
             String orderInfo = "Thanh toán qua MoMo";
             String requestType = "payWithATM";
+
             String rawHash = "accessKey=" + accessKey +
                     "&amount=" + amount +
                     "&extraData=" + extraData +
@@ -93,7 +80,50 @@ public class MomoService {
 
             return jsonResponse.getString("payUrl");
         } catch (Exception e) {
-            throw new AppException(ErrorCode.PAYMENT_MOMO_FALIED);
+            throw new AppException(ErrorCode.PAYMENT_MOMO_FAILED);
         }
     }
+
+    public boolean verifySignature(Map<String, String> params) {
+        try {
+            String rawHash = "accessKey=" + accessKey +
+                    "&amount=" + params.get("amount") +
+                    "&extraData=" + params.get("extraData") +
+                    "&message=" + params.get("message") +
+                    "&orderId=" + params.get("orderId") +
+                    "&orderInfo=" + params.get("orderInfo") +
+                    "&orderType=" + params.get("orderType") +
+                    "&partnerCode=" + params.get("partnerCode") +
+                    "&payType=" + params.getOrDefault("payType", "") +
+                    "&requestId=" + params.get("requestId") +
+                    "&responseTime=" + params.get("responseTime") +
+                    "&resultCode=" + params.get("resultCode") +
+                    "&transId=" + params.get("transId");
+
+            String generatedSignature = generateSignature(rawHash);
+            String receivedSignature = params.get("signature");
+
+            return generatedSignature.equals(receivedSignature);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.SIGNATURE_INVALID);
+        }
+    }
+
+    private String generateSignature(String rawHash) {
+        try {
+            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            sha256Hmac.init(secretKeySpec);
+            byte[] signedBytes = sha256Hmac.doFinal(rawHash.getBytes(StandardCharsets.UTF_8));
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : signedBytes) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.PAYMENT_MOMO_FAILED);
+        }
+    }
+
 }

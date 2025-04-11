@@ -1,6 +1,5 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
-import com.nimbusds.jose.JOSEException;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.AdminUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.common.PasswordChangeRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.AdminResponse;
@@ -15,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -28,8 +25,7 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/infor")
-    ResponseEntity<ApiResponse<AdminResponse>> getAdminByToken(@RequestHeader("Authorization") String authorizationHeader)
-            throws ParseException, JOSEException {
+    ResponseEntity<ApiResponse<AdminResponse>> getAdminByToken(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authenticationService.extractTokenFromHeader(authorizationHeader);
         String id = authenticationService.getIdByToken(token);
 

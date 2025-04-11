@@ -14,9 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class BookingService {
 
     public BookingResponse createBooking (String bookingCode, String customerId, String scheduleId,
                                           int quantityAdult, int quantityChildren,
-                                          Double amount, Double discount) {
+                                          Double amount, Double discount, boolean isReserved) {
         Booking booking = new Booking();
         var customer = customerService.getCustomerById(customerId);
         var schedule = scheduleService.getScheduleById(scheduleId);
@@ -60,6 +58,8 @@ public class BookingService {
         booking.setTotalPrice(amount);
         booking.setBookingTime(currentTime);
         booking.setStatus(BookingStatus.PROCESSING.getValue());
+        booking.setReviewed(false);
+        booking.setReserved(isReserved);
 
         return bookingMapper.toBookingResponse(bookingRepository.save(booking));
     }
@@ -85,40 +85,55 @@ public class BookingService {
 //        return bookingRepository.getCheckoutByBookingId(id);
 //    }
 //
-//    @Transactional
-//    public void cancelBooking(String id) {
-//        var booking = bookingRepository.existsBookingProcessing(id);
-//
-//        if (booking == null) {
-//            throw new AppException(ErrorCode.INVALID_ORDER);
-//        }
-//
-//        booking.setStatus("Đã hủy");
-//        bookingRepository.save(booking);
-//
-//        var schedule = bookingRepository.getScheduleByBookingId(id);
-//
-//        if(schedule != null) {
-//            scheduleService.minusNumberOfPeople(schedule.getAnotherId(), schedule.getNumberOfPeople());
-//        }
-//    }
-//
-//    public void confirmBooking(String id) {
-//        var booking = bookingRepository.existsBookingsPaid(id);
-//
-//        if (booking == null) {
-//            throw new AppException(ErrorCode.INVALID_ORDER);
-//        }
-//
-//        var tour = bookingRepository.getTourByBookingId(id);
-//        booking.setStatus("Đã xác nhận");
-//
-//        if(tour != null) {
-//            tourService.addOders(tour.getAnotherId(), tour.getNumberOfPeople());
-//        }
-//
-//        bookingRepository.save(booking);
-//    }
+    public void cancelBooking(String id) {
+        try {
+            var booking = bookingRepository.findBookingByIdAndStatus(id, BookingStatus.PROCESSING.getValue());
+
+            booking.setStatus(BookingStatus.CANCEL.getValue());
+            bookingRepository.save(booking);
+
+            if (booking.isReserved()) {
+                int people = booking.getQuantityAdult() + booking.getQuantityChildren();
+                scheduleService.minusQuantityPeople(booking.getScheduleId(), people);
+            }
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.BOOKING_NOT_EXITED);
+        }
+    }
+
+    public void confirmBooking(String id) {
+        try {
+            var booking = bookingRepository.findBookingPaid(id);
+
+            booking.setStatus(BookingStatus.CONFIRM.getValue());
+            bookingRepository.save(booking);
+
+            tourService.addOrders(booking.getTourId(), 1);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.BOOKING_NOT_EXITED);
+        }
+    }
+
+    public void confirmReserve(String id) {
+        var booking = bookingRepository.findBookingByIdAndStatusAndIsReserved(id, BookingStatus.PROCESSING.getValue(), false);
+
+        if (booking == null) {
+            throw new AppException(ErrorCode.BOOKING_NOT_EXITED);
+        }
+
+        int quantityPeople = booking.getQuantityAdult() + booking.getQuantityChildren();
+
+        if (!scheduleService.existsScheduleByQuantityPeople(booking.getScheduleId(), quantityPeople)) {
+            throw new AppException(ErrorCode.SCHEDULE_PEOPLE_INVALID);
+        }
+
+        booking.setReserved(true);
+        String scheduleId = booking.getScheduleId();
+
+        bookingRepository.save(booking);
+
+        scheduleService.addQuantityPeople(scheduleId, quantityPeople);
+    }
 //
 //    public long countBookings() {
 //        return bookingRepository.countBookings();
@@ -136,21 +151,17 @@ public class BookingService {
 //        return bookingRepository.existsByCustomerId(customerId);
 //    }
 //
-//    public void deleteByCustomerId(String customerId) {
-//        bookingRepository.deleteByCustomerId(customerId);
-//    }
-//
-//    public boolean existsByScheduleId(String scheduleId) {
-//        return bookingRepository.existsByScheduleId(scheduleId);
-//    }
-//
-//    public boolean existsByTourId(String tourId) {
-//        return bookingRepository.existsByTourId(tourId);
-//    }
-//
-//    public boolean existsByGuideId(String guideId) {
-//        return bookingRepository.existsByGuideId(guideId);
-//    }
+    public boolean existsByCustomerId(String customerId) {
+        return bookingRepository.existsByCustomerId(customerId);
+    }
+
+    public boolean existsByScheduleId(String scheduleId) {
+        return bookingRepository.existsByScheduleId(scheduleId);
+    }
+
+    public boolean existsByTourId(String tourId) {
+        return bookingRepository.existsByTourId(tourId);
+    }
 //
 //    public BookingStatusResponse getBookingStatusCounts() {
 //        return bookingRepository.getBookingStatusCounts();

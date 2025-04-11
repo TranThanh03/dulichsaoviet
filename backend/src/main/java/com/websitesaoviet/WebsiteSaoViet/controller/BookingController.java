@@ -46,7 +46,7 @@ public class BookingController {
 //        String id = authenticationService.getCustomerIdByToken(token);
 //
 //        ApiResponse<List<BookingResponse>> apiResponse = ApiResponse.<List<BookingResponse>>builder()
-//                .code(1800)
+//                .code(1801)
 //                .result(bookingService.getBookingsByCustomerId(id))
 //                .build();
 //
@@ -56,38 +56,51 @@ public class BookingController {
 //    @GetMapping("/{id}")
 //    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>> getBookingById(@PathVariable String id) {
 //        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>builder()
-//                .code(1800)
+//                .code(1802)
 //                .result(bookingService.getBookingById(id))
 //                .build();
 //
 //        return ResponseEntity.ok(apiResponse);
 //    }
 //
-//    @PostMapping("/cancel/{id}")
-//    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>> cancelBooking(@PathVariable String id) {
-//        bookingService.cancelBooking(id);
-//
-//
-//        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>builder()
-//                .code(1800)
-//                .message("Hủy lịch đặt thành công.")
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping("/confirm/{id}")
-//    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>> confirmBooking(@PathVariable String id) {
-//        bookingService.confirmBooking(id);
-//
-//        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>builder()
-//                .code(1800)
-//                .message("Xác nhận lịch đặt thành công.")
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
+    @PatchMapping("/cancel/{id}")
+    ResponseEntity<ApiResponse<BookingResponse>> cancelBooking(@PathVariable String id) {
+        bookingService.cancelBooking(id);
+
+        ApiResponse<BookingResponse> apiResponse = ApiResponse.<BookingResponse>builder()
+                .code(1803)
+                .message("Hủy lịch đặt thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/confirm/{id}")
+    ResponseEntity<ApiResponse<BookingResponse>> confirmBooking(@PathVariable String id) {
+        bookingService.confirmBooking(id);
+
+        ApiResponse<BookingResponse> apiResponse = ApiResponse.<BookingResponse>builder()
+                .code(1804)
+                .message("Xác nhận lịch đặt thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/reserve/{id}")
+    ResponseEntity<ApiResponse<BookingResponse>> confirmReserve(@PathVariable String id) {
+        bookingService.confirmReserve(id);
+
+        ApiResponse<BookingResponse> apiResponse = ApiResponse.<BookingResponse>builder()
+                .code(1805)
+                .message("Xác nhận giữ chỗ thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
 //
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @GetMapping("/all")
@@ -99,7 +112,7 @@ public class BookingController {
 //        Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse> bookingsPage = bookingService.getAllBookings(pageable);
 //
 //        ApiResponse<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>> apiResponse = ApiResponse.<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>>builder()
-//                .code(1800)
+//                .code(1805)
 //                .result(bookingsPage)
 //                .build();
 //
@@ -110,7 +123,7 @@ public class BookingController {
 //    @GetMapping("/detail/{id}")
 //    ResponseEntity<ApiResponse<BookingDetailResponse>> getBookingDetail(@PathVariable String id) {
 //        ApiResponse<BookingDetailResponse> apiResponse = ApiResponse.<BookingDetailResponse>builder()
-//                .code(1800)
+//                .code(1806)
 //                .result(bookingService.getBookingDetail(id))
 //                .build();
 //

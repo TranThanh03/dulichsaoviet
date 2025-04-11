@@ -13,20 +13,24 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VnpayService {
+
     @NonFinal
     @Value("${vnpay.tmnCode}")
     public String tmnCode;
+
     @NonFinal
     @Value("${vnpay.hashSecret}")
     public String hashSecret;
 
-    public String createPayment(int amount, String orderId, String ipnUrl, String redirectUrl, String extraData) {
+    public String createPayment(int amount, String orderId, String redirectUrl, String extraData) {
         try {
             String vnp_Version = "2.1.0";
             String vnp_Command = "pay";
@@ -46,38 +50,46 @@ public class VnpayService {
             vnp_Params.put("vnp_OrderInfo", "Thanh toan don dat tour;" + extraData);
             vnp_Params.put("vnp_OrderType", orderType);
             vnp_Params.put("vnp_Locale", "vn");
-            vnp_Params.put("vnp_ReturnUrl", ipnUrl);
+            vnp_Params.put("vnp_ReturnUrl", redirectUrl);
             vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
-            vnp_Params.put("vnp_CreateDate", new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+            vnp_Params.put("vnp_CreateDate", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+            vnp_Params.put("vnp_BankCode", bankCode);
 
-            if (bankCode != null && !bankCode.isEmpty()) {
-                vnp_Params.put("vnp_BankCode", bankCode);
-            }
-
-            List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
-            Collections.sort(fieldNames);
-
-            StringBuilder hashData = new StringBuilder();
-            StringBuilder query = new StringBuilder();
-
-            for (String fieldName : fieldNames) {
-                String value = vnp_Params.get(fieldName);
-                if (value != null && !value.isEmpty()) {
-                    hashData.append(fieldName).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
-                    query.append(fieldName).append('=').append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
-                }
-            }
-
-            hashData.deleteCharAt(hashData.length() - 1);
-            query.deleteCharAt(query.length() - 1);
-
-            String secureHash = hmacSHA512(hashSecret, hashData.toString());
-            query.append("&vnp_SecureHash=").append(secureHash);
+            String hashData = buildHashData(vnp_Params);
+            String query = hashData + "&vnp_SecureHash=" + hmacSHA512(hashSecret, hashData);
 
             return sandboxUrl + "?" + query;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.PAYMENT_VNPAY_FALIED);
+            throw new AppException(ErrorCode.PAYMENT_VNPAY_FAILED);
         }
+    }
+
+    public boolean verifySignature(Map<String, String> params) {
+        try {
+            String vnpSecureHash = params.get("vnp_SecureHash");
+            if (vnpSecureHash == null) {
+                return false;
+            }
+
+            Map<String, String> inputData = new HashMap<>(params);
+            inputData.remove("vnp_SecureHash");
+            inputData.remove("vnp_SecureHashType");
+
+            String hashData = buildHashData(inputData);
+            String calculatedHash = hmacSHA512(hashSecret, hashData);
+
+            return calculatedHash.equalsIgnoreCase(vnpSecureHash);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.SIGNATURE_INVALID);
+        }
+    }
+
+    private String buildHashData(Map<String, String> data) {
+        return data.entrySet().stream()
+                .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), StandardCharsets.US_ASCII))
+                .collect(Collectors.joining("&"));
     }
 
     private String hmacSHA512(String key, String data) {
@@ -92,7 +104,7 @@ public class VnpayService {
             }
             return sb.toString();
         } catch (Exception e) {
-            throw new AppException(ErrorCode.PAYMENT_VNPAY_FALIED);
+            throw new AppException(ErrorCode.PAYMENT_VNPAY_FAILED);
         }
     }
 }

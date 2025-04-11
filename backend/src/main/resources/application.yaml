@@ -56,7 +56,7 @@ vnpay:
   hashSecret: "VFXDH25HO55AOL3CB0IUGYX1XKLSAOXF"
 
 base:
-  url: "https://ed1c-118-71-192-193.ngrok-free.app"
+  url: "https://edab-118-71-192-193.ngrok-free.app"
 
 app:
   name: SaoViet

@@ -25,13 +25,13 @@ public class SecurityConfig {
             "/tours", "/tours/category", "/tours/category/{id:\\d}", "/tours/new", "/tours/{id:[A-Z]\\d+}", "/tours/search",
             "/guides", "/guides/{id:[A-Z]{3}\\d+}", "/guides/evaluate",
             "/assignments/guide/{id:[A-Z]{3}\\d+}",
-            "/checkouts/vnpay/callback/**",
     };
 
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login", "/auth/admin/login", "/auth/register",
             "/customers",
             "/checkouts/momo/callback/**",
+            "/checkouts/vnpay/callback/**",
     };
 
     private final String[] PATCH_PUBLIC_ENDPOINTS = {

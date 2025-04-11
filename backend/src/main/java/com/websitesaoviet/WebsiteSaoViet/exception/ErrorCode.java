@@ -64,8 +64,24 @@ public enum ErrorCode {
 
     DATE_INVALID(1038, "Thời gian không hợp lệ!" , HttpStatus.OK),
 
-    PAYMENT_MOMO_FALIED(1039, "Không thể thanh toán bằng Momo!", HttpStatus.OK),
-    PAYMENT_VNPAY_FALIED(1040, "Không thể thanh toán bằng Vnpay!", HttpStatus.OK),
+    PAYMENT_MOMO_FAILED(1039, "Không thể thanh toán bằng Momo!", HttpStatus.OK),
+    PAYMENT_VNPAY_FAILED(1040, "Không thể thanh toán bằng Vnpay!", HttpStatus.OK),
+    SIGNATURE_INVALID(1041, "Chữ ký không hợp lệ!", HttpStatus.OK),
+    DATA_INVALID(1042, "Dữ liệu không hợp lệ!", HttpStatus.OK),
+    CHECKOUT_EXITED(1043, "Thanh toán đã tồn tại!", HttpStatus.OK),
+    INTERNAL_SERVER_ERROR(1044, "Lỗi máy chủ nội bộ!", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHECKOUT_NOT_EXITED(1045, "Thanh toán không tồn tại!", HttpStatus.OK),
+
+    BOOKING_NOT_EXITED(1041, "Lịch đặt không tồn tại!", HttpStatus.OK),
+    BOOKING_PROCESSING(1042, "Lịch đặt đang xử lý!", HttpStatus.OK),
+
+
+
+
+    RATING_INVALID(1041, "Đánh giá phải lớn hơn 0!", HttpStatus.OK),
+
+    COMMENT_INVALID(1042, "Nội dung phản hồi khoảng 500 từ!", HttpStatus.OK),
+
 
     //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
 //    ORDER_NOT_EXITED(1020, "Lịch đặt không tồn tại!", HttpStatus.OK),

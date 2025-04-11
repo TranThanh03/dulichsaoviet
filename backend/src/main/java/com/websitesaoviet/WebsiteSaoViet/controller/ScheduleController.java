@@ -4,6 +4,9 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.ScheduleCreationReque
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ScheduleResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
+import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
+import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
+import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
 import com.websitesaoviet.WebsiteSaoViet.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -26,6 +29,7 @@ import java.util.List;
 
 public class ScheduleController {
     ScheduleService scheduleService;
+    BookingService bookingService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
@@ -80,9 +84,9 @@ public class ScheduleController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<ApiResponse<String>> deleteSchedule(@PathVariable String id) {
-//        if (orderService.existsByScheduleId(id)) {
-//            throw new AppException(ErrorCode.ORDER_PROCESSING);
-//        }
+        if (bookingService.existsByScheduleId(id)) {
+            throw new AppException(ErrorCode.BOOKING_PROCESSING);
+        }
 
         scheduleService.deleteSchedule(id);
 

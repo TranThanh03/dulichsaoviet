@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CheckoutRepository extends JpaRepository<Checkout, String> {
+    boolean existsCheckoutByCode(String code);
 
+    Checkout findCheckoutByIdAndStatus(String id, String status);
 }

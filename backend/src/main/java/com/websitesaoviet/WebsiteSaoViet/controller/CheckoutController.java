@@ -9,13 +9,10 @@ import com.websitesaoviet.WebsiteSaoViet.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -23,7 +20,6 @@ import java.util.Random;
 @RequestMapping("/checkouts")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 public class CheckoutController {
     CheckoutService checkoutService;
     ScheduleService scheduleService;
@@ -46,7 +42,7 @@ public class CheckoutController {
         Double childrenPrice = schedule.getChildrenPrice();
         Double discount = 0.0;
 
-        if (!request.getPromotionId().trim().equals("")) {
+        if ((request.getMethod().equals("momo") || request.getMethod().equals("vnpay")) && (!request.getPromotionId().trim().equals(""))) {
             try {
                 var promotion = promotionService.getAvailablePromotionById(request.getPromotionId());
                 discount = promotion.getDiscount();
@@ -55,11 +51,7 @@ public class CheckoutController {
             }
         }
 
-        Double amount = adultPrice * request.getQuantityAdult() + childrenPrice * request.getQuantityChildren();
-
-        if (request.getMethod().equals("momo") || request.getMethod().equals("vnpay")) {
-            amount = amount - discount;
-        }
+        Double amount = adultPrice * request.getQuantityAdult() + childrenPrice * request.getQuantityChildren() - discount;
 
         String checkoutUrl = "";
         Random random = new Random();
@@ -99,106 +91,59 @@ public class CheckoutController {
     }
 
     @PostMapping("/momo/callback")
-    public ResponseEntity<String> handleMomoCallback(@RequestBody Map<String, Object> data) {
-        try {
-            JSONObject jsonData = new JSONObject(data);
+    ResponseEntity<ApiResponse<String>> handleMomoCallback(@RequestParam Map<String, String> allParams) {
+        boolean result = checkoutService.resultMomoCheckout(allParams);
+        int code;
+        String message;
 
-            String bookingCode = jsonData.optString("orderId", "");
-            String checkoutCode = jsonData.optString("transId", "");
-            int resultCode = jsonData.optInt("resultCode", -1);
-
-            if (bookingCode.isEmpty() || checkoutCode.isEmpty()) {
-                return ResponseEntity.badRequest().body("Missing required fields");
-            }
-
-            if (resultCode == 0) {
-                String extraData = jsonData.optString("extraData", "");
-                String[] extraParams = extraData.split(";");
-
-                String scheduleId = (extraParams.length > 0 && extraParams[0].contains("=")) ? extraParams[0].split("=", 2)[1] : "";
-                String customerId = (extraParams.length > 1 && extraParams[1].contains("=")) ? extraParams[1].split("=", 2)[1] : "";
-                int quantityAdult = (extraParams.length > 2 && extraParams[2].contains("=")) ? Integer.parseInt(extraParams[2].split("=", 2)[1]) : 0;
-                int quantityChildren = (extraParams.length > 3 && extraParams[3].contains("=")) ? Integer.parseInt(extraParams[3].split("=", 2)[1]) : 0;
-                String promotionId = (extraParams.length > 4 && extraParams[4].contains("=")) ? extraParams[4].split("=", 2)[1] : "";
-
-                Double amount = jsonData.optDouble("amount", 0);
-
-                checkoutService.resultMomoCheckout(bookingCode, checkoutCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId);
-
-                return ResponseEntity.ok("OK");
-            }
-
-            return ResponseEntity.badRequest().body("ERROR");
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Callback processing error");
+        if (result) {
+            code = 1904;
+            message = "Thanh toán Momo thành công!";
+        } else {
+            code = 1905;
+            message = "Thanh toán Momo thất bại!";
         }
+
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(code)
+                .message(message)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/vnpay/callback")
-    public ResponseEntity<String> handleVnpayCallback(@RequestParam Map<String, String> params) {
-        try {
-            String bookingCode = params.get("vnp_TxnRef");
-            String checkoutCode = params.get("vnp_TransactionNo");
-            String vnp_ResponseCode = params.get("vnp_ResponseCode");
-            String vnp_OrderInfo = params.get("vnp_OrderInfo");
-            String vnp_Amount = params.get("vnp_Amount");
+    @PostMapping("/vnpay/callback")
+     ResponseEntity<ApiResponse<String>> handleVnpayCallback(@RequestParam Map<String, String> allParams) {
+        boolean result = checkoutService.resultVnpayCheckout(allParams);
+        int code;
+        String message;
 
-            if (bookingCode.isEmpty() || checkoutCode.isEmpty()) {
-                return ResponseEntity.badRequest().body("Missing required fields");
-            }
-
-            if ("00".equals(vnp_ResponseCode)) {
-                String[] orderInfoParts = vnp_OrderInfo.split(";");
-
-                Map<String, String> extraData = new HashMap<>();
-                for (int i = 1; i < orderInfoParts.length; i++) {
-                    String[] kv = orderInfoParts[i].split("=");
-                    if (kv.length == 2) {
-                        extraData.put(kv[0], kv[1]);
-                    }
-                }
-
-                String scheduleId = extraData.getOrDefault("scheduleId", "");
-                String customerId = extraData.getOrDefault("customerId", "");
-                int quantityAdult = Integer.parseInt(extraData.getOrDefault("quantityAdult", "0"));
-                int quantityChildren = Integer.parseInt(extraData.getOrDefault("quantityChildren", "0"));
-                String promotionId = extraData.getOrDefault("promotionId", "");
-
-                Double amount = Double.parseDouble(vnp_Amount) / 100;
-
-                checkoutService.resultVnpayCheckout(bookingCode, checkoutCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId);
-
-                return ResponseEntity.ok("OK");
-            }
-
-            return ResponseEntity.badRequest().body("ERROR");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Callback error");
+        if (result) {
+            code = 1906;
+            message = "Thanh toán Vnpay thành công!";
+        } else {
+            code = 1907;
+            message = "Thanh toán Vnpay thất bại!";
         }
+
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(code)
+                .message(message)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/confirm/{id}")
+    ResponseEntity<ApiResponse<String>> updateCheckout(@PathVariable String id) {
+        checkoutService.confirmCheckout(id);
 
-//    @GetMapping("/status/{id}")
-//    public ResponseEntity<ApiResponse<CheckoutStatusResponse>> getStatusByCheckoutId(@PathVariable String id){
-//        ApiResponse<CheckoutStatusResponse> apiResponse = ApiResponse.<CheckoutStatusResponse>builder()
-//                .code(1900)
-//                .result(checkoutService.getStatusByCheckoutId(id))
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
+        ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(1908)
+                .message("Xác nhận thanh toán thành công.")
+                .build();
 
-    //    @PutMapping("/{id}")
-//    ResponseEntity<ApiResponse<CheckoutResponse>> updateCheckout(@PathVariable String id, @RequestBody CheckoutUpdateRequest request) {
-//        ApiResponse<CheckoutResponse> apiResponse = ApiResponse.<CheckoutResponse>builder()
-//                .code(1900)
-//                .message("Cập nhật thông tin hóa đơn thành công.")
-//                .result(checkoutService.updateCheckout(id, request))
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-
+        return ResponseEntity.ok(apiResponse);
+    }
 }

@@ -4,6 +4,9 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
+import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
+import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
 import com.websitesaoviet.WebsiteSaoViet.service.ScheduleService;
 import com.websitesaoviet.WebsiteSaoViet.service.TourService;
 import jakarta.validation.Valid;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class TourController {
     TourService tourService;
     ScheduleService scheduleService;
+    BookingService bookingService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
@@ -80,9 +84,9 @@ public class TourController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<ApiResponse<String>> deleteTour(@PathVariable String id) {
-//        if (orderService.existsByTourId(id)) {
-//            throw new AppException(ErrorCode.ORDER_PROCESSING);
-//        }
+        if (bookingService.existsByTourId(id)) {
+            throw new AppException(ErrorCode.BOOKING_PROCESSING);
+        }
 
         scheduleService.deleteByTourId(id);
         tourService.deleteTour(id);

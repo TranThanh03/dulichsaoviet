@@ -28,7 +28,7 @@ public class Review {
     @Column(name = "rating")
     int rating;
 
-    @Column(name = "comment")
+    @Column(name = "comment", columnDefinition = "TEXT")
     String comment;
 
     @Column(name = "time_stamp")

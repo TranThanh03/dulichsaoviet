@@ -6,7 +6,10 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.CustomerUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.CustomerResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.CustomerCreateResponse;
+import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
+import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
+import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
 import com.websitesaoviet.WebsiteSaoViet.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     CustomerService customerService;
     AuthenticationService authenticationService;
+    BookingService bookingService;
 
     @PostMapping()
     ResponseEntity<ApiResponse<CustomerCreateResponse>> createCustomer(@RequestBody @Valid CustomerCreationRequest request) {
@@ -94,6 +98,10 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<ApiResponse<String>> deleteCustomer(@PathVariable String id) {
+        if (bookingService.existsByCustomerId(id)) {
+            throw new AppException(ErrorCode.BOOKING_PROCESSING);
+        }
+
         customerService.deleteCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()

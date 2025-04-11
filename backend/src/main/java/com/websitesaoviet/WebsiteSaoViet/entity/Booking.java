@@ -77,4 +77,10 @@ public class Booking {
 
     @Column(name = "status")
     String status;
+
+    @Column(name = "is_reviewed")
+    boolean isReviewed;
+
+    @Column(name = "is_reserved")
+    boolean isReserved;
 }

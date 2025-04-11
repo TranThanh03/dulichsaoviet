@@ -1,0 +1,19 @@
+package com.websitesaoviet.WebsiteSaoViet.dto.request.user;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ReviewUpdateRequest {
+    @Min(value = 1, message = "RATING_INVALID")
+    int rating;
+
+    @Max(value = 500, message = "COMMENT_INVALID")
+    String comment;
+}

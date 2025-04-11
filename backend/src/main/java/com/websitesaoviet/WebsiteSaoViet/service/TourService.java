@@ -67,6 +67,10 @@ public class TourService {
         tourRepository.deleteById(id);
     }
 
+    public void addOrders(String id, int orders) {
+        tourRepository.addOrders(id, orders);
+    }
+
     public String getNextCode(String type) {
         int nextCode = sequenceService.getNextNumber(type.toLowerCase());
 
