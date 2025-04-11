@@ -10,8 +10,6 @@ import com.websitesaoviet.WebsiteSaoViet.repository.BookingRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -71,11 +69,11 @@ public class BookingService {
 //    public List<BookingResponse> getBookingsByCustomerId(String id) {
 //        return bookingRepository.findBookingListByCustomerId(id);
 //    }
-//
-//    public BookingResponse getBookingById(String id) {
-//        return  bookingMapper.toBookingResponse(bookingRepository.findById(id)
-//                .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_EXITED)));
-//    }
+
+    public Booking getBookingById(String id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXITED));
+    }
 //
 //    public BookingDetailResponse getBookingDetail(String id) {
 //        return bookingRepository.getBookingDetail(id);

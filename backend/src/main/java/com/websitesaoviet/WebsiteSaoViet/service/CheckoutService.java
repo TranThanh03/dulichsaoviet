@@ -229,13 +229,18 @@ public class CheckoutService {
     }
 
     public void confirmCheckout(String id) {
-        var checkout = checkoutRepository.findCheckoutByIdAndStatus(id, CheckoutStatus.UNPAID.getValue());
+        var checkoutValid = checkoutRepository.findCheckoutValidById(id);
 
-        if (checkout == null) {
+        if (checkoutValid == null) {
             throw new AppException(ErrorCode.CHECKOUT_NOT_EXITED);
         }
 
-        bookingService.confirmReserve(checkout.getBookingId());
+        if (!checkoutValid.isReserved()) {
+            bookingService.confirmReserve(checkoutValid.getBookingId());
+        }
+
+        var checkout = checkoutRepository.findById(id)
+                        .orElseThrow(() -> new AppException(ErrorCode.CHECKOUT_NOT_EXITED));
 
         checkout.setCheckoutTime(LocalDateTime.now());
         checkout.setStatus(CheckoutStatus.PAID.getValue());
