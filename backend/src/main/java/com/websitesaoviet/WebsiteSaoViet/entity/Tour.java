@@ -49,8 +49,8 @@ public class Tour {
     @Column(name = "quantity_day")
     int quantityDay;
 
-    @Column(name = "created_time")
-    LocalDateTime createdTime;
+    @Column(name = "time_stamp")
+    LocalDateTime timeStamp;
 
     @Column(name = "quantity_order")
     int quantityOrder;

@@ -84,17 +84,8 @@ public enum ErrorCode {
     COMMENT_INVALID(1051, "Nội dung phản hồi khoảng 500 từ!", HttpStatus.OK),
 
     REVIEW_NOT_EXITED(1052, "Đánh giá không tồn tại!", HttpStatus.OK),
-
     REVIEW_INVALID(1053, "Đánh giá không hợp lệ!", HttpStatus.OK),
-
-    //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
-//    ORDER_NOT_EXITED(1020, "Lịch đặt không tồn tại!", HttpStatus.OK),
-//    PAYMENT_NOT_EXITED(1021, "Hóa đơn không tồn tại!", HttpStatus.OK),
-//    RESULT_MOMO_FALIED(1024, "Thanh toán qua MoMo thất bại!", HttpStatus.OK),
-//    INVALID_ORDER(1025, "Lịch đặt không hợp lệ!", HttpStatus.OK),
-//    ORDER_PROCESSING(1026, "Tồn tại lịch đặt đang xử lý!", HttpStatus.OK),
-//    GUIDE_PRICE_INVALID(1027, "Giá hướng dẫn viên phải lớn hơn 0!", HttpStatus.OK),
-
+    NEWS_NOT_EXITED(1054, "Tin tức không tồn tại!", HttpStatus.OK),
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
