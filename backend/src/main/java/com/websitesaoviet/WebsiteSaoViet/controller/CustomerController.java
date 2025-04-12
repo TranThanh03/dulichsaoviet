@@ -84,8 +84,11 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@PathVariable String id, @RequestBody @Valid CustomerUpdateRequest request) {
+    @PutMapping("")
+    ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid CustomerUpdateRequest request) {
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String id = authenticationService.getIdByToken(token);
+
         ApiResponse<CustomerResponse> apiResponse = ApiResponse.<CustomerResponse>builder()
                 .code(1304)
                 .message("Cập nhật thông tin khách hàng thành công.")
@@ -112,8 +115,11 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PutMapping("/password/{id}")
-    ResponseEntity<ApiResponse<String>> changePassword(@PathVariable String id, @RequestBody @Valid PasswordChangeRequest request) {
+    @PutMapping("/password")
+    ResponseEntity<ApiResponse<String>> changePassword(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid PasswordChangeRequest request) {
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String id = authenticationService.getIdByToken(token);
+
         customerService.changePassword(id, request);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()

@@ -38,11 +38,14 @@ public class AdminController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<AdminResponse>> updateAdmin(@PathVariable String id, @RequestBody @Valid AdminUpdateRequest request) {
+    @PutMapping("")
+    ResponseEntity<ApiResponse<AdminResponse>> updateAdmin(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid AdminUpdateRequest request) {
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String id = authenticationService.getIdByToken(token);
+
         ApiResponse<AdminResponse> apiResponse = ApiResponse.<AdminResponse>builder()
                 .code(1201)
-                .message("Cập nhật thông tin khách hàng thành công.")
+                .message("Cập nhật thông tin quản trị viên thành công.")
                 .result(adminService.updateAdmin(id, request))
                 .build();
 
@@ -50,8 +53,11 @@ public class AdminController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/password/{id}")
-    ResponseEntity<ApiResponse<String>> changePassword(@PathVariable String id, @RequestBody @Valid PasswordChangeRequest request) {
+    @PutMapping("/password")
+    ResponseEntity<ApiResponse<String>> changePassword(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid PasswordChangeRequest request) {
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String id = authenticationService.getIdByToken(token);
+
         adminService.changePassword(id, request);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()

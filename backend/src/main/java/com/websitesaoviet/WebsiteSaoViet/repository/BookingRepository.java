@@ -32,4 +32,6 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             "FROM Booking b " +
             "WHERE b.tourId = :tourId AND b.status = 'Đang xử lý'")
     boolean existsByTourId(@Param("tourId") String tourId);
+
+    Booking findBookingByIdAndCustomerIdAndIsReviewed(String id, String customerId, boolean isReviewed);
 }

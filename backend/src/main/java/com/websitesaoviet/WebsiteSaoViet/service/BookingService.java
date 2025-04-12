@@ -70,9 +70,18 @@ public class BookingService {
 //        return bookingRepository.findBookingListByCustomerId(id);
 //    }
 
-    public Booking getBookingById(String id) {
-        return bookingRepository.findById(id)
+//    public Booking getBookingById(String id) {
+//        return bookingRepository.findById(id)
+//                .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXITED));
+//    }
+
+    public void updateBookingByReview(String id, boolean isReviewed) {
+        var booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXITED));
+
+        booking.setReviewed(isReviewed);
+
+        bookingRepository.save(booking);
     }
 //
 //    public BookingDetailResponse getBookingDetail(String id) {
@@ -104,6 +113,7 @@ public class BookingService {
             var booking = bookingRepository.findBookingPaid(id);
 
             booking.setStatus(BookingStatus.CONFIRM.getValue());
+            booking.setReviewed(true);
             bookingRepository.save(booking);
 
             tourService.addOrders(booking.getTourId(), 1);
@@ -132,6 +142,7 @@ public class BookingService {
 
         scheduleService.addQuantityPeople(scheduleId, quantityPeople);
     }
+
 //
 //    public long countBookings() {
 //        return bookingRepository.countBookings();
@@ -160,7 +171,12 @@ public class BookingService {
     public boolean existsByTourId(String tourId) {
         return bookingRepository.existsByTourId(tourId);
     }
-//
+
+    public Booking getBookingReviewValid(String id, String customerId, boolean isReviewed) {
+        return bookingRepository.findBookingByIdAndCustomerIdAndIsReviewed(id, customerId, isReviewed);
+    }
+
+    //
 //    public BookingStatusResponse getBookingStatusCounts() {
 //        return bookingRepository.getBookingStatusCounts();
 //    }

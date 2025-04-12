@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, String> {
+    Review findReviewByIdAndCustomerId(String id, String customerId);
 
+    boolean existsReviewByIdAndCustomerId(String id, String customerId);
 }

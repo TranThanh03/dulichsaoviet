@@ -23,13 +23,22 @@ import java.time.LocalDateTime;
 public class ReviewService {
     ReviewRepository reviewRepository;
     ReviewMapper reviewMapper;
+    BookingService bookingService;
 
-    public ReviewResponse createReview(ReviewCreationRequest request) {
-        LocalDateTime currentTime = LocalDateTime.now();
+    public ReviewResponse createReview(String bookingId, String customerId, ReviewCreationRequest request) {
+        var booking = bookingService.getBookingReviewValid(bookingId, customerId, true);
+
+        if (booking == null) {
+            throw new AppException(ErrorCode.REVIEW_INVALID);
+        }
+
+        bookingService.updateBookingByReview(bookingId, false);
 
         Review review = reviewMapper.createReview(request);
 
-
+        review.setCustomerId(customerId);
+        review.setTourId(booking.getTourId());
+        review.setTimeStamp(LocalDateTime.now());
 
         return reviewMapper.toReviewResponse(reviewRepository.save(review));
     }
@@ -43,21 +52,23 @@ public class ReviewService {
                 .orElseThrow(() -> new AppException(ErrorCode.TOUR_NOT_EXITED)));
     }
 
-    public ReviewResponse updateReview(String id, ReviewUpdateRequest request) {
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.TOUR_NOT_EXITED));
+    public ReviewResponse updateReview(String id, String customerId, ReviewUpdateRequest request) {
+        Review review = reviewRepository.findReviewByIdAndCustomerId(id, customerId);
 
-        LocalDateTime currentTime = LocalDateTime.now();
+        if (review == null) {
+            throw new AppException(ErrorCode.REVIEW_NOT_EXITED);
+        }
 
         reviewMapper.updateReview(review, request);
-        review.setTimeStamp(currentTime);
+
+        review.setTimeStamp(LocalDateTime.now());
 
         return reviewMapper.toReviewResponse(reviewRepository.save(review));
     }
 
-    public void deleteReview(String id) {
-        if (!reviewRepository.existsById(id)) {
-            throw new AppException(ErrorCode.TOUR_NOT_EXITED);
+    public void deleteReview(String id, String customerId) {
+        if (!reviewRepository.existsReviewByIdAndCustomerId(id, customerId)) {
+            throw new AppException(ErrorCode.REVIEW_NOT_EXITED);
         }
 
         reviewRepository.deleteById(id);

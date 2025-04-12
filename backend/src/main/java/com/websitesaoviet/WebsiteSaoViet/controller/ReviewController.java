@@ -4,6 +4,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.ReviewCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.ReviewUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ReviewResponse;
+import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
 import com.websitesaoviet.WebsiteSaoViet.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,14 +24,21 @@ import org.springframework.web.bind.annotation.*;
 
 public class ReviewController {
     ReviewService reviewService;
+    AuthenticationService authenticationService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping()
-    ResponseEntity<ApiResponse<ReviewResponse>> createReview(@RequestBody @Valid ReviewCreationRequest request) {
+    @PostMapping("/{bookingId}")
+    ResponseEntity<ApiResponse<ReviewResponse>> createReview(
+            @PathVariable String bookingId,
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody @Valid ReviewCreationRequest request) {
+
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String customerId = authenticationService.getIdByToken(token);
+
         ApiResponse<ReviewResponse> apiResponse = ApiResponse.<ReviewResponse>builder()
                 .code(2000)
-                .message("Thêm review mới thành công.")
-                .result(reviewService.createReview(request))
+                .message("Thêm đánh giá mới thành công.")
+                .result(reviewService.createReview(bookingId, customerId,request))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
@@ -63,24 +70,37 @@ public class ReviewController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<ReviewResponse>> updateUser(@PathVariable String id, @RequestBody @Valid ReviewUpdateRequest request) {
+    ResponseEntity<ApiResponse<ReviewResponse>> updateUser(
+            @PathVariable String id,
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody @Valid ReviewUpdateRequest request) {
+
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String customerId = authenticationService.getIdByToken(token);
+
         ApiResponse<ReviewResponse> apiResponse = ApiResponse.<ReviewResponse>builder()
                 .code(2003)
-                .message("Cập nhật thông tin review thành công.")
-                .result(reviewService.updateReview(id, request))
+                .message("Cập nhật thông tin đánh giá thành công.")
+                .result(reviewService.updateReview(id, customerId, request))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    ResponseEntity<ApiResponse<String>> deleteReview(@PathVariable String id) {
+    ResponseEntity<ApiResponse<String>> deleteReview(
+            @PathVariable String id,
+            @RequestHeader("Authorization") String authorizationHeader){
+
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String customerId = authenticationService.getIdByToken(token);
+
+        reviewService.deleteReview(id, customerId);
+
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(2004)
-                .message("Xóa review thành công.")
+                .message("Xóa đánh giá thành công.")
                 .build();
 
         return ResponseEntity.ok(apiResponse);

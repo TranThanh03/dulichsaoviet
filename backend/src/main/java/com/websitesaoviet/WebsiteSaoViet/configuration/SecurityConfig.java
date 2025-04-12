@@ -28,10 +28,8 @@ public class SecurityConfig {
     };
 
     private final String[] POST_PUBLIC_ENDPOINTS = {
-            "/auth/login", "/auth/admin/login", "/auth/register",
+            "/auth/login", "/auth/register", "/auth/admin/login",
             "/customers",
-            "/checkouts/momo/callback/**",
-            "/checkouts/vnpay/callback/**",
     };
 
     private final String[] PATCH_PUBLIC_ENDPOINTS = {

@@ -72,16 +72,20 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(1044, "Lỗi máy chủ nội bộ!", HttpStatus.INTERNAL_SERVER_ERROR),
     CHECKOUT_NOT_EXITED(1045, "Thanh toán không tồn tại!", HttpStatus.OK),
 
-    BOOKING_NOT_EXITED(1041, "Lịch đặt không tồn tại!", HttpStatus.OK),
-    BOOKING_PROCESSING(1042, "Lịch đặt đang xử lý!", HttpStatus.OK),
+    QUANTITY_ADULT(1046, "Số người lớn nằm trong khoảng 1-100!", HttpStatus.OK),
 
+    QUANTITY_CHILDREN(1047, "Số trẻ em nằm trong khoảng 1-100!", HttpStatus.OK),
 
+    BOOKING_NOT_EXITED(1048, "Lịch đặt không tồn tại!", HttpStatus.OK),
+    BOOKING_PROCESSING(1049, "Lịch đặt đang xử lý!", HttpStatus.OK),
 
+    RATING_INVALID(1050, "Đánh giá nằm trong khoảng 1-5!", HttpStatus.OK),
 
-    RATING_INVALID(1041, "Đánh giá phải lớn hơn 0!", HttpStatus.OK),
+    COMMENT_INVALID(1051, "Nội dung phản hồi khoảng 500 từ!", HttpStatus.OK),
 
-    COMMENT_INVALID(1042, "Nội dung phản hồi khoảng 500 từ!", HttpStatus.OK),
+    REVIEW_NOT_EXITED(1052, "Đánh giá không tồn tại!", HttpStatus.OK),
 
+    REVIEW_INVALID(1053, "Đánh giá không hợp lệ!", HttpStatus.OK),
 
     //    ASSIGNMENT_NOT_EXITED(1013, "Lịch phân công không tồn tại!", HttpStatus.OK),
 //    ORDER_NOT_EXITED(1020, "Lịch đặt không tồn tại!", HttpStatus.OK),
