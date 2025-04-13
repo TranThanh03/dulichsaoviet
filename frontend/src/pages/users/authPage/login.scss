@@ -1,49 +1,53 @@
 .login-page {
     .container {
         max-width: 70% !important;
-    }
 
-    .left-box {
-        background: #1087be;
+        .left-box {
+            background: #1087be;
 
-        
-        img {
-                width: 280px;
-                height: 200px;
-                border-radius: 10px;
-            }
-
-        p {
-            font-weight: 600;
-        }
-
-        small {
-            width: 20rem;
-        }
-    }
-    
-    .right-box {
-        .input-group {
-            display: block;
+            
+            img {
+                    width: 280px;
+                    height: 200px;
+                    border-radius: 10px;
+                }
 
             p {
-                margin-bottom: 0.5rem !important;
+                font-weight: 600;
             }
 
-            input {
-                width: 100%;
-                border-radius: 7px !important;
+            small {
+                width: 20rem;
+            }
+        }
+        
+        .right-box {
+            .input-group {
+                display: block;
+
+                p {
+                    margin-bottom: 0.5rem !important;
+                }
+
+                input {
+                    width: 100%;
+                    border-radius: 7px !important;
+                }
+            }
+
+            .bottom-group {
+                small {
+                    font-size: 1.05rem !important;
+                }
+
+                a {
+                    text-decoration: none;
+                }
             }
         }
 
-        .bottom-group {
-            small {
-                font-size: 1.05rem !important;
-            }
-
-            a {
-                text-decoration: none;
-            }
+        .bg-custom {
+            background-color: #f5f5f5 !important;
         }
     }
 }

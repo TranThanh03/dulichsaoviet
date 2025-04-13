@@ -2,15 +2,11 @@ import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './register.scss';
 import { CustomerApi } from 'services';
-import NotifiSuccess from 'component/notifi/success';
+import { SuccessToast } from 'component/notifi/index';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const RegisterPage = () => {
-    const [notifi, setNotifi] = useState({
-        title: '',
-        message: '',
-        isActive: false
-    });
-
     const [formData, setFormData] = useState({
         fullName: '',
         phone: '',
@@ -53,20 +49,16 @@ const RegisterPage = () => {
         try {
             const response = await CustomerApi.create(formData);
 
-            if (response?.code === 1999) {
-                // setFormData({
-                //     fullName: '',
-                //     phone: '',
-                //     email: '',
-                //     password: '',
-                //     repeatpw: ''
-                // });
-                
-                setNotifi({
-                    title: 'Đăng ký tài khoản thành công',
-                    message: `Vui lòng kiểm tra mail <span id='bold-red'>${response.result.email}</span>`,
-                    isActive: true
+            if (response?.code === 1300) {
+                setFormData({
+                    fullName: '',
+                    phone: '',
+                    email: '',
+                    password: '',
+                    repeatpw: ''
                 });
+
+                SuccessToast(<p>Vui lòng kiểm tra mail <b>{response.result.email}</b></p>);
             } else {
                 let newErrors = {};
                 if (response?.code === 1005 || response?.code === 1008) newErrors.phone = response.message;
@@ -84,7 +76,7 @@ const RegisterPage = () => {
     return (
         <div className="register-page">
             <div className="container d-flex justify-content-center align-items-center min-vh-100">
-                <div className="row border rounded-4 p-3 bg-white shadow my-2">
+                <div className="row border rounded-4 p-3 bg-white shadow my-2 bg-custom">
                     <h2 className="text-center fw-bold">Đăng ký</h2>
 
                     <form onSubmit={handleRegister}>
@@ -181,10 +173,7 @@ const RegisterPage = () => {
                 </div>
             </div>
 
-            <NotifiSuccess  title={notifi.title}
-                            message={notifi.message}
-                            isActive={notifi.isActive}
-                            onClose={() => setNotifi(prev => ({ ...prev, isActive: false }))}/>
+            <ToastContainer />
         </div>
     );
 };

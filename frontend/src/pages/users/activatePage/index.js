@@ -12,7 +12,7 @@ const ActivatePage = () => {
             try {
                 const response = await CustomerApi.activate(id);
 
-                if (response?.code === 1992) {
+                if (response?.code === 1307) {
                     navigate("/auth/login");
                 }
                 else {
