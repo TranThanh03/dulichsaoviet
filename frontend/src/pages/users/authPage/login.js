@@ -38,54 +38,70 @@ const LoginPage = () => {
 
     return (
         <div className='login-page'>
-            <div className="container">
-                <div className="left-box">
-                    <div className="featured-image">
-                        <img src={logo} alt="Logo" />
-                    </div>
-                    <p className="title">Sao Việt</p>
-                    <small className="subtitle">Uy tín tạo nên sự tin tưởng</small>
-                </div>
-
-                <div className="right-box">
-                    <div className="header-text">
-                        <h2>Xin chào</h2>
-                        <p>Chúng tôi rất vui vì bạn đã trở lại</p>
+            <div className="container d-flex justify-content-center align-items-center min-vh-100">
+                <div className="row border rounded-5 p-3 bg-while shadow box-area">
+                    <div className="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+                        <div className="featured-image my-3">
+                            <img src={logo} className="img-fluid" alt="Logo" />
+                        </div>
+                        <p className="text-white fs-2">Sao Việt</p>
+                        <small className="text-white text-wrap text-center fs-4">Uy tín tạo nên sự tin tưởng</small>
                     </div>
 
-                    <form onSubmit={handleLogin}>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" name="username"
-                                placeholder="SDT hoặc Email"
-                                value={formData.username}
-                                onChange={handleInputChange}
-                                autoFocus />
-                            <label for="floatingInputInvalid">Tài khoản</label>
-                        </div>
-                        
-                        <div class="form-floating">
-                            <input type="password" class="form-control" id="floatingPassword" name="password"
-                                placeholder="******"
-                                value={formData.password}
-                                onChange={handleInputChange} />
-                            <label for="floatingPasswordInvalid">Mật khẩu</label>
-                        </div>
-        
-                        <div className="error-message">
-                            {errorMessage}
-                        </div>
+                    <div className="col-md-6 right-box d-flex px-4">
+                        <div className="row align-items-center">
+                            <div className="header-text mb-2">
+                                <h2 className="fw-bold">Xin chào</h2>
+                                <p>Chào mừng bạn đến với website Sao Việt</p>
+                            </div>
 
-                        <div className="submit-group">
-                            <button type="submit">Đăng nhập</button>
-                        </div>
-                    </form>
+                            <form onSubmit={handleLogin}>
+                                <div className="input-group mb-3">
+                                    <p><b>Tài khoản</b></p>
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg bg-light fs-6"
+                                        placeholder="SDT hoặc Email"
+                                        id="username"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
 
-                    <div className="footer-links">
-                        <div className="register">
-                            <small>Khách hàng mới? <Link to="/auth/register">Tạo tài khoản</Link></small>
-                        </div>
-                        <div className="back">
-                            <small><Link to="/">Trang chủ</Link></small>
+                                <div className="input-group mb-1">
+                                    <p><b>Mật khẩu</b></p>
+                                    <input
+                                        type="password"
+                                        className="form-control form-control-lg bg-light fs-6"
+                                        placeholder="******"
+                                        id="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+
+                                <div className="text-danger mt-2">
+                                    {errorMessage}
+                                </div>
+
+                                <div className="mt-3">
+                                    <button type="submit" className="btn btn-lg btn-primary w-100 fs-6">
+                                        Đăng nhập
+                                    </button>
+                                </div>
+                            </form>
+                    
+                            <div className="input-group mt-3 .bg-warning d-flex fs-5 justify-content-between bottom-group">
+                                <div className="register">
+                                    <small>Khách hàng mới? <Link to="/auth/register">Tạo tài khoản</Link></small>
+                                </div>
+
+                                <div className="back">
+                                    <small><Link to="/">Trang chủ</Link></small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -83,83 +83,100 @@ const RegisterPage = () => {
 
     return (
         <div className="register-page">
-            <div className="container">
-                <div className="box-area">
-                    <h1 className="text-center">Đăng ký tài khoản</h1>
+            <div className="container d-flex justify-content-center align-items-center min-vh-100">
+                <div className="row border rounded-4 p-3 bg-white shadow my-2">
+                    <h2 className="text-center fw-bold">Đăng ký</h2>
 
                     <form onSubmit={handleRegister}>
-                        <div className="form-group">
-                            <label htmlFor="name">Họ và tên</label>
+                        <div className="form-floating mb-3">
                             <input
                                 type="text"
+                                className="form-control"
                                 id="name"
                                 name="fullName"
+                                placeholder="Họ và tên"
                                 value={formData.fullName}
                                 onChange={handleInputChange}
                             />
-                            {errors.fullName && <p className="warning">{errors.fullName}</p>}
+                            <label htmlFor="name">Họ và tên</label>
+                            
+                            {errors.fullName && <p className="text-danger mt-1">{errors.fullName}</p>}
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="phone">Số điện thoại</label>
+                        <div className="form-floating mb-3">
                             <input
                                 type="text"
+                                className="form-control"
                                 id="phone"
                                 name="phone"
+                                placeholder="Số điện thoại"
                                 value={formData.phone}
                                 onChange={handleInputChange}
                             />
-                            {errors.phone && <p className="warning">{errors.phone}</p>}
+                            <label htmlFor="phone">Số điện thoại</label>
+                            
+                            {errors.phone && <p className="text-danger mt-1">{errors.phone}</p>}
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
+                        <div className="form-floating mb-3">
                             <input
                                 type="email"
+                                className="form-control"
                                 id="email"
                                 name="email"
+                                placeholder="Email"
                                 value={formData.email}
                                 onChange={handleInputChange}
                             />
-                            {errors.email && <p className="warning">{errors.email}</p>}
+                            <label htmlFor="email">Email</label>
+                            
+                            {errors.email && <p className="text-danger mt-1">{errors.email}</p>}
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="pwd">Mật khẩu</label>
+                        <div className="form-floating mb-3">
                             <input
                                 type="password"
+                                className="form-control"
                                 id="pwd"
                                 name="password"
+                                placeholder="Mật khẩu"
                                 value={formData.password}
                                 onChange={handleInputChange}
                             />
-                            {errors.password && <p className="warning">{errors.password}</p>}
+                            <label htmlFor="pwd">Mật khẩu</label>
+                            
+                            {errors.password && <p className="text-danger mt-1">{errors.password}</p>}
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="repeatpw">Nhập lại mật khẩu</label>
+                        <div className="form-floating mb-3">
                             <input
                                 type="password"
+                                className="form-control"
                                 id="repeatpw"
                                 name="repeatpw"
+                                placeholder="Nhập lại mật khẩu"
                                 value={formData.repeatpw}
                                 onChange={handleInputChange}
                             />
-                            {errors.repeatpw && <p className="warning">{errors.repeatpw}</p>}
+                            <label htmlFor="repeatpw">Nhập lại mật khẩu</label>
+                            
+                            {errors.repeatpw && <p className="text-danger mt-1">{errors.repeatpw}</p>}
                         </div>
 
-                        {errors.general && <p className="warning">{errors.general}</p>}
+                        {errors.general && <p className="text-danger mt-2">{errors.general}</p>}
 
-                        <button type="submit" className="btn-submit">Đăng ký</button>
+                        <button type="submit" className="btn btn-lg btn-primary w-100 fs-6 mb-3">
+                            Đăng ký
+                        </button>
                     </form>
 
                     <p>
-                        Bằng việc đăng ký tài khoản bạn đã đồng ý với 
-                        <Link to="#"> Điều khoản sử dụng</Link> của chúng tôi!
+                        Bằng việc đăng ký tài khoản bạn đã đồng ý với
+                        <Link to="#"> Điều khoản sử dụng </Link>của chúng tôi!
                     </p>
                     <p>
                         Bạn đã có tài khoản? <Link to="/auth/login">Đăng nhập</Link>
-                        <Link to="/" id="back">Trang chủ</Link>    
+                        <Link to="/" id="back">Trang chủ</Link>
                     </p>
                 </div>
             </div>

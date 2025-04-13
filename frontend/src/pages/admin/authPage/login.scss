@@ -1,119 +1,39 @@
 .login-manage-page {
-    background-color: white;
-    height: 100vh;
-    width: 100%;
-    font-size: 18px;
-
     .container {
-        display: flex;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        flex-direction: row;
-        width: 900px;
-        background-color: white;
-        border-radius: 30px;
-        box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.15);
-        overflow: hidden;
+        max-width: 70% !important;
     }
 
     .left-box {
-        flex: 1;
-        background-color: #45c3d2;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
+        background: #1087be;
 
-    .left-box .featured-image img {
-        width: 280px;
-        height: 200px;
-        border-radius: 15px;
-        margin-bottom: 20px;
-    }
 
-    .left-box .title {
-        font-size: 24px;
-        font-weight: bold;
-        margin: 10px 0;
-        color: #ffc10e;
-    }
+        img {
+            width: 280px;
+            height: 200px;
+            border-radius: 10px;
+        }
 
-    .left-box .subtitle {
-        font-size: 18px;
-        text-align: center;
-        width: 70%;
+        p {
+            font-weight: 600;
+        }
+
+        small {
+            width: 20rem;
+        }
     }
 
     .right-box {
-        flex: 1;
-        padding: 40px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+        .input-group {
+            display: block;
 
-    .right-box .header-text {
-        margin-bottom: 20px;
-    }
+            p {
+                margin-bottom: 0.5rem !important;
+            }
 
-    .right-box .header-text h2 {
-        font-size: 28px;
-        margin-bottom: 10px;
-        font-weight: bold;
-    }
-
-    .right-box .header-text p {
-        font-size: 16px;
-        color: #555;
-    }
-
-    .input-group {
-        margin-bottom: 15px;
-    }
-
-    .input-group label {
-        font-size: 16px;
-        margin-bottom: 5px;
-        display: block;
-    }
-
-    .input-group input {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        outline: none;
-    }
-
-    .submit-group {
-        margin-top: 20px;
-    }
-
-    .submit-group button {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        color: white;
-        background-color: #45c3d2;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .submit-group button:hover {
-        background-color: #008998;
-    }
-
-    .error-message {
-        color: red;
-        font-size: 15px;
-        margin-bottom: 10px;
+            input {
+                width: 100%;
+                border-radius: 7px !important;
+            }
+        }
     }
 }

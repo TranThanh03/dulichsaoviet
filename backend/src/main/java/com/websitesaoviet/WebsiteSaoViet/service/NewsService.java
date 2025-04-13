@@ -27,6 +27,12 @@ public class NewsService {
     public NewsResponse createNews(NewsCreationRequest request) {
         News news = newsMapper.createNews(request);
 
+        if (request.getType().equals("featured")) {
+            news.setType("Nổi bật");
+        } else {
+            news.setType("Thường");
+        }
+
         news.setViewCount(0);
         news.setTimeStamp(LocalDateTime.now());
 
@@ -47,6 +53,12 @@ public class NewsService {
                 .orElseThrow(() -> new AppException(ErrorCode.NEWS_NOT_EXITED));
 
         newsMapper.updateNews(news, request);
+
+        if (request.getType().equals("featured")) {
+            news.setType("Nổi bật");
+        } else {
+            news.setType("Thường");
+        }
 
         news.setTimeStamp(LocalDateTime.now());
 
