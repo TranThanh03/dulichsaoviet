@@ -56,15 +56,7 @@ const RenderRouter = () => {
             component: <usersPage.NewsDetailPage />
         },
         {
-            path: ROUTERS.USER.HOTELS,
-            component: <usersPage.HotelPage />
-        },
-        {
-            path: ROUTERS.USER.HOTELSDETAIL,
-            component: <usersPage.HotelDetailPage />
-        },
-        {
-            path: ROUTERS.USER.TOURS,
+            path: ROUTERS.USER.TOUR,
             component: <usersPage.TourPage />
         },
         {
@@ -76,31 +68,19 @@ const RenderRouter = () => {
             component: <usersPage.TourListPage />
         },
         {
-            path: ROUTERS.USER.TOURSDETAIL,
+            path: ROUTERS.USER.TOURDETAIL,
             component: <usersPage.TourDetailPage />
         },
-         {
-            path: ROUTERS.USER.GUIDES,
-            component: <usersPage.GuidePage />
+        {
+            path: ROUTERS.USER.BOOKING,
+            component: <usersPage.BookingPage />
         },
         {
-            path: ROUTERS.USER.GUIDESDETAIL,
-            component: <usersPage.GuideDetailPage />
-        },
-        {
-            path: ROUTERS.USER.GUIDESLIST,
-            component: <usersPage.GuideListPage />
-        },
-        {
-            path: ROUTERS.USER.ORDERS,
-            component: <usersPage.OrderPage />
-        },
-        {
-            path: ROUTERS.USER.CALENDARS,
+            path: ROUTERS.USER.CALENDAR,
             component: <usersPage.CalendarPage />
         },
         {
-            path: ROUTERS.USER.ORDERSMESSAGE,
+            path: ROUTERS.USER.BOOKINGMESSAGE,
             component: <usersPage.MessagePage />
         },
         {
@@ -120,11 +100,11 @@ const RenderRouter = () => {
             component: <adminPage.LoginPage />
         },
         {
-            path: ROUTERS.ADMIN.CUSTOMERSPAGE,
+            path: ROUTERS.ADMIN.CUSTOMERPAGE,
             component: <adminPage.CustomerPage />
         },
         {
-            path: ROUTERS.ADMIN.TOURSPAGE,
+            path: ROUTERS.ADMIN.TOURPAGE,
             component: <adminPage.TourPage />
         },
         {
@@ -136,23 +116,11 @@ const RenderRouter = () => {
             component: <adminPage.TourUpdatePage />
         },
         {
-            path: ROUTERS.ADMIN.GUIDESPAGE,
-            component: <adminPage.GuidePage />
-        },
-        {
-            path: ROUTERS.ADMIN.GUIDEINSERTPAGE,
-            component: <adminPage.GuideInsertPage />
-        },
-        {
-            path: ROUTERS.ADMIN.GUIDEUPDATEPAGE,
-            component: <adminPage.GuideUpdatePage />
-        },
-        {
             path: ROUTERS.ADMIN.ASSIGNMENTSPAGE,
             component: <adminPage.AssignmentPage />
         },
         {
-            path: ROUTERS.ADMIN.CALENDARSPAGE,
+            path: ROUTERS.ADMIN.CALENDARPAGE,
             component: <adminPage.CalendarPage />
         },
         {

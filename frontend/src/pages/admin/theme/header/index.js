@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useRef, useMemo, useContext } from 'react';
-import { logo, userIcon, background } from 'assets';
+import { logo } from 'assets';
 import './style.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthApi } from 'services';
@@ -63,7 +63,7 @@ const Header = () => {
     const { authenticated } = useContext(AuthContext);
 
     return (
-        <div className="header-manage" style={{ backgroundImage: `url(${background})` }}>
+        <div className="header-manage">
             <div className="header-container" id="manage-page">
                 <div className="logo">
                     <img src={logo} alt="logo" />
@@ -73,7 +73,7 @@ const Header = () => {
                     <div className="icon-account">
                         {authenticated && (
                             <div className="account-info">
-                                <img src={userIcon} alt="Tài khoản" onClick={() => {setShow(!isShow)}} />
+                                <img src={logo} alt="Tài khoản" onClick={() => {setShow(!isShow)}} />
                                 <p onClick={() => {setShow(!isShow)}}>Tai khoan</p>
                                 {isShow && (
                                     <ul id="slidebar">

@@ -64,7 +64,7 @@ public class CustomerService {
                 "<html><body>" +
                         "<p>Xin chào,</p>" +
                         "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
-                        "<a href='http://localhost:3000/customers/activate/%s'>Kích hoạt tài khoản</a>" +
+                        "<a href='http://localhost:3000/customer/activate/%s'>Kích hoạt tài khoản</a>" +
                         "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
                         "</body></html>", savedCustomer.getId()
         );

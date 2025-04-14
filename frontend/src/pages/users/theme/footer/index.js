@@ -1,53 +1,74 @@
 import { memo } from 'react';
-import  { locationIcon, envelopeIcon, ministryOfIndustryAndTradeIcon, facebookIcon, instagramIcon, zaloIcon, logo, phoneIcon } from 'assets';
+import { locationIcon, envelopeIcon, ministryOfIndustryAndTradeIcon, facebookIcon, instagramIcon, zaloIcon, logo, phoneIcon } from 'assets';
 import './style.scss';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-    return (
-        <div className='footer'>
-            <div className="infor">
-                <h4>Sao Việt - Vivu ba miền</h4>
-                <div className='sub'>
-                    <img src={locationIcon} alt="Địa chỉ" />
-                    <p>1 Hoàng Công Chất, Phú Diễn, Bắc Từ Liêm, Hà Nội</p>
+  return (
+    <footer className="footer bg-light pt-4 mt-5">
+        <div className="container">
+            <div className="row justify-content-between text-start">
+                <div className="col-lg-5 col-md-6">
+                    <h5 className="fw-bold">Sao Việt - Vivu ba miền</h5>
+                    <div className="d-flex align-items-start gap-2 my-2 icon">
+                        <img src={locationIcon} alt="Địa chỉ" />
+                        <p className="mb-0">1 Hoàng Công Chất, Phú Diễn, Bắc Từ Liêm, Hà Nội</p>
+                    </div>
+                    <div className="d-flex align-items-start gap-2 my-2 icon">
+                        <img src={phoneIcon} alt="Số điện thoại" />
+                        <p className="mb-0">0399999999</p>
+                    </div>
+                    <div className="d-flex align-items-start gap-2 my-2 icon">
+                        <img src={envelopeIcon} alt="Email" />
+                        <p className="mb-0">support@saoviet.com</p>
+                    </div>
+                    <div className="mt-2">
+                        <img
+                            src={ministryOfIndustryAndTradeIcon}
+                            alt="Bộ Công Thương"
+                            style={{ height: 40 }}
+                        />
+                    </div>
                 </div>
-                <div className='sub'>
-                    <img src={phoneIcon} alt="Số điện thoại" />
-                    <p>0399999999</p>
+
+                <div className="col-lg-4 col-md-5 d-flex flex-column align-items-start">
+                    <div className="d-flex align-items-center gap-2 mb-3 logo">
+                        <img src={logo} alt="Logo Sao Việt" />
+                        <span className="fw-bold text-warning fs-5">Sao Việt</span>
+                    </div>
+                    <Link to="#" className="text-info text-decoration-none mb-2">Tuyển dụng</Link>
+                    <Link to="#" className="text-info text-decoration-none mb-2">Chính sách bảo mật</Link>
+                    <Link to="#" className="text-info text-decoration-none mb-2">Điều khoản sử dụng</Link>
+                    <Link to="#" className="text-info text-decoration-none mb-2">Liên hệ hợp tác</Link>
+                    <Link to="#" className="text-info text-decoration-none mb-2">Câu hỏi thường gặp</Link>
                 </div>
-                <div className='sub'>
-                    <img src={envelopeIcon} alt="Email" />
-                    <p>support@saoviet.com</p>
-                </div>
-                <div>
-                    <img src={ministryOfIndustryAndTradeIcon} alt="Bộ Công Thương" />
+
+                <div className="col-lg-2 col-md-6">
+                    <h5 className="fw-bold">Liên hệ hỗ trợ</h5>
+                    <div className="d-flex flex-column gap-2 mt-2">
+                        <Link to="#" className="text-dark text-decoration-none d-flex align-items-center gap-2 fw-bold icon">
+                            <img src={facebookIcon} alt="Facebook" />
+                            Facebook
+                        </Link>
+                        <Link to="#" className="text-dark text-decoration-none d-flex align-items-center gap-2 fw-bold icon">
+                            <img src={instagramIcon} alt="Instagram" />
+                            Instagram
+                        </Link>
+                        <Link to="#" className="text-dark text-decoration-none d-flex align-items-center gap-2 fw-bold icon">
+                            <img src={zaloIcon} alt="Zalo" />
+                            Zalo
+                        </Link>
+                    </div>
                 </div>
             </div>
 
-            <div className="policy">
-                <img src={logo} alt="Logo Sao Việt" />
-                <span>Sao Việt</span>
-                <p><Link to="#">Tuyển dụng</Link></p>
-                <p><Link to="#">Chính sách bảo mật</Link></p>
-                <p><Link to="#">Điều khoản sử dụng</Link></p>
-                <p><Link to="#">Liên hệ hợp tác</Link></p>
-                <p><Link to="#">Câu hỏi thường gặp</Link></p>
-            </div>
-
-            <div className="contact">
-                <h4>Liên hệ hỗ trợ</h4>
-                <p><Link to="#"><img src={facebookIcon} alt="Facebook" />Facebook</Link></p>
-                <p><Link to="#"><img src={instagramIcon} alt="Instagram" />Instagram</Link></p>
-                <p><Link to="#"><img src={zaloIcon} alt="Zalo" />Zalo</Link></p>
-            </div>
-
-            <div className="end">
-                <hr />
-                <span>© 2025 Sao Việt</span>
+            <hr />
+            <div className="pb-1">
+                <span className="fw-bold fs-7">© 2025 Sao Việt</span>
             </div>
         </div>
-    );
+    </footer>
+  );
 };
 
 export default memo(Footer);

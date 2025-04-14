@@ -1,171 +1,60 @@
-.header {
-    height: 275px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-width: 800px;
+.user-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 
-    .header-container {
-        width: 100%;
-        height: 150px;
-        display: flex;
-        justify-content: space-around;
-    }
-
-    .logo {
-        padding: 28px 0;
-        width: 180px;
-    }
-
-    .logo img {
-        width: 70px;
-        border-radius: 50%;
-        margin-left: 20%;
-    }
-
-    .logo p {
+    .title {
         color: #ffc10e;
-        font-size: 22px;
-        margin-top: 10px;
-        margin-left: 30px;
-        font-weight: bold;
     }
 
-    .sub-search {
-        position: relative;
-        top: 54%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #ffffff00;
-    }
-
-    .search input {
-        font-size: 16px;
-        width: 350px;
-        height: 43px;
-        padding: 6px 5px 6px 18px;
-        border-radius: 30px 0 0 30px;
-        border: 1px solid rgb(209, 209, 209);
-        outline: none;
-        border-right: none;
-        float: left;
-    }
-
-    .search button {
+    #img-logo {
         width: 50px;
-        height: 43px;
-        padding: 10px 15px 6px 10px;
-        background-color: white;
-        border: 1px solid rgb(209, 209, 209);
-        border-radius: 0 30px 30px 0;
-        border-left: none;
-        cursor: pointer;
-    }
-
-    .search img {
-        width: 17px;
-    }
-
-    .content-right {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .icon-calendar {
-        text-align: center;
-        padding: 45px 25px 0 0;
-        color: white;
-        font-weight: 500;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    p {
-        margin-top: 10px;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .icon-account {
-        text-align: center;
-        padding: 45px 0;
-    }
-
-    .icon-account p {
-        color: white;
-    }
-
-    .icon-account .account-info {
-        padding-bottom: 10px;
-    }
-
-    .icon-account #slidebar {
-        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ddd;
-        box-shadow: 5px 4px 6px rgb(146 146 150);
-        list-style: none;
-        padding: 15px 0;
-        z-index: 10;
-        width: 185px;
-        border-radius: 5px;
-    }
-
-    .icon-account #slidebar li{
-        margin-bottom: 10px;
-    }
-
-    .icon-account #slidebar a:hover,
-    .icon-account #slidebar span:hover {
-        font-weight: bold;
-    }
-
-
-    .icon-account #slidebar a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .icon-account #slidebar span {
-        color: red;
-        cursor: pointer;
-    }
-
-    .icon-calendar img {
-        width: 28px;
-        cursor: pointer;
-    }
-
-    .icon-account img {
-        width: 25px;
-        cursor: pointer;
-    }
-
-    .icon-calendar #notification-calendar {
-        display: none;
-        color: red;
         border-radius: 50%;
-        position: relative;
-        top: -112px;
-        left: 15px;
-        font-weight: 700;
-        font-size: 50px;
     }
 
-    .icon-calendar a {
-        text-decoration: none;
+    .nav .nav-link {
+        font-weight: 600;
+        padding: 8px 16px;
+        transition: 0.3s;
+        color: #000;
     }
 
-    .icon-calendar p {
-        color: white;
+    .nav .nav-link:hover {
+        color: #45C3D2 !important;
     }
 
-    .activeNav {
-        background-color: #45C3D2;
+    .nav .nav-link.active {
+        background-color: #45C3D2 !important;
+        color: white !important;
         border-radius: 20px;
-        padding: 2px 5px 5px 5px;
+    }
+
+    .search-group {
+        margin-right: 20px;
+
+        input {
+            width: 165px;
+            border: none;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: none;
+            border: none;
+        }
+
+        button:focus {
+            border: none;
+        }
+    }
+
+    .dropdown-menu {
+        right: -8px;
+        z-index: 2000;
+        text-align: center;
+
+        .dropdown-item:hover {
+            font-weight: bold;
+        }
     }
 }

@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import { ScrollToTop } from 'utils/ScrollToTop';
 import { noImage } from 'assets';
 
-const OrderPage = () => {
+const BookingPage = () => {
     const [user, setUser] = useState({ fullName: "", phone: "", email: "" });
     const [assignment, setAssignment] = useState({
         tourName: "",
@@ -289,4 +289,4 @@ const OrderPage = () => {
     );
 };
 
-export default memo(OrderPage);
+export default memo(BookingPage);

@@ -1,8 +1,4 @@
 export { default as logo } from './img/logo.jpg';
-export { default as background } from './img/background.jpg';
-export { default as searchIcon } from './icons/search.svg';
-export { default as clockIcon } from './icons/clock-regular.svg';
-export { default as userIcon } from './icons/user-regular.svg';
 export { default as locationIcon } from './icons/location-dot-solid.svg';
 export { default as phoneIcon } from './icons/phone-solid.svg';
 export { default as envelopeIcon } from './icons/envelope-solid.svg';
@@ -34,3 +30,5 @@ export { default as userPassword} from './img/user/user-password.png';
 export { default as successSvg } from './icons/success.svg';
 export { default as failedSvg } from './icons/failed.svg';
 export { default as noImage } from './img/no-image.jpg';
+export { default as momo } from './img/payment/momo.jpg';
+export { default as vnpay } from './img/payment/vnpay.jpg';
