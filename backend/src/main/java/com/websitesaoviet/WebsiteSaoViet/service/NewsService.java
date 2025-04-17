@@ -44,8 +44,15 @@ public class NewsService {
     }
 
     public NewsResponse getNewsById(String id) {
-        return newsMapper.toNewsResponse(newsRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.NEWS_NOT_EXITED)));
+        var news = newsRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NEWS_NOT_EXITED));
+
+        int viewCount = news.getViewCount();
+
+        news.setViewCount(++viewCount);
+        newsRepository.save(news);
+
+        return newsMapper.toNewsResponse(news);
     }
 
     public NewsResponse updateNews(String id, NewsUpdateRequest request) {

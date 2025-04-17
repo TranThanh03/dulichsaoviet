@@ -1,0 +1,46 @@
+.hero-area {
+    .search-form-container {
+        max-width: 900px;
+        background: rgb(229 229 229 / 90%);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group,
+    .btn {
+        border-radius: 5px;
+    }
+
+    .input-group-text,
+    .form-control,
+    .form-select {
+        height: 45px;
+        font-size: 16px;
+    }
+
+    .form-control {
+        border-radius: 0 5px 5px 0 !important;
+    }
+
+    .btn-primary {
+        background-color: #28a745;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #218838;
+    }
+
+    .react-datepicker-wrapper {
+        input {
+            width: 158px !important;
+        }
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #dee2e6 !important;
+        box-shadow: none !important;
+    }
+}

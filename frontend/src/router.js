@@ -60,14 +60,6 @@ const RenderRouter = () => {
             component: <usersPage.TourPage />
         },
         {
-            path: ROUTERS.USER.TOURCATEGORY,
-            component: <usersPage.TourCategoryPage />
-        },
-        {
-            path: ROUTERS.USER.TOURLIST,
-            component: <usersPage.TourListPage />
-        },
-        {
             path: ROUTERS.USER.TOURDETAIL,
             component: <usersPage.TourDetailPage />
         },

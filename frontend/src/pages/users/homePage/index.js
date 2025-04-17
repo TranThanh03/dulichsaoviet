@@ -3,6 +3,7 @@ import './style.scss';
 import { slide1, slide2, slide3, slide4, slide5 } from 'assets';
 import { SlideShow, SlideTour, SlideGuide } from 'component/users';
 import { TourApi, GuideApi } from 'services';
+import SearchForm from 'component/users/home/searchForm';
 
 const slides = [slide1, slide2, slide3, slide4, slide5];
 
@@ -50,9 +51,9 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
-            <div className="space" />
-            
-            <SlideShow slides={slides} />
+            <SlideShow slides={slides} interval={3000} />
+
+            <SearchForm />
 
             <SlideTour data={tours} itemsPerSlide={3} itemWidth={1115}/>
             

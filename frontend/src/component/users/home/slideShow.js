@@ -1,52 +1,75 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import './slideShow.scss';
 
-const SlideShow = ({ slides }) => {
-    const [slideIndex, setSlideIndex] = useState(1);
+const SlideShow = ({ slides, interval = 3000 }) => {
+    const nextBtnRef = useRef(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            plusSlides(1);
-        }, 3000);
+        const timer = setTimeout(() => {
+            if (nextBtnRef.current) {
+                nextBtnRef.current.click();
+            }
+        }, interval);
 
-        return () => clearInterval(interval);
-    }, [slideIndex]);
-
-    const plusSlides = (n) => {
-        setSlideIndex((prevIndex) => (prevIndex + n - 1 + slides.length) % slides.length + 1);
-    };
-
-    const currentSlide = (n) => {
-        setSlideIndex(n);
-    };
+        return () => clearTimeout(timer);
+    }, [interval]);
 
     return (
-        <div className="slideshow-container">
-            {slides.map((slide, index) => (
-                <div
-                    key={index}
-                    className={`mySlides fade ${slideIndex === index + 1 ? 'active' : ''}`}
-                    style={{ display: slideIndex === index + 1 ? 'block' : 'none' }}
-                >
-                    <img src={slide} alt={`Slide ${index + 1}`} style={{ width: '100%' }} />
-                </div>
-            ))}
-
-            <a className="prev" onClick={() => plusSlides(-1)}>
-                &#10094;
-            </a>
-            <a className="next" onClick={() => plusSlides(1)}>
-                &#10095;
-            </a>
-
-            <div style={{ textAlign: 'center' }}>
-                {slides.map((_, index) => (
-                    <span
+        <div
+            id="carouselExampleFade"
+            className="carousel slide carousel-fade"
+            data-bs-ride="carousel"
+            data-bs-interval={interval}
+            data-bs-pause="false"
+        >
+            <div className="carousel-inner">
+                {slides.map((slide, index) => (
+                    <div
                         key={index}
-                        className={`dot ${slideIndex === index + 1 ? 'active' : ''}`}
-                        onClick={() => currentSlide(index + 1)}
-                    ></span>
+                        className={`carousel-item ${index === 0 ? 'active' : ''}`}
+                    >
+                        <img
+                            src={slide}
+                            className="d-block w-100"
+                            alt={`Slide ${index + 1}`}
+                            style={{ height: '600px', objectFit: 'cover' }}
+                        />
+                    </div>
+                ))}
+            </div>
+
+            <button
+                className="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleFade"
+                data-bs-slide="prev"
+            >
+                <span className="carousel-control-prev-icon" />
+                <span className="visually-hidden">Previous</span>
+            </button>
+
+            <button
+                ref={nextBtnRef}
+                className="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleFade"
+                data-bs-slide="next"
+            >
+                <span className="carousel-control-next-icon" />
+                <span className="visually-hidden">Next</span>
+            </button>
+
+            <div className="carousel-indicators">
+                {slides.map((_, index) => (
+                    <button
+                        key={index}
+                        type="button"
+                        data-bs-target="#carouselExampleFade"
+                        data-bs-slide-to={index}
+                        className={index === 0 ? 'active' : ''}
+                        aria-current={index === 0}
+                        aria-label={`Slide ${index + 1}`}
+                    ></button>
                 ))}
             </div>
         </div>
@@ -55,6 +78,7 @@ const SlideShow = ({ slides }) => {
 
 SlideShow.propTypes = {
     slides: PropTypes.arrayOf(PropTypes.string).isRequired,
+    interval: PropTypes.number,
 };
 
-export default memo(SlideShow);
+export default SlideShow;

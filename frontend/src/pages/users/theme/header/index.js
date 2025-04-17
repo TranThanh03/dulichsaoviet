@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FaUserCircle, FaAngleDown, FaSearch, FaRegClock } from "react-icons/fa";
+import { FaUserCircle, FaAngleDown, FaSearch, FaRegCalendarAlt } from "react-icons/fa";
 import { logo } from "assets";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
@@ -78,7 +78,7 @@ const Header = () => {
         <header className="shadow-sm bg-white py-2 user-header">
             <div className="container-fluid d-flex align-items-center justify-content-between">
 
-                <div className="d-flex align-items-center">
+                <div className="col-md-3 d-flex align-items-center ms-4">
                     <img src={logo} alt="Logo" id="img-logo"/>
                     <span className="fw-bold fs-4 ms-2 title">Sao Việt</span>
                 </div>
@@ -91,7 +91,7 @@ const Header = () => {
                     ))}
                 </ul>
 
-                <div className="d-flex align-items-center gap-3">
+                <div className="col-md-3 d-flex align-items-center gap-3">
                     <form onSubmit={handleSearch} className="d-flex align-items-center bg-light rounded-pill px-3 py-1 search-group">
                         <input
                             type="text"
@@ -105,8 +105,8 @@ const Header = () => {
                         </button>
                     </form>
 
-                    <Link to="/calendars/index" className="text-dark fs-5">
-                        <FaRegClock size={26} />
+                    <Link to="/calendar/index" className="text-dark fs-5">
+                        <FaRegCalendarAlt size={26} />
                     </Link>
 
                     <div className="dropdown">
