@@ -1,5 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.dto.request.admin;
 
+import com.websitesaoviet.WebsiteSaoViet.entity.Itinerary;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -24,7 +25,7 @@ public class TourUpdateRequest {
     String destination;
     String area;
     List<String> image;
-    List<String> itinerary;
+    List<Itinerary> itinerary;
     String description;
 
     @Min(value = 1, message = "DAY_INVALID")

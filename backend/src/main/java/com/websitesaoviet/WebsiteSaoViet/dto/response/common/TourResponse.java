@@ -1,5 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
 
+import com.websitesaoviet.WebsiteSaoViet.entity.Itinerary;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,9 +19,9 @@ public class TourResponse {
     String destination;
     String area;
     List<String> image;
-    List<String> itinerary;
+    List<Itinerary> itinerary;
     String description;
     int quantityDay;
-    LocalDateTime createdTime;
+    LocalDateTime timeStamp;
     int quantityOrder;
 }

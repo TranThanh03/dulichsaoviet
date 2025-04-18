@@ -1,0 +1,13 @@
+.tour-page {
+    .page-banner-area {
+        display: flex;
+        justify-content: center;
+        height: 500px;
+
+        img {
+            object-fit: cover;
+            width: 97%;
+            border-radius: 10px;
+        }
+    }
+}

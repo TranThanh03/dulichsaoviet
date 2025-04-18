@@ -67,7 +67,7 @@ const TourCard = ({ tour }) => {
               <span>{tour.priceAdult}</span> <span className="text-gray-600">VND/người</span>
             </span>
             <Link
-                to={`/tour-detail/${tour.tourId}`}
+                to={`/tour/detail/${tour.tourId}`}
                 className="theme-btn bg-white text-black border border-gray-300 rounded-full p-2"
                 >
                 <i className="fas fa-arrow-right"></i>

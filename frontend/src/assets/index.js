@@ -6,8 +6,6 @@ export { default as ministryOfIndustryAndTradeIcon } from './icons/bo-cong-thuon
 export { default as facebookIcon } from './icons/facebook.svg';
 export { default as instagramIcon } from './icons/instagram.svg';
 export { default as zaloIcon } from './icons/zalo.svg';
-export { default as starSolid } from './icons/star-solid.svg';
-export { default as starRegular } from './icons/star-regular.svg';
 export { default as slide1 } from './img/home/slide_1.jpg';
 export { default as slide2 } from './img/home/slide_2.jpg';
 export { default as slide3 } from './img/home/slide_3.jpg';
@@ -32,3 +30,4 @@ export { default as failedSvg } from './icons/failed.svg';
 export { default as noImage } from './img/no-image.jpg';
 export { default as momo } from './img/payment/momo.jpg';
 export { default as vnpay } from './img/payment/vnpay.jpg';
+export { default as tourBanner } from './img/tour/banner.jpg';

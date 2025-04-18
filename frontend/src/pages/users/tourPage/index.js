@@ -3,6 +3,8 @@ import { TourApi } from 'services';
 import TourCard from 'component/users/tour/TourCard';
 import TourSidebar from 'component/users/tour/TourSidebar';
 import Pagination from 'component/pagination';
+import { tourBanner } from 'assets';
+import "./index.scss";
 
 const TourPage = () => {
     const [tours, setTours] = useState([
@@ -84,8 +86,12 @@ const TourPage = () => {
 
     return (
         <section className="tour-page">
+            <section class="page-banner-area py-4 text-white">
+                <img src={tourBanner} alt="banner" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50"/>
+            </section>
+
             <div className="container mx-auto px-4">
-                <div className="flex flex-wrap -mx-4 pt-5">
+                <div className="flex flex-wrap -mx-4 pt-2">
                 
                     <TourSidebar />
 

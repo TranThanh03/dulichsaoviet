@@ -1,5 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.dto.request.admin;
 
+import com.websitesaoviet.WebsiteSaoViet.entity.Itinerary;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +17,7 @@ public class TourCreationRequest {
     String destination;
     String area;
     List<String> image;
-    List<String> itinerary;
+    List<Itinerary> itinerary;
     String description;
 
     @Min(value = 1, message = "DAY_INVALID")

@@ -17,8 +17,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
 
     boolean existsByIdAndStatus(String id, String status);
 
-    boolean existsScheduleByTourId(String tourId);
-
     boolean existsScheduleByTourIdAndStatus(String tourId, String status);
 
     @Transactional

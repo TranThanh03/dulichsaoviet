@@ -40,8 +40,7 @@ public class Tour {
 
     @ElementCollection
     @CollectionTable(name = "tour_itineraries", joinColumns = @JoinColumn(name = "tour_id"))
-    @Column(name = "itinerary")
-    List<String> itinerary;
+    List<Itinerary > itinerary;
 
     @Column(name = "description", columnDefinition = "LONGTEXT")
     String description;

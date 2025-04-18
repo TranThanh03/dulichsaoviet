@@ -73,10 +73,6 @@ public class ScheduleService {
     }
 
     public void deleteByTourId(String tourId) {
-        if (!scheduleRepository.existsScheduleByTourId(tourId)) {
-            throw new AppException(ErrorCode.SCHEDULE_NOT_EXITED);
-        }
-
         if (scheduleRepository.existsScheduleByTourIdAndStatus(tourId, CommonStatus.IN_PROGRESS.getValue())) {
             throw new AppException(ErrorCode.SCHEDULE_IN_PROGRESS);
         }
