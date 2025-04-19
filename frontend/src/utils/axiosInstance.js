@@ -10,21 +10,21 @@ const axiosInstance = axios.create({
 
 const pendingRequests = new Set();
 
-// axiosInstance.interceptors.request.use(
-//     (config) => {
-//             config.metadata = { startTime: new Date().getTime() };
-//             const timer = setTimeout(() => {
-//                 setLoading(true);
-//             }, 250);
-//             config.metadata.timer = timer;
-//             pendingRequests.add(config);
+axiosInstance.interceptors.request.use(
+    (config) => {
+            config.metadata = { startTime: new Date().getTime() };
+            const timer = setTimeout(() => {
+                setLoading(true);
+            }, 250);
+            config.metadata.timer = timer;
+            pendingRequests.add(config);
 
-//         return config;
-//     },
-//     (error) => {
-//         return Promise.reject(error);
-//     }
-// );
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 axiosInstance.interceptors.response.use(
     (response) => {

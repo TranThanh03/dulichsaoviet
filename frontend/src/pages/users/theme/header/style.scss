@@ -1,32 +1,37 @@
-.user-header {
-    position: sticky;
+.header-custom {
+    position: sticky !important;
     top: 0;
     z-index: 1000;
 
     .title {
         color: #ffc10e;
+        height: 100%;
     }
 
-    #img-logo {
-        width: 50px;
-        border-radius: 50%;
+    .logo {
+        text-align: center;
+
+        img {
+            width: 60px;
+            border-radius: 50%;
+        }
     }
 
-    .nav .nav-link {
-        font-weight: 600;
-        padding: 8px 16px;
-        transition: 0.3s;
-        color: #000;
+    .mobile-logo {
+        img {
+            width: 40px;
+            border-radius: 50%;
+        }
     }
 
-    .nav .nav-link:hover {
-        color: #45C3D2 !important;
+    .navigation a {
+        text-decoration: none !important;
     }
 
-    .nav .nav-link.active {
+    .navigation .active {
         background-color: #45C3D2 !important;
         color: white !important;
-        border-radius: 20px;
+        border-radius: 25px;
     }
 
     .search-group {
@@ -49,12 +54,22 @@
     }
 
     .dropdown-menu {
-        right: -36px;
-        z-index: 2000;
+        margin-left: -88px;
+        z-index: 1100;
         text-align: center;
 
         .dropdown-item:hover {
             font-weight: bold;
         }
+    }
+
+    .search-dropdown {
+        z-index: 1200;
+    }
+
+    .nav-search .btn-custom {
+        width: 40px;
+        height: 40px;
+        border-color: black !important;
     }
 }

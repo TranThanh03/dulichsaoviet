@@ -4,10 +4,9 @@ export const setLoading = (isLoading) => {
     
     if (loader) {
         loader.style.opacity = isLoading ? "1" : "0";
-        loader.style.visibility = isLoading ? "visible" : "hidden";
 
         if(mainPage) {
-            mainPage.style.visibility = isLoading ? "hidden" : "visible";
+            mainPage.style.opacity = isLoading ? "0" : "1";
         }
     }
 };

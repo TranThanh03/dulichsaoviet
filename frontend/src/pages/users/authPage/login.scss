@@ -53,5 +53,31 @@
         .bg-custom {
             background-color: #f5f5f5 !important;
         }
+
+        @media only screen and (max-width: 992px) {
+            .left-box {
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+
+            .right-box {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 576px) {
+            .left-box {
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+            .left-box {
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+        }
     }
 }
