@@ -16,6 +16,7 @@ export const ROUTERS = {
         CALENDAR: "/calendar/index",
         SEARCH: "/tour/search",
         ACTIVATE: "/customer/activate/:id",
+        ABOUT: "/about",
     },
     ADMIN: {
         HOME: "/manage",

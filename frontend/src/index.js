@@ -7,7 +7,6 @@ import './style/style.scss';
 import Loading from 'component/loading';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

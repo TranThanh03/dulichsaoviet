@@ -86,7 +86,6 @@ const RegisterPage = () => {
                                 className="form-control"
                                 id="name"
                                 name="fullName"
-                                placeholder="Họ và tên"
                                 value={formData.fullName}
                                 onChange={handleInputChange}
                             />
@@ -101,7 +100,6 @@ const RegisterPage = () => {
                                 className="form-control"
                                 id="phone"
                                 name="phone"
-                                placeholder="Số điện thoại"
                                 value={formData.phone}
                                 onChange={handleInputChange}
                             />
@@ -116,7 +114,6 @@ const RegisterPage = () => {
                                 className="form-control"
                                 id="email"
                                 name="email"
-                                placeholder="Email"
                                 value={formData.email}
                                 onChange={handleInputChange}
                             />
@@ -131,7 +128,6 @@ const RegisterPage = () => {
                                 className="form-control"
                                 id="pwd"
                                 name="password"
-                                placeholder="Mật khẩu"
                                 value={formData.password}
                                 onChange={handleInputChange}
                             />
@@ -146,7 +142,6 @@ const RegisterPage = () => {
                                 className="form-control"
                                 id="repeatpw"
                                 name="repeatpw"
-                                placeholder="Nhập lại mật khẩu"
                                 value={formData.repeatpw}
                                 onChange={handleInputChange}
                             />

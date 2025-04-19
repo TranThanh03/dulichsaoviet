@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="footer bg-light pt-4">
+    <footer className="footer bg-light pt-2">
         <div className="container">
             <div className="row justify-content-between text-start">
-                <div className="col-lg-5 col-md-6">
+                <div className="col-lg-5 col-md-6 py-2" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
                     <h5 className="fw-bold">Sao Việt - Vivu ba miền</h5>
                     <div className="d-flex align-items-start gap-2 my-2 icon">
                         <img src={locationIcon} alt="Địa chỉ" />
@@ -31,7 +31,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="col-lg-4 col-md-5 d-flex flex-column align-items-start">
+                <div className="col-lg-4 col-md-5 d-flex flex-column align-items-start py-2" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
                     <div className="d-flex align-items-center gap-2 mb-3 logo">
                         <img src={logo} alt="Logo Sao Việt" />
                         <span className="fw-bold text-warning fs-5">Sao Việt</span>
@@ -43,7 +43,7 @@ const Footer = () => {
                     <Link to="#" className="text-info text-decoration-none mb-2">Câu hỏi thường gặp</Link>
                 </div>
 
-                <div className="col-lg-2 col-md-6">
+                <div className="col-lg-2 col-md-6 py-2" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
                     <h5 className="fw-bold">Liên hệ hỗ trợ</h5>
                     <div className="d-flex flex-column gap-2 mt-2">
                         <Link to="#" className="text-dark text-decoration-none d-flex align-items-center gap-2 fw-bold icon">

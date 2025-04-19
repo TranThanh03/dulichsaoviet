@@ -84,6 +84,10 @@ const RenderRouter = () => {
             component: <usersPage.ActivatePage />
         },
         {
+            path: ROUTERS.USER.ABOUT,
+            component: <usersPage.AboutPage />
+        },
+        {
             path: ROUTERS.ADMIN.HOME,
             component: <adminPage.HomePage />
         },

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Apr 12, 2025 at 07:48 PM
+-- Generation Time: Apr 19, 2025 at 12:51 PM
 -- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
@@ -98,10 +98,10 @@ CREATE TABLE `booking` (
 --
 
 INSERT INTO `booking` (`id`, `adult_price`, `booking_time`, `children_price`, `code`, `customer_code`, `customer_id`, `discount`, `end_date`, `start_date`, `status`, `total_price`, `tour_code`, `tour_id`, `tour_name`, `quantity_adult`, `quantity_children`, `quantity_day`, `schedule_code`, `schedule_id`, `is_reserved`, `is_reviewed`) VALUES
-('0eab6f9d-603c-4ea5-82f3-14f740863e4b', 250000, '2025-04-11 14:16:13.588664', 180000, '1744355675345583', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 25000, '2025-04-16', '2025-04-13', 'Đang xử lý', 655000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
-('2adf2d0a-5ec0-4e15-b1c8-7eacc6e1d0b8', 250000, '2025-04-11 01:02:45.550880', 180000, '1744308165437325', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 0, '2025-04-16', '2025-04-13', 'Đã hủy', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
-('470c9cb0-ffa0-4eae-9dcf-48a9a8b61e51', 250000, '2025-04-10 17:46:21.070031', 180000, '1744281486261308', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 0, '2025-04-15', '2025-04-12', 'Đã hủy', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
-('76a6a6b1-7e04-409b-bf8b-6efce5ffe51d', 250000, '2025-04-09 17:41:57.239985', 180000, '1744195263066452', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 0, '2025-04-11', '2025-04-09', 'Đang xử lý', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
+('0eab6f9d-603c-4ea5-82f3-14f740863e4b', 250000, '2025-04-11 14:16:13.588664', 180000, '1744355675345583', 'KH2025000001', 'a2d942d9-9934-419d-96b2-05a11d0a80a9', 25000, '2025-04-16', '2025-04-13', 'Đã xác nhận', 655000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'1'),
+('2adf2d0a-5ec0-4e15-b1c8-7eacc6e1d0b8', 250000, '2025-04-11 01:02:45.550880', 180000, '1744308165437325', 'KH2025000001', 'a2d942d9-9934-419d-96b2-05a11d0a80a9', 0, '2025-04-16', '2025-04-13', 'Đã hủy', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
+('470c9cb0-ffa0-4eae-9dcf-48a9a8b61e51', 250000, '2025-04-10 17:46:21.070031', 180000, '1744281486261308', 'KH2025000001', 'a2d942d9-9934-419d-96b2-05a11d0a80a9', 0, '2025-04-15', '2025-04-12', 'Đã hủy', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
+('76a6a6b1-7e04-409b-bf8b-6efce5ffe51d', 250000, '2025-04-09 17:41:57.239985', 180000, '1744195263066452', 'KH2025000001', 'a2d942d9-9934-419d-96b2-05a11d0a80a9', 0, '2025-04-11', '2025-04-09', 'Đang xử lý', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
 ('8020ca2c-246d-4c45-b641-415e339d9a9e', 250000, '2025-04-10 19:11:06.107042', 180000, '1744287016648206', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 0, '2025-04-15', '2025-04-12', 'Đang xử lý', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
 ('89abb866-dde0-485f-87bc-32a9fb6df344', 250000, '2025-04-10 19:14:21.062799', 180000, '1744287204330945', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 25000, '2025-04-15', '2025-04-12', 'Đã xác nhận', 655000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'1', b'0'),
 ('d390d250-e2a7-4b8b-b823-ef987e2ac190', 250000, '2025-04-09 17:44:26.396835', 180000, '1744195466353631', 'KH2025000001', '0371691d-4050-438b-ba33-f3ac1207b793', 0, '2025-04-15', '2025-04-12', 'Đã hủy', 680000, 'T2025000001', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tour khám phá Hà Giang', 2, 1, 3, 'LT20250001', 'sche-12345', b'0', b'0');
@@ -156,7 +156,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `code`, `email`, `full_name`, `password`, `phone`, `registered_time`, `status`) VALUES
-('0371691d-4050-438b-ba33-f3ac1207b793', 'KH2025000001', 'thanhhkh3@gmail.com', 'Trần Thành', '$2a$10$XEoBS09iLESDFzmvN1aXA.RTbnoje9DkwddBhJMelEAvPwrtJJs0u', '0825702210', '2025-04-02 23:03:45.926337', 'Đang hoạt động');
+('1347bc6c-0568-48b3-8a2c-f3c453618348', 'KH2025000002', 'thanhhkh3@gmail.com', 'Trần Thành', '$2a$10$71E0JRplj5Rlnuu1gKZwx.COcZ8LmmQ3IE7IGcRKNoDN7JDV0/qoa', '0825702210', '2025-04-15 01:49:25.033616', 'Đang hoạt động');
 
 -- --------------------------------------------------------
 
@@ -174,7 +174,7 @@ CREATE TABLE `customer_roles` (
 --
 
 INSERT INTO `customer_roles` (`id`, `role`) VALUES
-('0371691d-4050-438b-ba33-f3ac1207b793', 'USER');
+('1347bc6c-0568-48b3-8a2c-f3c453618348', 'USER');
 
 -- --------------------------------------------------------
 
@@ -253,7 +253,7 @@ CREATE TABLE `review` (
 --
 
 INSERT INTO `review` (`id`, `customer_id`, `rating`, `time_stamp`, `tour_id`, `comment`) VALUES
-('d693235d-1bf0-4f7e-88d3-aaf7ba86fba8', '0371691d-4050-438b-ba33-f3ac1207b793', 4, '2025-04-12 19:48:52.395462', '54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Tuyệt vời, tôi sẽ đặt tour tại Sao Việt nhiều hơn.');
+('d693235d-1bf0-4f7e-88d3-aaf7ba86fba8', '0371691d-4050-438b-ba33-f3ac1207b793', 4, '2025-04-12 19:48:52.395462', 'a2d942d9-9934-419d-96b2-05a11d0a80a9', 'Tuyệt vời, tôi sẽ đặt tour tại Sao Việt nhiều hơn.');
 
 -- --------------------------------------------------------
 
@@ -279,7 +279,7 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`id`, `adult_price`, `children_price`, `code`, `end_date`, `quantity_people`, `start_date`, `status`, `total_people`, `tour_id`) VALUES
-('sche-12345', 250000, 180000, 'LT20250001', '2025-04-16', 15, '2025-04-13', 'Chưa diễn ra', 20, '54f9acd8-de2d-49a7-87ca-4aee9daba4b2');
+('sche-12345', 250000, 180000, 'LT20250001', '2025-04-16', 18, '2025-04-13', 'Chưa diễn ra', 20, 'a2d942d9-9934-419d-96b2-05a11d0a80a9');
 
 -- --------------------------------------------------------
 
@@ -299,8 +299,8 @@ CREATE TABLE `sequence` (
 --
 
 INSERT INTO `sequence` (`id`, `last_number`, `type`, `year`) VALUES
-(1, 1, 'customer', 2025),
-(2, 1, 'tour', 2025);
+(1, 2, 'customer', 2025),
+(2, 6, 'tour', 2025);
 
 -- --------------------------------------------------------
 
@@ -318,8 +318,10 @@ CREATE TABLE `token` (
 --
 
 INSERT INTO `token` (`id`, `expiry_time`) VALUES
+('1f270cb9-5eeb-4ded-83a3-99165aa27ef9', '2025-04-15 02:50:34'),
 ('1fe094d6-63ec-489c-8045-52fa9f1d3a05', '2025-04-01 17:09:28'),
 ('5cc5c9de-8661-48d0-bdbe-16b351ca6312', '2025-04-01 18:44:12'),
+('7f56da9a-1249-455f-8da8-bfbc369a0edc', '2025-04-14 01:23:23'),
 ('a5f5e5ee-9957-4330-824d-d4cfd549052b', '2025-04-01 18:21:12'),
 ('ae6a55e7-11b6-4c58-a16d-4c94ac2fd8f6', '2025-04-01 18:28:30'),
 ('b33acd3d-2b3e-489e-a60a-30a3d08d9b14', '2025-04-01 16:14:05'),
@@ -348,7 +350,7 @@ CREATE TABLE `tour` (
 --
 
 INSERT INTO `tour` (`id`, `code`, `description`, `destination`, `name`, `quantity_day`, `quantity_order`, `area`, `time_stamp`) VALUES
-('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'T2025000001', 'Tour khám phá Hà Giang 3 ngày 2 đêm với cảnh đẹp thiên nhiên và trải nghiệm văn hóa dân tộc.', 'Hà Giang, Việt Nam', 'Tour khám phá Hà Giang', 3, 1, 'Vùng núi phía Bắc', '2025-04-13 00:48:01.000000');
+('a2d942d9-9934-419d-96b2-05a11d0a80a9', 'T2025000006', 'Hành trình 3 ngày khám phá vùng núi và biển đẹp nhất miền Bắc Việt Nam.', 'Hà Nội - Hạ Long', 'Du lịch Hạ Long', 2, 0, 'Miền Bắc', '2025-04-18 18:41:50.120530');
 
 -- --------------------------------------------------------
 
@@ -366,8 +368,8 @@ CREATE TABLE `tour_images` (
 --
 
 INSERT INTO `tour_images` (`tour_id`, `image`) VALUES
-('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854199/saoviet/o3tufqj6ama66vekmdpy.jpg'),
-('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854102/saoviet/jwel4yzvsnkhpodz1pab.jpg');
+('a2d942d9-9934-419d-96b2-05a11d0a80a9', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854199/saoviet/o3tufqj6ama66vekmdpy jpg'),
+('a2d942d9-9934-419d-96b2-05a11d0a80a9', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854102/saoviet/jwel4yzvsnkhpodz1pab.jpg');
 
 -- --------------------------------------------------------
 
@@ -377,16 +379,18 @@ INSERT INTO `tour_images` (`tour_id`, `image`) VALUES
 
 CREATE TABLE `tour_itineraries` (
   `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `itinerary` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+  `day_number` int DEFAULT NULL,
+  `description` longtext COLLATE utf8mb4_vietnamese_ci,
+  `title` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Dumping data for table `tour_itineraries`
 --
 
-INSERT INTO `tour_itineraries` (`tour_id`, `itinerary`) VALUES
-('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Ngày 1: Hà Nội - Hà Giang'),
-('54f9acd8-de2d-49a7-87ca-4aee9daba4b2', 'Ngày 2: Hà Giang - Đồng Văn');
+INSERT INTO `tour_itineraries` (`tour_id`, `day_number`, `description`, `title`) VALUES
+('a2d942d9-9934-419d-96b2-05a11d0a80a9', 1, 'Tham quan Lăng Bác, Hồ Gươm, Văn Miếu Quốc Tử Giám.', 'Khám phá Hà Nội'),
+('a2d942d9-9934-419d-96b2-05a11d0a80a9', 2, 'Du thuyền tham quan vịnh, hang Sửng Sốt, Titop.', 'Vịnh Hạ Long');
 
 --
 -- Indexes for dumped tables

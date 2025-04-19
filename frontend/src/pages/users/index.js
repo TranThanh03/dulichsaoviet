@@ -13,3 +13,4 @@ export { default as MessagePage } from './bookingPage/message';
 export { default as CalendarPage } from './calendarPage/index';
 export { default as SearchPage } from './tourPage/search';
 export { default as ActivatePage } from './activatePage/index';
+export { default as AboutPage } from './aboutPage/index';
