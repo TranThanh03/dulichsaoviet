@@ -34,21 +34,10 @@
         border-radius: 25px;
     }
 
-    .search-group {
-        margin-right: 20px;
-
-        input {
-            width: 165px;
-            border: none;
-        }
-
-        input:focus {
+    .nav-search {
+        .btn-2-custom {
             outline: none;
             box-shadow: none;
-            border: none;
-        }
-
-        button:focus {
             border: none;
         }
     }

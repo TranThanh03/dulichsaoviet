@@ -132,7 +132,7 @@ const Header = () => {
 
                         <div className="d-flex align-items-center gap-3">
                             <div className="nav-search">
-                                <button type="button" className="btn btn-custom p-0 text-dark" onClick={() => setShowSearch(!showSearch)}>
+                                <button type="button" className="btn btn-custom p-0 text-dark" onClick={() => {setShowSearch(!showSearch); setPlaceholder("Tìm kiếm tour")}}>
                                     <FaSearch />
                                 </button>
                                 {showSearch && (
@@ -148,7 +148,7 @@ const Header = () => {
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                             autoFocus
                                         />
-                                        <button type="submit" className="btn px-2 text-dark">
+                                        <button type="submit" className="btn px-2 text-dark btn-2-custom">
                                             <FaSearch />
                                         </button>
                                     </form>

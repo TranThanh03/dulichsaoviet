@@ -1,46 +1,50 @@
-.hero-area {
-    .search-form-container {
-        max-width: 900px;
-        background: rgb(229 229 229 / 90%);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.search-form-custom {
+    [data-aos="move-up-zoom-out"] {
+        transform: translateY(0) scale(1.2);
+        opacity: 0;
+        transition: transform 0.6s ease, opacity 0.6s ease;
     }
 
-    .input-group,
-    .btn {
-        border-radius: 5px;
+    [data-aos="move-up-zoom-out"].aos-animate {
+        transform: translateY(-80px) scale(1);
+        opacity: 1;
     }
 
-    .input-group-text,
-    .form-control,
-    .form-select {
-        height: 45px;
-        font-size: 16px;
+    .sub-form {
+        max-width: 1300px;
     }
 
-    .form-control {
-        border-radius: 0 5px 5px 0 !important;
-    }
-
-    .btn-primary {
-        background-color: #28a745;
+    .form-select,
+    .datetimepicker-custom {
+        outline: none;
+        box-shadow: none;
         border: none;
     }
 
-    .btn-primary:hover {
-        background-color: #218838;
+    .div-custom {
+        border-right: 1px solid #E9E9E9;
+        padding-left: 30px;
     }
 
-    .react-datepicker-wrapper {
-        input {
-            width: 158px !important;
+    .div-custom label {
+        width: 100%;
+    }
+
+    .btn-custom {
+        background-color: #45C3D2;
+        max-width: 150px;
+        height: 45px;
+    }
+
+    @media only screen and (max-width: 992px) {
+        .div-startdate {
+            border-right: none !important;
         }
     }
 
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #dee2e6 !important;
-        box-shadow: none !important;
+    @media only screen and (max-width: 767px) {
+        .div-custom {
+            border-right: none;
+        }
     }
 }

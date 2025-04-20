@@ -1,22 +1,22 @@
 .page-banner-area {
     max-height: 40px !important;
     padding-bottom: 35px !important;
-}
 
-@media only screen and (max-width: 992px) {
-    .banner-custom {
-        padding-bottom: 15px !important;
+    @media only screen and (max-width: 992px) {
+        .banner-custom {
+            padding-bottom: 15px !important;
+        }
     }
-}
 
-@media only screen and (max-width: 576px) {
-    .banner-custom {
-        padding-bottom: 10px !important;
+    @media only screen and (max-width: 576px) {
+        .banner-custom {
+            padding-bottom: 10px !important;
+        }
     }
-}
 
-@media only screen and (max-width: 375px) {
-    .banner-custom {
-        padding-bottom: 5px !important;
+    @media only screen and (max-width: 375px) {
+        .banner-custom {
+            padding-bottom: 5px !important;
+        }
     }
 }

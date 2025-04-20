@@ -1,10 +1,16 @@
-.tour-sidebar {
-    .widget {
-        border-bottom: 1px solid #E9E9E9;
-    }
+.tour-sidebar-custom {
+    .div_filter_clear {
+        display: flex;
+        justify-content: end;
 
-    .shadow-custom {
-        border: 1px solid #E9E9E9;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        .clear_filter {
+            background-color: red;
+            border-radius: 8px;
+            padding: 2px 20px;
+
+            a {
+                color: white;
+            }
+        }
     }
 }

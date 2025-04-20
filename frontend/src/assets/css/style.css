@@ -198,7 +198,9 @@
         padding-right: 70px; } }
 
     .row {
-    --bs-gutter-x: 30px; }
+    --bs-gutter-x: 30px;
+    --bs-gutter-y: 30px;
+    }
 
     .no-gap {
     --bs-gutter-x: 0; }
@@ -278,8 +280,7 @@
     position: relative; }
     .section-title h2 {
         margin-bottom: 15px;
-        letter-spacing: -1px;
-        text-transform: capitalize; }
+        letter-spacing: -1px; }
         @media only screen and (max-width: 575px) {
         .section-title h2 {
             font-size: 35px; } }
@@ -4416,7 +4417,8 @@
     /*******************************************************/
     .destination-item {
     color: #92A498;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
+    height: 100%;
     background: #232C26;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -4457,7 +4459,7 @@
         line-height: 40px;
         border-radius: 50%;
         text-align: center;
-        color: var(--secondary-color); }
+        color: red; }
     .destination-item .content {
         padding: 18px 40px 40px; }
         @media only screen and (max-width: 1599px) {
@@ -4796,7 +4798,7 @@
             padding: 4px 20px; }
 
     .text-white .destination-item.style-four.no-border .image .heart i {
-    color: var(--secondary-color); }
+    color: red; }
 
     .text-white .destination-item.style-four.no-border .content .location,
     .text-white .destination-item.style-four.no-border .content .location i {
@@ -4886,7 +4888,7 @@
             padding: 5px 15px; } }
         .destinations-nav li.active {
         color: white;
-        background: var(--primary-color); }
+        background: var(--secondary-color); }
     .destinations-nav.style-two li {
         font-size: 16px;
         padding: 1px 15px; }

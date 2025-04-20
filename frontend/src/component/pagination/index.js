@@ -15,15 +15,16 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     }
 
     return (
-        <div className="flex justify-center pt-1 pb-4">
-            <ul className="flex items-center space-x-2">
+        <div className="d-flex justify-content-center pt-4 pb-5">
+            <ul className="d-flex align-items-center gap-2 list-unstyled mb-0">
                 <li>
                     <button
                         disabled={currentPage === 1}
                         onClick={() => onPageChange(currentPage - 1)}
-                        className={`w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 ${
-                            currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'
+                        className={`btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center ${
+                            currentPage === 1 ? 'disabled' : ''
                         }`}
+                        style={{ width: '40px', height: '40px' }}
                     >
                         <i className="fas fa-chevron-left"></i>
                     </button>
@@ -33,11 +34,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                     <li key={page}>
                         <button
                             onClick={() => onPageChange(page)}
-                            className={`w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 ${
+                            className={`btn ${
                                 page === currentPage
-                                    ? 'bg-yellow-500 text-white border-yellow-500'
-                                    : 'text-gray-700 hover:bg-gray-100'
-                            }`}
+                                    ? 'btn-warning text-white'
+                                    : 'btn-outline-secondary'
+                            } rounded-circle d-flex align-items-center justify-content-center`}
+                            style={{ width: '40px', height: '40px' }}
                         >
                             {page}
                         </button>
@@ -48,9 +50,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                     <button
                         disabled={currentPage >= totalPages}
                         onClick={() => onPageChange(currentPage + 1)}
-                        className={`w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 ${
-                            currentPage >= totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'
+                        className={`btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center ${
+                            currentPage >= totalPages ? 'disabled' : ''
                         }`}
+                        style={{ width: '40px', height: '40px' }}
                     >
                         <i className="fas fa-chevron-right"></i>
                     </button>
@@ -60,4 +63,4 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     );
 };
 
-export default memo(Pagination)
+export default memo(Pagination);

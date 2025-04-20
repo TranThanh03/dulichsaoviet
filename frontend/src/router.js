@@ -88,6 +88,10 @@ const RenderRouter = () => {
             component: <usersPage.AboutPage />
         },
         {
+            path: ROUTERS.USER.DESTINATIONS,
+            component: <usersPage.DestinationsPage />
+        },
+        {
             path: ROUTERS.ADMIN.HOME,
             component: <adminPage.HomePage />
         },

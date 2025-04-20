@@ -1,82 +1,62 @@
+import { noImage } from 'assets';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import "./TourCard.scss";
 
 const TourCard = ({ tour }) => {
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <i
-          key={i}
-          className={`fa-star ${i < rating ? 'fas text-yellow-400' : 'far text-gray-300'}`}
-        ></i>
-      );
-    }
-    return stars;
-  };
+    const {
+        images = [],
+        destination,
+        rating = 0,
+        title,
+        time,
+        quantity,
+        priceAdult,
+        tourId
+    } = tour;
 
-  return (
-    <div className="tour-page mb-[30px]">
-      <div
-        className="destination-item tour-grid bg-gray-50 rounded-lg shadow-md overflow-hidden h-full"
-        data-aos="fade-up"
-        data-aos-duration="1500"
-        data-aos-offset="50"
-      >
-        <div className="image relative">
-          <span className="badge absolute top-3 left-3 bg-pink-500 text-white text-xs font-semibold py-1 px-2 rounded">
-            Featured
-          </span>
-          
-          <img
-            src={tour.image} 
-            alt="image"
-            className="w-full h-48 object-cover"
-          />
-          <div className="absolute bottom-3 right-3 flex space-x-1">
-            {renderStars(tour.rating)}
-          </div>
+    const formattedPrice = new Intl.NumberFormat('vi-VN').format(priceAdult);
+
+    return (
+        <div className="tour-card-custom col-xl-4 col-md-6">
+            <div className="destination-item tour-grid style-three bgc-lighter block_tours equal-block-fix" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                <div className="image">
+                    <i className="fas fa-heart heart" />
+                    <img src={images[0] ? images[0] : noImage} alt="image" />
+                </div>
+
+                <div className="content equal-content-fix">
+                    <div className="destination-header">
+                        <span className="location">
+                            <i className="fal fa-map-marker-alt"></i> {destination}
+                        </span>
+
+                        <div className="ratting">
+                            {[...Array(5)].map((_, i) =>
+                                i < rating ? (
+                                    <i key={i} className="fas fa-star"></i>
+                                ) : (
+                                    <i key={i} className="far fa-star"></i>
+                                )
+                            )}
+                        </div>
+                    </div>
+                    <h6>{title}</h6>
+                    <ul className="blog-meta">
+                        <li><i className="far fa-clock"></i> {time}</li>
+                        <li><i className="far fa-user"></i> {quantity}</li>
+                    </ul>
+                    <div className="destination-footer">
+                        <span className="price">
+                            <span>{formattedPrice}</span> đ / người
+                        </span>
+                        <Link to={`/tour/detail/${tourId}`} className="theme-btn style-two style-three">
+                            <i className="fal fa-arrow-right"></i>
+                        </Link>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div className="content p-4">
-          <div className="destination-header flex justify-between items-center mb-2">
-            <span className="location text-gray-500 text-sm">
-              <i className="fas fa-map-marker-alt mr-1"></i>
-              {tour.destination}
-            </span>
-          </div>
-
-          <h6 className="text-lg font-semibold mb-2">
-              {tour.title}
-          </h6>
-
-          <ul className="blog-meta flex space-x-4 text-gray-500 text-sm mb-3">
-            <li>
-              <i className="far fa-clock mr-1"></i>
-              {tour.time}
-            </li>
-            <li>
-              <i className="far fa-user mr-1"></i>
-              {tour.quantity}
-            </li>
-          </ul>
-
-          <div className="destination-footer flex justify-between items-center">
-            <span className="price text-lg font-bold text-gray-800">
-              <span>{tour.priceAdult}</span> <span className="text-gray-600">VND/người</span>
-            </span>
-            <Link
-                to={`/tour/detail/${tour.tourId}`}
-                className="theme-btn bg-white text-black border border-gray-300 rounded-full p-2"
-                >
-                <i className="fas fa-arrow-right"></i>
-                </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default memo(TourCard);

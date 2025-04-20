@@ -17,6 +17,7 @@ export const ROUTERS = {
         SEARCH: "/tour/search",
         ACTIVATE: "/customer/activate/:id",
         ABOUT: "/about",
+        DESTINATIONS: "/destinations/index",
     },
     ADMIN: {
         HOME: "/manage",

@@ -84,7 +84,7 @@ const AboutPage = () => {
                                 <div className="feature-item style-three bgc-primary">
                                     <div className="icon-title">
                                         <div className="icon"><i className="flaticon-tourism"></i></div>
-                                        <h5><Link to="#">5000+ Điểm đến du lịch phổ biến</Link></h5>
+                                        <h5><Link to="#">200+ Điểm đến du lịch phổ biến</Link></h5>
                                     </div>
                                     <div className="content">
                                         <p>Đội ngũ chuyên gia của chúng tôi tận tâm phát triển các chiến lược tiên tiến thúc đẩy
