@@ -5,6 +5,7 @@ import TourSidebar from 'component/users/tour/TourSidebar';
 import Pagination from 'component/pagination';
 import { tourBanner } from 'assets';
 import Banner from 'component/banner';
+import "./index.scss";
 
 const TourPage = () => {
     const [tours, setTours] = useState([

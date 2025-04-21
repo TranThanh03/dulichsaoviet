@@ -6,7 +6,7 @@ import "./SearchForm.scss";
 
 const SearchForm = () => {
     return (
-        <div className="search-form-custom container py-4 d-flex justify-content-center rel z-2">
+        <div className="search-form-custom container py-4 d-flex justify-content-center position-absolute z-2">
             <div className="bg-white rounded-4 shadow p-4 w-100 sub-form" data-aos="move-up-zoom-out" data-aos-duration="1500" data-aos-offset="50">
                 <form id="search_form">
                     <div className="row g-4">

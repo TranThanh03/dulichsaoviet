@@ -786,9 +786,6 @@
     .text-white .counter-text-wrap .count-text {
     color: white; }
 
-    .text-white.section-title p span {
-    background: var(--primary-color); }
-
     .text-white .subtitle {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.1); }
@@ -3246,8 +3243,6 @@
     .main-menu {
         width: 100%; } }
 
-    .main-menu .mobile-logo {
-    margin-right: auto; }
     @media only screen and (max-width: 575px) {
         .main-menu .mobile-logo {
         max-width: 150px; } }
@@ -3425,13 +3420,13 @@
         -ms-flex-pack: start;
         justify-content: start; } }
     .main-menu .navbar-header .navbar-toggle {
-        float: right;
+        float: left;
         padding: 4px 0;
         cursor: pointer;
         background: transparent; }
         @media only screen and (max-width: 991px) {
         .main-menu .navbar-header .navbar-toggle {
-            margin-right: 12px; } }
+            margin-left: 20px; } }
         .main-menu .navbar-header .navbar-toggle .icon-bar {
         background: var(--base-color);
         height: 2px;
@@ -3621,14 +3616,11 @@
     /* Header Search */
     .nav-search {
     position: relative;
-    margin-right: 10px; 
-    margin-left: 10px;}
-    @media only screen and (max-width: 375px) {
-        .nav-search {
-        display: none; } }
+    margin: 0px 5px;
+    } 
     .nav-search > button {
-        width: 50px;
-        height: 50px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         background: transparent;
         border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -3636,7 +3628,7 @@
         position: absolute;
         width: 320px;
         top: 100%;
-        right: 0;
+        right: -13px;
         z-index: 777;
         display: -webkit-box;
         display: -ms-flexbox;
@@ -4274,16 +4266,47 @@
         margin-right: 15px; } }
     @media only screen and (max-width: 1399px) {
         .page-banner-area {
-        min-height: 360px; } }
+        min-height: 430px; } }
     @media only screen and (max-width: 1199px) {
         .page-banner-area {
-        min-height: 310px; } }
-    @media only screen and (max-width: 767px) {
+        min-height: 380px; 
+        
+        .container {
+            padding-left: 10px;
+        }
+    } }
+
+    @media only screen and (min-width: 992px) and (max-width: 1110px) {
+        .page-banner-area .container {
+            padding-left: 50px !important;
+        }
+    }
+
+    @media only screen and (min-width: 1200px) and (max-width: 1500px) {
+        .page-banner-area .container {
+            padding-left: 60px !important;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
         .page-banner-area {
-        min-height: 260px; } }
+        min-height: 320px;
+
+        .container {
+            padding-left: 35px !important;
+        }
+    } }
     @media only screen and (max-width: 575px) {
         .page-banner-area {
-        min-height: 210px; } }
+        min-height: 280px; 
+
+        .container {
+            padding-left: 35px !important;
+        }
+
+        .breadcrumb {
+            margin-bottom: 0px !important;
+        }} }
     .page-banner-area:before {
         position: absolute;
         left: 0;

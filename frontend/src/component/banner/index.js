@@ -7,8 +7,7 @@ const Banner = ({ title, image }) => {
             <div className="container">
                 <div className="banner-inner text-white">
                     <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb justify-content-center mb-20" data-aos="fade-right" data-aos-delay="200"
-                            data-aos-duration="1500" data-aos-offset="50">
+                        <ol className="breadcrumb justify-content-center" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1500" data-aos-offset="50">
                             <li className="breadcrumb-item">Trang chủ</li>
                             <li className="breadcrumb-item active">{title}</li>
                         </ol>

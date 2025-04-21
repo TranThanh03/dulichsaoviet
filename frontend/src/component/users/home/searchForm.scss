@@ -1,4 +1,7 @@
 .search-form-custom {
+    left: 50%;
+    transform: translate(-50%, 0);
+
     [data-aos="move-up-zoom-out"] {
         transform: translateY(0) scale(1.2);
         opacity: 0;

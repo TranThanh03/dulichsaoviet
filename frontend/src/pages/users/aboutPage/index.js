@@ -32,16 +32,17 @@ const AboutPage = () => {
                                         </div>
                                     </div>
                                     <div className="col-md-8">
-                                        <p>Chúng tôi chuyên tạo ra những trải nghiệm thành phố khó quên cho du khách muốn khám phá
+                                        <p className="text-indent">Chúng tôi chuyên tạo ra những trải nghiệm thành phố khó quên cho du khách muốn khám phá
                                             trái tim và tâm hồn của cảnh quan đô thị. Các tour du lịch có hướng dẫn viên chuyên
                                             nghiệp của chúng tôi sẽ đưa du khách qua
                                             những con phố sôi động, các địa danh lịch sử và những viên ngọc ẩn giấu của mỗi thành
-                                            phố.</p>
+                                            phố.
+                                        </p>
                                         <ul className="list-style-two mt-35">
-                                            <li>Cơ quan Trải nghiệm</li>
-                                            <li>Đội ngũ Chuyên nghiệp</li>
-                                            <li>Du lịch Chi phí Thấp</li>
-                                            <li>Hỗ trợ Trực tuyến 24/7</li>
+                                            <li>Cơ quan trải nghiệm</li>
+                                            <li>Đội ngũ chuyên nghiệp</li>
+                                            <li>Du lịch chi phí thấp</li>
+                                            <li>Hỗ trợ trực tuyến 24/7</li>
                                         </ul>
                                         <Link to="/tour/index" className="theme-btn style-three mt-30">
                                             <span data-hover="Khám phá Tours">Khám phá Tours</span>
@@ -78,7 +79,7 @@ const AboutPage = () => {
                                         <h5><Link to="#">Chúng tôi là công ty đạt giải thưởng</Link></h5>
                                     </div>
                                     <div className="content">
-                                        <p>Tại Pinnacle Business Solutions cam kết về sự xuất sắc và đổi mới đã đạt được</p>
+                                        <p className="text-indent">Tại Pinnacle Business Solutions cam kết về sự xuất sắc và đổi mới đã đạt được.</p>
                                     </div>
                                 </div>
                                 <div className="feature-item style-three bgc-primary">
@@ -87,8 +88,8 @@ const AboutPage = () => {
                                         <h5><Link to="#">200+ Điểm đến du lịch phổ biến</Link></h5>
                                     </div>
                                     <div className="content">
-                                        <p>Đội ngũ chuyên gia của chúng tôi tận tâm phát triển các chiến lược tiên tiến thúc đẩy
-                                            thành công</p>
+                                        <p className="text-indent">Đội ngũ chuyên gia của chúng tôi tận tâm phát triển các chiến lược tiên tiến thúc đẩy
+                                            thành công.</p>
                                     </div>
                                 </div>
                             </div>
@@ -103,9 +104,9 @@ const AboutPage = () => {
                         <div className="col-xl-5 col-lg-6">
                             <div className="about-us-content rmb-55" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
                                 <div className="section-title mb-25">
-                                    <h2>Du lịch với sự tự tin Lý do hàng đầu để chọn công ty của chúng tôi</h2>
+                                    <h2>Du lịch với sự tự tin lý do hàng đầu để chọn công ty của chúng tôi</h2>
                                 </div>
-                                <p>Chúng tôi hợp tác chặt chẽ với khách hàng để hiểu rõ những thách thức và mục tiêu, cung
+                                <p className="text-indent">Chúng tôi hợp tác chặt chẽ với khách hàng để hiểu rõ những thách thức và mục tiêu, cung
                                     cấp các giải pháp tùy chỉnh để nâng cao hiệu quả, tăng lợi nhuận và thúc đẩy tăng trưởng bền
                                     vững.</p>
                                 <div className="row pt-25">
@@ -143,7 +144,7 @@ const AboutPage = () => {
                         data-aos-duration="1500" data-aos-offset="50">
                         <h2>Làm thế nào để hưởng lợi từ các chuyến du lịch của chúng tôi</h2>
                         <p>Website
-                            <AnimatedCounter end={345} duration={2} className="plus" />
+                            <AnimatedCounter end={345} duration={2} className="plus mx-2" />
                             phổ biến nhất kinh nghiệm bạn sẽ nhớ
                         </p>
                     </div>

@@ -2,6 +2,10 @@
     .container {
         max-width: 70% !important;
 
+        .row {
+            --bs-gutter-y: 0px !important;
+        }
+
         .left-box {
             background: #1087be;
 
@@ -57,7 +61,7 @@
         @media only screen and (max-width: 992px) {
             .left-box {
                 padding-bottom: 10px;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
                 width: 100%;
             }
 
@@ -69,14 +73,7 @@
         @media only screen and (max-width: 576px) {
             .left-box {
                 padding-bottom: 10px;
-                margin-bottom: 20px;
-            }
-        }
-
-        @media only screen and (max-width: 375px) {
-            .left-box {
-                padding-bottom: 10px;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
             }
         }
     }

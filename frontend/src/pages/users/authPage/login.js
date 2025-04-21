@@ -44,7 +44,7 @@ const LoginPage = () => {
                         <div className="featured-image my-3">
                             <img src={logo} className="img-fluid" alt="Logo" />
                         </div>
-                        <p className="text-white fs-2">Sao Việt</p>
+                        <p className="text-white fs-2 mb-1">Sao Việt</p>
                         <small className="text-white text-wrap text-center fs-4">Uy tín tạo nên sự tin tưởng</small>
                     </div>
 

@@ -70,6 +70,7 @@ const Header = () => {
         e.preventDefault();
         
         if (searchQuery.trim() !== "") {
+            setShowSearch(!showSearch);
             navigate(`/tour/search?p=${encodeURIComponent(searchQuery)}`);
         } else {
             setPlaceholder("Vui lòng nhập tour...");
@@ -133,7 +134,7 @@ const Header = () => {
                         <div className="d-flex align-items-center gap-3">
                             <div className="nav-search">
                                 <button type="button" className="btn btn-custom p-0 text-dark" onClick={() => {setShowSearch(!showSearch); setPlaceholder("Tìm kiếm tour")}}>
-                                    <FaSearch />
+                                    <FaSearch size={15}/>
                                 </button>
                                 {showSearch && (
                                     <form

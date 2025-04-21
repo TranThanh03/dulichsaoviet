@@ -6,7 +6,7 @@ import "./TourSidebar.scss";
 
 const TourSidebar = () => {
     return (
-        <div className="tour-sidebar-custom col-lg-3 col-md-6 col-sm-10 rmb-75">
+        <div className="tour-sidebar-custom col-lg-3 col-md-6 col-sm-10">
             <div className="shop-sidebar">
                 <div className="div_filter_clear pb-2">
                     <button className="clear_filter" name="btn_clear">
@@ -119,7 +119,7 @@ const TourSidebar = () => {
                 </div>
             </div>
 
-            <div className="widget widget-cta mt-30" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+            <div className="widget widget-cta mt-30 banner-sidebar-custom" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                 <div className="content text-white">
                     <span className="h6">Khám phá Việt Nam</span>
                     <h3>Điểm đến du lịch tốt nhất</h3>
