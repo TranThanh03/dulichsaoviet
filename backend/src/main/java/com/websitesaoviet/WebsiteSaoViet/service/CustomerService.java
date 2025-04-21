@@ -15,6 +15,8 @@ import com.websitesaoviet.WebsiteSaoViet.repository.CustomerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,6 +36,10 @@ public class CustomerService {
     CustomerMapper customerMapper;
     SequenceService sequenceService;
     MailService mailService;
+
+    @NonFinal
+    @Value("${base.url}")
+    protected String BASE_URL;
 
     @Transactional
     public CustomerCreateResponse createCustomer(CustomerCreationRequest request) {
@@ -64,9 +70,9 @@ public class CustomerService {
                 "<html><body>" +
                         "<p>Xin chào,</p>" +
                         "<p>Vui lòng nhấn vào link dưới đây để kích hoạt tài khoản của bạn:</p>" +
-                        "<a href='http://localhost:3000/customer/activate/%s'>Kích hoạt tài khoản</a>" +
+                        "<a href='%s/customer/activate/%s'>Kích hoạt tài khoản</a>" +
                         "<p>Trân trọng, <b>Sao Việt - Vivu ba miền</b></p>" +
-                        "</body></html>", savedCustomer.getId()
+                        "</body></html>", BASE_URL, savedCustomer.getId()
         );
 
         mailService.sendToQueue(

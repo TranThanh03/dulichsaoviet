@@ -1,5 +1,6 @@
 //create https
 ngrok http 8080
+ngrok start --all
 
 //admin
 "phone": "0399999999",

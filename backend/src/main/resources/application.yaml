@@ -56,7 +56,7 @@ vnpay:
   hashSecret: "VFXDH25HO55AOL3CB0IUGYX1XKLSAOXF"
 
 base:
-  url: "https://edab-118-71-192-193.ngrok-free.app"
+  url: "http://localhost:3000"
 
 app:
   name: SaoViet
