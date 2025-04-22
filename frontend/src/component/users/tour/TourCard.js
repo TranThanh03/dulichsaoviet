@@ -1,38 +1,26 @@
 import { noImage } from 'assets';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
+import formatCurrency from 'utils/formatCurrency';
 
 const TourCard = ({ tour }) => {
-    const {
-        images = [],
-        destination,
-        rating = 0,
-        title,
-        time,
-        quantity,
-        priceAdult,
-        tourId
-    } = tour;
-
-    const formattedPrice = new Intl.NumberFormat('vi-VN').format(priceAdult);
-
     return (
         <div className="tour-card-custom col-xl-4 col-md-6">
             <div className="destination-item tour-grid style-three bgc-lighter block_tours equal-block-fix" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                 <div className="image">
                     <i className="fas fa-heart heart" />
-                    <img src={images[0] ? images[0] : noImage} alt="image" />
+                    <img src={tour.image ? tour.image : noImage} alt="tour-image" />
                 </div>
 
                 <div className="content equal-content-fix">
                     <div className="destination-header">
                         <span className="location">
-                            <i className="fal fa-map-marker-alt"></i> {destination}
+                            <i className="fal fa-map-marker-alt"></i> {tour.destination}
                         </span>
 
                         <div className="ratting">
                             {[...Array(5)].map((_, i) =>
-                                i < rating ? (
+                                i < tour.rating ? (
                                     <i key={i} className="fas fa-star"></i>
                                 ) : (
                                     <i key={i} className="far fa-star"></i>
@@ -40,16 +28,16 @@ const TourCard = ({ tour }) => {
                             )}
                         </div>
                     </div>
-                    <h6>{title}</h6>
+                    <h6 className="fw-bold mb-2">{tour.name}</h6>
                     <ul className="blog-meta">
-                        <li><i className="far fa-clock"></i> {time}</li>
-                        <li><i className="far fa-user"></i> {quantity}</li>
+                        <li><i className="far fa-clock"></i> {tour.quantityDay} ngày {tour.quantityDay-1} đêm</li>
+                        <li><i className="far fa-user"></i> {tour.people}</li>
                     </ul>
                     <div className="destination-footer">
                         <span className="price">
-                            <span>{formattedPrice}</span> đ / người
+                            <span>{formatCurrency(tour.adultPrice)}</span> / người
                         </span>
-                        <Link to={`/tour/detail/${tourId}`} className="theme-btn style-two style-three">
+                        <Link to={`/tour/detail/${tour.id}`} className="theme-btn style-two style-three">
                             <i className="fal fa-arrow-right"></i>
                         </Link>
                     </div>

@@ -2,7 +2,9 @@ package com.websitesaoviet.WebsiteSaoViet.mapper;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

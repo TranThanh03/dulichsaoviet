@@ -2,22 +2,23 @@ import { memo, useState, useEffect } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
-const PriceFilter = ({ maxPrice = 10000000, onChangeRange }) => {
-    const [priceRange, setPriceRange] = useState([0, maxPrice]);
+const PriceFilter = ({ maxPrice = 10000000, onChangeRange, value }) => {
+    const [priceRange, setPriceRange] = useState(value || [0, maxPrice]);
 
     useEffect(() => {
-        setPriceRange([0, maxPrice]);
-    }, [maxPrice]);
+        setPriceRange(value || [0, maxPrice]);
+    }, [value, maxPrice]);
 
     const handleChange = (values) => {
         setPriceRange(values);
-        if (onChangeRange) {
-            onChangeRange(values);
-        }
+    };
+
+    const handleChangeComplete = (values) => {
+        onChangeRange?.(values);
     };
 
     return (
-        <div className="widget widget-filter" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
+        <div className="widget widget-filter">
             <h6 className="widget-title">Lọc theo giá</h6>
             <div className="price-filter-wrap">
                 <Slider
@@ -27,6 +28,7 @@ const PriceFilter = ({ maxPrice = 10000000, onChangeRange }) => {
                     step={500000}
                     value={priceRange}
                     onChange={handleChange}
+                    onChangeComplete={handleChangeComplete}
                     allowCross={false}
                     trackStyle={[{ backgroundColor: "green" }]}
                     handleStyle={[

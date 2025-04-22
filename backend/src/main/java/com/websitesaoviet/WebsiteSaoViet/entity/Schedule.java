@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "schedule")
@@ -46,4 +47,7 @@ public class Schedule {
 
     @Column(name = "status")
     String status;
+
+    @Column(name = "created_time")
+    LocalDateTime createdTime;
 }

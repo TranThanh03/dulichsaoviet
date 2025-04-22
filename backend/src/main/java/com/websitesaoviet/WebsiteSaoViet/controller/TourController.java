@@ -2,8 +2,10 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
@@ -46,7 +48,7 @@ public class TourController {
     @GetMapping()
     ResponseEntity<ApiResponse<Page<TourResponse>>> getTours(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "9") int size) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startDate")));
         Page<TourResponse> toursPage = tourService.getTours(pageable);
@@ -94,6 +96,20 @@ public class TourController {
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(1504)
                 .message("Xóa tour thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/filter")
+    ResponseEntity<ApiResponse<Page<FilterToursResponse>>> getFilterTours(
+            @RequestBody FilterToursRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+
+        ApiResponse<Page<FilterToursResponse>> apiResponse = ApiResponse.<Page<FilterToursResponse>>builder()
+                .code(1505)
+                .result(tourService.getFilteredTours(request, page, size))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

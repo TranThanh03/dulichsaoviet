@@ -9,21 +9,6 @@ const TourApi = {
     getById: (id) => {
         return axiosInstance.get(`/api/v1/tours/${id}`);
     },
-    getTourListNew: () => {
-        return axiosInstance.get("/api/v1/tours/new");
-    },
-    getByCategoryId: (id, page = 0, size = 6) => {
-        return axiosInstance.get(`/api/v1/tours/category/${id}`, {
-            params: { page, size },
-        });
-    },
-    getToursByAssignment: () => {
-        return axiosInstanceAdmin.get(`/api/v1/tours/assignment`, {
-            headers: {
-                Authorization: `Bearer ${getToken(true)}`
-            }
-        });
-    },
     create: (data) => {
         return axiosInstanceAdmin.post("/api/v1/tours", data, {
             headers: {
@@ -45,9 +30,6 @@ const TourApi = {
             }
         });
     },
-    getCategory: () => {
-        return axiosInstance.get("/api/v1/tours/category");
-    },
     searchTours: (searchQuery, page = 0, size = 6) => {
         return axiosInstance.get(`/api/v1/tours/search?p=${searchQuery}`, {
             params: { page, size },
@@ -58,6 +40,11 @@ const TourApi = {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
+        });
+    },
+    filter: (data, params) => {
+        return axiosInstance.post("/api/v1/tours/filter", data, {
+            params: params,
         });
     }
 };

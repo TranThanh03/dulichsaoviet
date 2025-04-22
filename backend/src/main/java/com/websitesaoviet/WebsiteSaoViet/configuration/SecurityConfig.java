@@ -22,7 +22,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] GET_PUBLIC_ENDPOINTS = {
-            "/tours", "/tours/category", "/tours/category/{id:\\d}", "/tours/new", "/tours/{id:[A-Z]\\d+}", "/tours/search",
+            "/tours", "/tours/category/{id:\\d}", "/tours/new", "/tours/{id:[A-Z]\\d+}", "/tours/search",
             "/guides", "/guides/{id:[A-Z]{3}\\d+}", "/guides/evaluate",
             "/assignments/guide/{id:[A-Z]{3}\\d+}",
     };
@@ -30,6 +30,7 @@ public class SecurityConfig {
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login", "/auth/register", "/auth/admin/login",
             "/customers",
+            "/tours/filter",
     };
 
     private final String[] PATCH_PUBLIC_ENDPOINTS = {

@@ -2,7 +2,9 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -12,7 +14,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -75,5 +79,65 @@ public class TourService {
         int nextCode = sequenceService.getNextNumber(type.toLowerCase());
 
         return "T" + Year.now().getValue() + String.format("%06d", nextCode);
+    }
+
+    public Page<FilterToursResponse> getFilteredTours(FilterToursRequest request, int page, int size) {
+        Double minPrice = null;
+        Double maxPrice = null;
+        String area = null;
+
+        if (request.getPrice() != null && request.getPrice().size() > 0) {
+            if (request.getPrice().get(0) >= 0) {
+                minPrice = request.getPrice().get(0);
+            }
+            if (request.getPrice().size() > 1) {
+                maxPrice = request.getPrice().get(1);
+            }
+        }
+
+        if (request.getDestination() != null) {
+            switch (request.getDestination().toLowerCase()) {
+                case "b" -> area = "b";
+                case "t" -> area = "t";
+                case "n" -> area = "n";
+                default -> area = null;
+            }
+        }
+
+        Integer rating = (request.getRating() != null && request.getRating() >= 1 && request.getRating() <= 5)
+                ? request.getRating() : null;
+
+        Integer quantityDay = (request.getDuration() != null && request.getDuration() >= 1 && request.getDuration() <= 100)
+                ? request.getDuration() : null;
+
+        Sort sort = Sort.unsorted();
+
+        if (request.getSort() != null) {
+            sort = switch (request.getSort()) {
+                case "high-to-low" -> Sort.by(Sort.Direction.DESC, "adult_price");
+                case "low-to-high" -> Sort.by(Sort.Direction.ASC, "adult_price");
+                case "new" -> Sort.by(Sort.Direction.DESC, "created_time");
+                case "old" -> Sort.by(Sort.Direction.ASC, "created_time");
+                case "default" -> Sort.by(Sort.Direction.DESC, "quantity_order");
+                default -> Sort.unsorted();
+            };
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Object[]> rawResult = tourRepository.findFilteredToursNative(
+                minPrice, maxPrice, area, rating, quantityDay, pageable
+        );
+
+        return rawResult.map(obj -> new FilterToursResponse(
+                (String) obj[0],
+                (String) obj[1],
+                (String) obj[2],
+                (String) obj[3],
+                ((Number) obj[4]).intValue(),
+                (Double) obj[5],
+                ((Number) obj[6]).intValue(),
+                ((Number) obj[7]).intValue()
+        ));
     }
 }

@@ -2,11 +2,11 @@ import { memo } from 'react';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     const pagesToShow = 3;
-    let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-    let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+    let startPage = Math.max(0, currentPage - Math.floor(pagesToShow / 2));
+    let endPage = Math.min(totalPages - 1, startPage + pagesToShow - 1);
 
     if (endPage - startPage + 1 < pagesToShow) {
-        startPage = Math.max(1, endPage - pagesToShow + 1);
+        startPage = Math.max(0, endPage - pagesToShow + 1);
     }
 
     const displayedPages = [];
@@ -19,10 +19,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             <ul className="d-flex align-items-center gap-2 list-unstyled mb-0">
                 <li>
                     <button
-                        disabled={currentPage === 1}
+                        disabled={currentPage === 0}
                         onClick={() => onPageChange(currentPage - 1)}
                         className={`btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center ${
-                            currentPage === 1 ? 'disabled' : ''
+                            currentPage === 0 ? 'disabled' : ''
                         }`}
                         style={{ width: '40px', height: '40px' }}
                     >
@@ -41,17 +41,17 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                             } rounded-circle d-flex align-items-center justify-content-center`}
                             style={{ width: '40px', height: '40px' }}
                         >
-                            {page}
+                            {page + 1}
                         </button>
                     </li>
                 ))}
 
                 <li>
                     <button
-                        disabled={currentPage >= totalPages}
+                        disabled={currentPage >= totalPages - 1}
                         onClick={() => onPageChange(currentPage + 1)}
                         className={`btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center ${
-                            currentPage >= totalPages ? 'disabled' : ''
+                            currentPage >= totalPages - 1 ? 'disabled' : ''
                         }`}
                         style={{ width: '40px', height: '40px' }}
                     >

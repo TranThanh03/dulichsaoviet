@@ -4965,7 +4965,6 @@
         .tour-grid-wrap .tour-grid.destination-item .content .blog-meta li:not(:last-child) {
         margin-right: 10px; }
     .tour-grid-wrap .tour-grid.destination-item .content .destination-footer {
-        margin-top: 25px;
         padding-top: 25px;
         border-top: 1px solid var(--border-color); }
         .tour-grid-wrap .tour-grid.destination-item .content .destination-footer .theme-btn.style-three {

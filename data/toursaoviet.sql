@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Apr 19, 2025 at 12:51 PM
+-- Generation Time: Apr 22, 2025 at 11:32 PM
 -- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
@@ -156,7 +156,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `code`, `email`, `full_name`, `password`, `phone`, `registered_time`, `status`) VALUES
-('1347bc6c-0568-48b3-8a2c-f3c453618348', 'KH2025000002', 'thanhhkh3@gmail.com', 'Trần Thành', '$2a$10$71E0JRplj5Rlnuu1gKZwx.COcZ8LmmQ3IE7IGcRKNoDN7JDV0/qoa', '0825702210', '2025-04-15 01:49:25.033616', 'Đang hoạt động');
+('1347bc6c-0568-48b3-8a2c-f3c453618348', 'KH2025000002', 'thanhhkh3@gmail.com', 'Trần Thành', '$2a$10$71E0JRplj5Rlnuu1gKZwx.COcZ8LmmQ3IE7IGcRKNoDN7JDV0/qoa', '0825702210', '2025-04-15 01:49:25.033616', 'Đang hoạt động'),
+('32a36d69-4760-4a34-a36d-fe90255f875d', 'KH2025000003', 'tranthanh200322@gmail.com', 'Trần Thành', '$2a$10$FYyp7qYo71uCMoDQJ8do1.y1GPOOi05FwwM56e/ANn2iWpLwObQ7m', '0825702211', '2025-04-22 01:51:41.077804', 'Đang hoạt động');
 
 -- --------------------------------------------------------
 
@@ -174,7 +175,8 @@ CREATE TABLE `customer_roles` (
 --
 
 INSERT INTO `customer_roles` (`id`, `role`) VALUES
-('1347bc6c-0568-48b3-8a2c-f3c453618348', 'USER');
+('1347bc6c-0568-48b3-8a2c-f3c453618348', 'USER'),
+('32a36d69-4760-4a34-a36d-fe90255f875d', 'USER');
 
 -- --------------------------------------------------------
 
@@ -271,15 +273,18 @@ CREATE TABLE `schedule` (
   `start_date` date DEFAULT NULL,
   `status` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
   `total_people` int DEFAULT NULL,
-  `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+  `tour_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `created_time` datetime(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Dumping data for table `schedule`
 --
 
-INSERT INTO `schedule` (`id`, `adult_price`, `children_price`, `code`, `end_date`, `quantity_people`, `start_date`, `status`, `total_people`, `tour_id`) VALUES
-('sche-12345', 250000, 180000, 'LT20250001', '2025-04-16', 18, '2025-04-13', 'Chưa diễn ra', 20, 'a2d942d9-9934-419d-96b2-05a11d0a80a9');
+INSERT INTO `schedule` (`id`, `adult_price`, `children_price`, `code`, `end_date`, `quantity_people`, `start_date`, `status`, `total_people`, `tour_id`, `created_time`) VALUES
+('4791d516-fc35-4e6sdv', 5000000, 4000000, 'PC-202500003', '2025-04-24', 0, '2025-04-25', 'Chưa diễn ra', 20, '4791d516-fc35-4e65-805e-0002bc8968c5', '2025-04-23 04:10:23.000000'),
+('bhjhv', 2500000, 1000000, 'PC20250001', '2025-04-24', 10, '2025-04-23', 'Chưa diễn ra', 20, '4791d516-fc35-4e65-805e-0002bc8968c5', '2025-04-23 01:10:27.244000'),
+('dsfvds', 30000000, 2000000, 'PC250002', '2025-04-24', 5, '2025-04-23', 'Chưa diễn ra', 20, 'c9d72b78-e452-4f2c-a22b-dc48902c239d', '2025-04-23 02:10:41.524000');
 
 -- --------------------------------------------------------
 
@@ -299,8 +304,8 @@ CREATE TABLE `sequence` (
 --
 
 INSERT INTO `sequence` (`id`, `last_number`, `type`, `year`) VALUES
-(1, 2, 'customer', 2025),
-(2, 6, 'tour', 2025);
+(1, 3, 'customer', 2025),
+(2, 9, 'tour', 2025);
 
 -- --------------------------------------------------------
 
@@ -320,12 +325,14 @@ CREATE TABLE `token` (
 INSERT INTO `token` (`id`, `expiry_time`) VALUES
 ('1f270cb9-5eeb-4ded-83a3-99165aa27ef9', '2025-04-15 02:50:34'),
 ('1fe094d6-63ec-489c-8045-52fa9f1d3a05', '2025-04-01 17:09:28'),
+('38aea9a9-94be-4739-b757-04de809a040c', '2025-04-22 01:52:22'),
 ('5cc5c9de-8661-48d0-bdbe-16b351ca6312', '2025-04-01 18:44:12'),
 ('7f56da9a-1249-455f-8da8-bfbc369a0edc', '2025-04-14 01:23:23'),
 ('a5f5e5ee-9957-4330-824d-d4cfd549052b', '2025-04-01 18:21:12'),
 ('ae6a55e7-11b6-4c58-a16d-4c94ac2fd8f6', '2025-04-01 18:28:30'),
 ('b33acd3d-2b3e-489e-a60a-30a3d08d9b14', '2025-04-01 16:14:05'),
-('c14d7fd7-2577-4cdc-874f-3b0d028288a6', '2025-04-01 18:31:35');
+('c14d7fd7-2577-4cdc-874f-3b0d028288a6', '2025-04-01 18:31:35'),
+('db9cfb77-e483-4d53-997b-6c66dae281e1', '2025-04-22 02:50:25');
 
 -- --------------------------------------------------------
 
@@ -350,7 +357,8 @@ CREATE TABLE `tour` (
 --
 
 INSERT INTO `tour` (`id`, `code`, `description`, `destination`, `name`, `quantity_day`, `quantity_order`, `area`, `time_stamp`) VALUES
-('a2d942d9-9934-419d-96b2-05a11d0a80a9', 'T2025000006', 'Hành trình 3 ngày khám phá vùng núi và biển đẹp nhất miền Bắc Việt Nam.', 'Hà Nội - Hạ Long', 'Du lịch Hạ Long', 2, 0, 'Miền Bắc', '2025-04-18 18:41:50.120530');
+('4791d516-fc35-4e65-805e-0002bc8968c5', 'T2025000007', 'Hành trình 3 ngày khám phá vùng núi và biển đẹp nhất miền Bắc Việt Nam.', 'Hà Nội - Hạ Long', 'DU LỊCH HẠ LONG 2 NGÀY - 1 ĐÊM', 2, 0, 't', '2025-04-22 23:07:20.683688'),
+('c9d72b78-e452-4f2c-a22b-dc48902c239d', 'T2025000009', 'Hành trình 3 ngày khám phá vùng núi và biển đẹp nhất miền Bắc Việt Nam.', 'Hà Nội - Hạ Long', 'DU LỊCH HẠ LONG 3 NGÀY - 2 ĐÊM', 3, 0, 'b', '2025-04-23 03:42:57.940150');
 
 -- --------------------------------------------------------
 
@@ -368,8 +376,10 @@ CREATE TABLE `tour_images` (
 --
 
 INSERT INTO `tour_images` (`tour_id`, `image`) VALUES
-('a2d942d9-9934-419d-96b2-05a11d0a80a9', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854199/saoviet/o3tufqj6ama66vekmdpy jpg'),
-('a2d942d9-9934-419d-96b2-05a11d0a80a9', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854102/saoviet/jwel4yzvsnkhpodz1pab.jpg');
+('4791d516-fc35-4e65-805e-0002bc8968c5', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854102/saoviet/jwel4yzvsnkhpodz1pab.jpg'),
+('4791d516-fc35-4e65-805e-0002bc8968c5', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854199/saoviet/o3tufqj6ama66vekmdpy.jpg'),
+('c9d72b78-e452-4f2c-a22b-dc48902c239d', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854102/saoviet/jwel4yzvsnkhpodz1pab.jpg'),
+('c9d72b78-e452-4f2c-a22b-dc48902c239d', 'https://res.cloudinary.com/doie0qiiq/image/upload/v1740854199/saoviet/o3tufqj6ama66vekmdpy.jpg');
 
 -- --------------------------------------------------------
 
@@ -389,8 +399,10 @@ CREATE TABLE `tour_itineraries` (
 --
 
 INSERT INTO `tour_itineraries` (`tour_id`, `day_number`, `description`, `title`) VALUES
-('a2d942d9-9934-419d-96b2-05a11d0a80a9', 1, 'Tham quan Lăng Bác, Hồ Gươm, Văn Miếu Quốc Tử Giám.', 'Khám phá Hà Nội'),
-('a2d942d9-9934-419d-96b2-05a11d0a80a9', 2, 'Du thuyền tham quan vịnh, hang Sửng Sốt, Titop.', 'Vịnh Hạ Long');
+('4791d516-fc35-4e65-805e-0002bc8968c5', 1, 'Tham quan Lăng Bác, Hồ Gươm, Văn Miếu Quốc Tử Giám.', 'Khám phá Hà Nội'),
+('4791d516-fc35-4e65-805e-0002bc8968c5', 2, 'Du thuyền tham quan vịnh, hang Sửng Sốt, Titop.', 'Vịnh Hạ Long'),
+('c9d72b78-e452-4f2c-a22b-dc48902c239d', 1, 'Tham quan Lăng Bác, Hồ Gươm, Văn Miếu Quốc Tử Giám.', 'Khám phá Hà Nội'),
+('c9d72b78-e452-4f2c-a22b-dc48902c239d', 2, 'Du thuyền tham quan vịnh, hang Sửng Sốt, Titop.', 'Vịnh Hạ Long');
 
 --
 -- Indexes for dumped tables
