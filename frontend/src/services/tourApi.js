@@ -35,17 +35,23 @@ const TourApi = {
             params: { page, size },
         });
     },
-    popular: () => {
-        return axiosInstanceAdmin.get(`/api/v1/tours/popular`, {
-            headers: {
-                Authorization: `Bearer ${getToken(true)}`
-            }
-        });
-    },
+    // popular: () => {
+    //     return axiosInstanceAdmin.get(`/api/v1/tours/popular`, {
+    //         headers: {
+    //             Authorization: `Bearer ${getToken(true)}`
+    //         }
+    //     });
+    // },
     filter: (data, params) => {
         return axiosInstance.post("/api/v1/tours/filter", data, {
             params: params,
         });
+    },
+    areaCount: () => {
+        return axiosInstance.get("/api/v1/tours/area-count");
+    },
+    popular: () => {
+        return axiosInstance.get("/api/v1/tours/popular");
     }
 };
 

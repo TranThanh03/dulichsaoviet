@@ -1,7 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.ReviewCreationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.user.ReviewUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ReviewResponse;
 import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
@@ -10,12 +9,10 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reviews")
@@ -44,45 +41,21 @@ public class ReviewController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping()
-    ResponseEntity<ApiResponse<Page<ReviewResponse>>> getReviews(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+    @GetMapping("/{tourId}")
+    ResponseEntity<ApiResponse<List<ReviewResponse>>> getReviews(
+            @PathVariable String tourId,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startDate")));
-        Page<ReviewResponse> reviewsPage = reviewService.getReviews(pageable);
+        String customerId = null;
 
-        ApiResponse<Page<ReviewResponse>> apiResponse = ApiResponse.<Page<ReviewResponse>>builder()
+        if (authorizationHeader != null && !authorizationHeader.isBlank()) {
+            String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+            customerId = authenticationService.getIdByToken(token);
+        }
+
+        ApiResponse<List<ReviewResponse>> apiResponse = ApiResponse.<List<ReviewResponse>>builder()
                 .code(2001)
-                .result(reviewsPage)
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
-    }
-
-    @GetMapping("/{id}")
-    ResponseEntity<ApiResponse<ReviewResponse>> getReviewById(@PathVariable String id) {
-        ApiResponse<ReviewResponse> apiResponse = ApiResponse.<ReviewResponse>builder()
-                .code(2002)
-                .result(reviewService.getReviewById(id))
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
-    }
-
-    @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<ReviewResponse>> updateUser(
-            @PathVariable String id,
-            @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody @Valid ReviewUpdateRequest request) {
-
-        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
-        String customerId = authenticationService.getIdByToken(token);
-
-        ApiResponse<ReviewResponse> apiResponse = ApiResponse.<ReviewResponse>builder()
-                .code(2003)
-                .message("Cập nhật thông tin đánh giá thành công.")
-                .result(reviewService.updateReview(id, customerId, request))
+                .result(reviewService.getReviews(tourId, customerId))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
@@ -99,7 +72,7 @@ public class ReviewController {
         reviewService.deleteReview(id, customerId);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(2004)
+                .code(2002)
                 .message("Xóa đánh giá thành công.")
                 .build();
 

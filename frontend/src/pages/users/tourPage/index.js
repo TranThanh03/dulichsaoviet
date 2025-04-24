@@ -29,7 +29,7 @@ const TourPage = () => {
                 setTotalPages(response?.result?.totalPages);
             }
         } catch (error) {
-            console.error("Failed to fetch tours:", error);
+            console.error("Failed to fetch tours: ", error);
         } finally {
             setLoading(false);
         }

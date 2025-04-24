@@ -5,6 +5,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PopularTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -14,6 +15,8 @@ public interface TourMapper {
     Tour createTour(TourCreationRequest request);
 
     TourResponse toTourResponse(Tour tour);
+
+    PopularTourResponse toPopularTourResponse(Tour tour);
 
     void updateTour(@MappingTarget Tour tour, TourUpdateRequest request);
 }

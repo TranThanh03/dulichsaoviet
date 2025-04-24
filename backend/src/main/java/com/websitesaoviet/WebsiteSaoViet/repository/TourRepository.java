@@ -1,5 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 public interface TourRepository extends JpaRepository<Tour, String> {
@@ -60,4 +63,17 @@ public interface TourRepository extends JpaRepository<Tour, String> {
             @Param("quantityDay") Integer quantityDay,
             Pageable pageable
     );
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse(" +
+            "SUM(CASE WHEN t.area = 'b' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN t.area = 't' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN t.area = 'n' THEN 1 ELSE 0 END)) " +
+            "FROM Tour t")
+    AreaTourCountResponse countToursByArea();
+
+    @Query("SELECT t " +
+            "FROM Tour t " +
+            "ORDER BY t.quantityOrder DESC " +
+            "LIMIT 5")
+    List<Tour> findPopularTourResponse();
 }

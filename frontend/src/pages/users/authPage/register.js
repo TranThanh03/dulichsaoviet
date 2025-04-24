@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './register.scss';
 import { CustomerApi } from 'services';
 import { SuccessToast } from 'component/notifi/index';
-import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
 const RegisterPage = () => {

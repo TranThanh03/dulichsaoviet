@@ -5,7 +5,9 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PopularTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
@@ -22,6 +24,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tours")
@@ -110,6 +114,26 @@ public class TourController {
         ApiResponse<Page<FilterToursResponse>> apiResponse = ApiResponse.<Page<FilterToursResponse>>builder()
                 .code(1505)
                 .result(tourService.getFilteredTours(request, page, size))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/area-count")
+    ResponseEntity<ApiResponse<AreaTourCountResponse>> getFilterTours() {
+        ApiResponse<AreaTourCountResponse> apiResponse = ApiResponse.<AreaTourCountResponse>builder()
+                .code(1506)
+                .result(tourService.getCountToursByArea())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/popular")
+    ResponseEntity<ApiResponse<List<PopularTourResponse>>> getPopularTourResponse() {
+        ApiResponse<List<PopularTourResponse>> apiResponse = ApiResponse.<List<PopularTourResponse>>builder()
+                .code(1507)
+                .result(tourService.getPopularTourResponse())
                 .build();
 
         return ResponseEntity.ok(apiResponse);

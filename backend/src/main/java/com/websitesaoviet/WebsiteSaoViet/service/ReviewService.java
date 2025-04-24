@@ -1,7 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.ReviewCreationRequest;
-import com.websitesaoviet.WebsiteSaoViet.dto.request.user.ReviewUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ReviewResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Review;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -11,11 +10,10 @@ import com.websitesaoviet.WebsiteSaoViet.repository.ReviewRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,27 +41,12 @@ public class ReviewService {
         return reviewMapper.toReviewResponse(reviewRepository.save(review));
     }
 
-    public Page<ReviewResponse> getReviews(Pageable pageable) {
-        return reviewRepository.findAll(pageable).map(reviewMapper::toReviewResponse);
-    }
-
-    public ReviewResponse getReviewById(String id) {
-        return reviewMapper.toReviewResponse(reviewRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.TOUR_NOT_EXITED)));
-    }
-
-    public ReviewResponse updateReview(String id, String customerId, ReviewUpdateRequest request) {
-        Review review = reviewRepository.findReviewByIdAndCustomerId(id, customerId);
-
-        if (review == null) {
-            throw new AppException(ErrorCode.REVIEW_NOT_EXITED);
+    public List<ReviewResponse> getReviews(String tourId, String customerId) {
+        if (customerId != null) {
+            return reviewRepository.findAllByTourIdWithCustomer(tourId, customerId);
         }
 
-        reviewMapper.updateReview(review, request);
-
-        review.setTimeStamp(LocalDateTime.now());
-
-        return reviewMapper.toReviewResponse(reviewRepository.save(review));
+        return reviewRepository.findAllByTourId(tourId);
     }
 
     public void deleteReview(String id, String customerId) {

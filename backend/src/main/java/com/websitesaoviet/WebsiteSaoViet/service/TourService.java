@@ -4,7 +4,9 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PopularTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -139,5 +143,16 @@ public class TourService {
                 ((Number) obj[6]).intValue(),
                 ((Number) obj[7]).intValue()
         ));
+    }
+
+    public AreaTourCountResponse getCountToursByArea() {
+        return tourRepository.countToursByArea();
+    }
+
+    public List<PopularTourResponse> getPopularTourResponse() {
+        return tourRepository.findPopularTourResponse()
+                .stream()
+                .map(tourMapper::toPopularTourResponse)
+                .collect(Collectors.toList());
     }
 }

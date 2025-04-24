@@ -1,14 +1,34 @@
 import React, { useState, useEffect, memo } from 'react';
 import './style.scss';
-import { hAuthor1, hAuthor2, hAuthor3, hBoxTwo, hCta1, hCta2, hCta3, hShape1, hShape2, hShape3, hShape4, hShape5, hShape6, hShape7, slide1, slide2, slide3, slide4, slide5, tourCta } from 'assets';
+import { hAuthor1, hAuthor2, hAuthor3, hBoxTwo, hCta1, hCta2, hCta3, hShape1, hShape2, hShape3, hShape4, hShape5, hShape6, hShape7, noImage, slide1, slide2, slide3, slide4, slide5, tourCta } from 'assets';
 import SlideShow from 'component/users/home/SlideShow';
 import SearchForm from 'component/users/home/SearchForm';
 import AnimatedCounter from 'component/counter';
 import { Link } from 'react-router-dom';
+import { TourApi } from 'services';
+import formatNumberShort from 'utils/formatNumberShort';
 
 const slides = [slide1, slide2, slide3, slide4, slide5];
 
 const HomePage = () => {
+    const [popularTours, setPopularTours] = useState([]);
+
+    useEffect(() => {
+        const fetchPopularTour = async () => {
+            try {
+                const response = await TourApi.popular();
+
+                if (response?.code === 1507) {
+                    setPopularTours(response?.result);
+                }
+            } catch(error) {
+                console.error("Failed to fetch popular tour: ", error);
+            }
+        }
+
+        fetchPopularTour();
+    }, [])
+
     return (
         <div className="home-page">
             <SlideShow slides={slides} interval={3000} />
@@ -137,36 +157,31 @@ const HomePage = () => {
                         </div>
                         <div className="container">
                             <div className="row justify-content-center">
-                                {/* @php $count = 0; @endphp
-                                @foreach ($toursPopular as $tour)
-                                    @if ($count == 2 || $count == 3)
-                                        <!-- Cột thứ 3 và thứ 4 sẽ là col-md-6 -->
-                                        <div className="col-md-6 item ">
-                                        @else
-                                            <!-- Các cột còn lại sẽ là col-xl-3 col-md-6 -->
-                                            <div className="col-xl-3 col-md-6 item ">
-                                    @endif
-
-                                    <div className="destination-item style-two" data-aos-duration="1500" data-aos-offset="50">
-                                        <div className="image" style="max-height: 250px">
-                                            <a href="#" className="heart"><i className="fas fa-heart"></i></a>
-                                            <img src="{{ asset('admin/assets/images/gallery-tours/' . $tour->images[0]) }}"
-                                                alt="Destination">
-                                        </div>
-                                        <div className="content">
-                                            <h6 className="tour-title"><a
-                                                    href="{{ route('tour-detail', ['id' => $tour->tourId]) }}">{{ $tour->title }}</a>
-                                            </h6>
-                                            <span className="time">{{ $tour->time }}</span>
-                                            <a href="{{ route('tour-detail', ['id' => $tour->tourId]) }}" className="more"><i
-                                                    className="fas fa-chevron-right"></i></a>
-                                        </div>
-                                    </div>
-
-                                </div> <!-- Đóng div col-md-6 hoặc col-xl-3 col-md-6 -->
-
-                                @php $count++; @endphp
-                                @endforeach*/}
+                                {popularTours.length > 0 && (
+                                    popularTours.map((item, index) => {
+                                        return (
+                                            <div key={index} className={`col-md-6 item ${index === 2 || index === 3 ? '' : 'col-xl-3'}`}>
+                                                <Link to={`/tour/detail/${item.id}`}>
+                                                    <div className="destination-item style-two" data-aos-duration="1500" data-aos-offset="50">
+                                                        <div className="image img-custom">
+                                                            <span class="badge">Popular</span>
+                                                            <span className="order">
+                                                                <span id="quantity">{formatNumberShort(item.quantityOrder)}</span>
+                                                                <i class="fas fa-ticket-alt ms-1"></i>
+                                                            </span>
+                                                            <img src={item.image[0] ?? noImage} alt="tour-image" />
+                                                        </div>
+                                                        <div className="content">
+                                                            <h6 className="tour-title fw-bold">{item.name}</h6>
+                                                            <span className="time">{item.quantityDay} ngày {item.quantityDay-1} đêm</span>
+                                                            <i className="fas fa-chevron-right ms-2"></i>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            </div>
+                                        )
+                                    })
+                                )}
                             </div>
                         </div>
                     </div>

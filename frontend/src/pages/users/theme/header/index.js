@@ -43,8 +43,10 @@ const Header = () => {
         const fetchAuth = async () => {
             try {
                 const token = getToken();
+
                 if (token) {
                     const response = await AuthApi.introspect();
+                    
                     if (response?.code === 9998) {
                         setAuthenticated(response?.result);
                     }
@@ -58,6 +60,7 @@ const Header = () => {
     const handleLogout = async () => {
         try {
             const response = await AuthApi.logout();
+
             if (response.code === 9997) {
                 window.location.href = "/";
             }

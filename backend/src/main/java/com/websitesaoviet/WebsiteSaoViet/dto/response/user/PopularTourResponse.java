@@ -3,18 +3,17 @@ package com.websitesaoviet.WebsiteSaoViet.dto.response.user;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ReviewResponse {
+public class PopularTourResponse {
     String id;
-    int rating;
-    String comment;
-    LocalDateTime timeStamp;
-    String fullName;
-    boolean isCustomer;
+    String name;
+    List<String> image;
+    int quantityDay;
+    int quantityOrder;
 }

@@ -3,6 +3,40 @@
         height: 48px;
     }
 
+    .popular-destinations-area .img-custom {
+        .badge {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            z-index: 2;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 10px;
+            background: #ff737e
+        }
+
+        .order {
+            z-index: 2;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            padding: 0 5px;
+            font-size: 12px;
+
+            #quantity {
+                color: #f7921e;
+            }
+        }
+
+        img {
+            max-height: 250px;
+        }
+    }
+
     @media only screen and (max-width: 992px) {
         .space-custom {
             height: 140px;

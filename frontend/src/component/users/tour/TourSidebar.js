@@ -1,7 +1,8 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { pShape3, tourCta } from 'assets';
 import PriceFilter from './PriceFilter';
 import './TourSidebar.scss';
+import { TourApi } from 'services';
 
 const TourSidebar = ({ filters, setFilters }) => {
     
@@ -11,6 +12,32 @@ const TourSidebar = ({ filters, setFilters }) => {
             [field]: value,
         });
     };
+
+    const [listCount, setListCount] = useState({
+        'totalNorth': 0,
+        'totalCentral': 0,
+        'totalSouth': 0
+    })
+
+    useEffect(() => {
+        const fetchAreaCount = async () => {
+            try {
+                const response = await TourApi.areaCount();
+
+                if (response?.code === 1506) {
+                    setListCount({
+                        totalNorth: response?.result?.totalNorth,
+                        totalCentral: response?.result?.totalCentral,
+                        totalSouth: response?.result?.totalSouth 
+                    })
+                }
+            } catch(error) {
+                console.error("Failed to fetch count tours by area: ", error);
+            }
+        }
+
+        fetchAreaCount();
+    }, [])
 
     return (
         <div className="tour-sidebar-custom col-lg-3 col-md-6 col-sm-10">
@@ -40,7 +67,11 @@ const TourSidebar = ({ filters, setFilters }) => {
                 <div className="widget widget-activity">
                     <h6 className="widget-title">Điểm đến</h6>
                     <ul className="radio-filter">
-                        {[{ id: 'b', label: 'Miền Bắc' }, { id: 't', label: 'Miền Trung' }, { id: 'n', label: 'Miền Nam' }].map((item) => (
+                        {[
+                            { id: 'b', label: 'Miền Bắc' , value: listCount.totalNorth },
+                            { id: 't', label: 'Miền Trung', value: listCount.totalCentral },
+                            { id: 'n', label: 'Miền Nam', value: listCount.totalSouth }
+                        ].map((item) => (
                             <li key={item.id}>
                                 <input
                                     className="form-check-input"
@@ -51,7 +82,10 @@ const TourSidebar = ({ filters, setFilters }) => {
                                     checked={filters.destination === item.id}
                                     onChange={(e) => handleFilterChange('destination', e.target.value)}
                                 />
-                                <label htmlFor={item.id}>{item.label}</label>
+                                <label htmlFor={item.id}>
+                                    {item.label}
+                                    <span>{item.value}</span>
+                                </label>
                             </li>
                         ))}
                     </ul>
@@ -86,7 +120,10 @@ const TourSidebar = ({ filters, setFilters }) => {
                 <div className="widget widget-duration">
                     <h6 className="widget-title">Thời gian</h6>
                     <ul className="radio-filter">
-                        {[{ id: '3ngay2dem', value: '2', label: '2 ngày 1 đêm' }, { id: '4ngay3dem', value: '3', label: '3 ngày 2 đêm' }, { id: '5ngay4dem', value: '4', label: '4 ngày 3 đêm' }].map((item) => (
+                        {[
+                            { id: '2ngay3dem', value: '2', label: '2 ngày 1 đêm' },
+                            { id: '3ngay2dem', value: '3', label: '3 ngày 2 đêm' },
+                            { id: '4ngay3dem', value: '4', label: '4 ngày 3 đêm' }].map((item) => (
                             <li key={item.id}>
                                 <input
                                     className="form-check-input"
