@@ -11,8 +11,8 @@ const ReviewApi = {
             headers
         });
     },
-    create: (data) => {
-        return axiosInstanceAdmin.post("/api/v1/reviews", data, {
+    create: (bookingId, data) => {
+        return axiosInstanceAdmin.post(`/api/v1/reviews/${bookingId}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
@@ -20,6 +20,13 @@ const ReviewApi = {
     },
     delete: (id) => {
         return axiosInstanceAdmin.delete(`/api/v1/reviews/${id}`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`
+            }
+        });
+    },
+    check: (bookingId) => {
+        return axiosInstanceAdmin.get(`/api/v1/reviews/check/${bookingId}`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }

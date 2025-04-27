@@ -13,6 +13,9 @@ import java.time.LocalDate;
 public class ScheduleSummaryResponse {
     String id;
     LocalDate startDate;
+    LocalDate endDate;
+    Double adultPrice;
+    Double childrenPrice;
     int quantityPeople;
     int totalPeople;
 }

@@ -2,13 +2,12 @@ import { memo, useEffect, useState } from 'react';
 import './index.scss';
 import { useNavigate } from 'react-router-dom';
 import { userAvatar } from 'assets';
-import Swal from 'sweetalert2';
-import { CustomerApi } from 'services';
+import { AdminApi } from 'services';
+import { SuccessToast } from 'component/notifi';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
-    const [id, setId] = useState();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ fullName: '', phone: '', email: '' });
     const [isLoading, setLoading] = useState(false);
@@ -26,14 +25,13 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await CustomerApi.inforAdmin();
-                if (response?.code === 1996) {
+                const response = await AdminApi.infor();
+                if (response?.code === 1200) {
                     setUser(response.result);
-                    setId(response.result.id);
                 }
             }
             catch (error) {
-                console.error("Failed to fetch user:", error);
+                console.error("Failed to fetch admin: ", error);
                 navigate("/manage/error/404");
             }
             finally {
@@ -73,17 +71,11 @@ const ProfilePage = () => {
         }
 
         try {
-            const response = await CustomerApi.updateAdmin(id, formData);
+            const response = await AdminApi.update(formData);
 
-            if (response.code === 1995) {
+            if (response.code === 1201) {
                 setUser((prev) => ({ ...prev, ...formData }));
-                
-                Swal.fire({
-                    title: 'Thành công',
-                    text: 'Cập nhật thông tin thành công',
-                    icon: 'success',
-                    confirmButtonText: 'Đóng'
-                });
+                SuccessToast("Cập nhật thông tin thành công.");
             } else {
                 setError(response.message);
             }
@@ -99,48 +91,78 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="manage-profile">
-            <div className="avatar-container">
-                <img src={userAvatar} alt="avatar" className="avatar" />
-            </div>
-            <div className="user-details">
-                <h2>Thông tin quản trị viên</h2>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><strong>Mã quản trị:</strong></td>
-                            <td className="infor">{user?.code || 'N/A'}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Họ tên:</strong></td>
-                            <td className="infor">
-                                <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Số điện thoại:</strong></td>
-                            <td className="infor">
-                                <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Email:</strong></td>
-                            <td className="infor">
-                                <input type="text" name="email" value={formData.email} onChange={handleInputChange} />
-                            </td>
-                        </tr>
-                        {error && (
-                            <tr>
-                                <td colSpan={2} id="error">{error}</td>
-                            </tr>
-                        )}
-                        <tr>
-                            <td colSpan={2} id="btn">
-                                <button type="button" onClick={handleUpdate}>Cập nhật</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div className="manage-profile container">
+            <div className="card mx-auto shadow" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                <div className="card-body text-center">
+                    <div className="mb-4">
+                        <img src={userAvatar} alt="avatar" className="avatar rounded-circle" />
+                    </div>
+                    <div className="user-details">
+                        <h2 className="card-title mb-4">Thông tin quản trị viên</h2>
+                        <table className="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Mã quản trị:</strong></td>
+                                    <td className="text-end me-1">{user?.code || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Họ tên:</strong></td>
+                                    <td className="text-end">
+                                        <input
+                                            type="text"
+                                            name="fullName"
+                                            className="form-custom"
+                                            value={formData.fullName}
+                                            onChange={handleInputChange}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Số điện thoại:</strong></td>
+                                    <td className="text-end">
+                                        <input
+                                            type="text"
+                                            name="phone"
+                                            className="form-custom"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td className="text-end">
+                                        <input
+                                            type="text"
+                                            name="email"
+                                            className="form-custom"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                        />
+                                    </td>
+                                </tr>
+                                {error && (
+                                    <tr>
+                                        <td colSpan="2">
+                                            <div className="text-danger text-center">{error}</div>
+                                        </td>
+                                    </tr>
+                                )}
+                                <tr>
+                                    <td colSpan="2" className="text-center float-none">
+                                        <button
+                                            type="button"
+                                            className="btn text-white"
+                                            onClick={handleUpdate}
+                                        >
+                                            Cập nhật
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     );

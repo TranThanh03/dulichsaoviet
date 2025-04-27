@@ -1,15 +1,12 @@
 .user-profile {
+    margin: 50px 0px;
     position: relative;
-    top: 0;
     left: 50%;
     transform: translate(-50%, 0);
-    background-color: #fff;
-    width: 600px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-    margin: 30px 0 60px 0;
+
+    .card {
+        max-width: 600px;
+    }
 
     .avatar-container {
         margin-bottom: 20px;
@@ -23,71 +20,40 @@
         object-fit: cover;
     }
 
-    .user-details h2 {
-        font-size: 24px;
-        margin-bottom: 15px;
-        color: #333;
+    table {
+        td {
+            float: left;
+        }
+
+        .text-end {
+            float: right;
+
+            input {
+                text-align: right;
+                border: 2px solid #3ac4d3;
+                box-shadow: 1px 1px 0 0 #25b8c8;
+                padding: 5px;
+                border-radius: 5px;
+                width: 100%;
+            }
+        }
     }
 
-    .user-details table {
-        text-align: left;
-        position: relative;
-        top: 0;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 400px;
+    h2 {
+        font-size: 25px;
+        font-weight: bold;
     }
 
-    .user-details table tr {
-        font-size: 16px;
-        margin: 10px 0;
-        color: #555;
+    .btn {
+        background-color: #3ac4d3;
     }
 
-    .user-details table td {
-        color: #555;
-        padding: 10px 0;
+    .btn:hover {
+        background-color: #00b6ca;
     }
 
-    .user-details table .infor {
-        padding-left: 15px;
-        text-align: right;
-    }
-
-    .user-details input {
-        height: 30px;
-        font-size: 16px;
-        text-align: right;
-        outline: none;
-        border: none;
-        background-color: #e3e3e3;
-        border-radius: 3px;
-        padding: 10px;
-        color: #555;
-    }
-
-    .user-details #btn {
-        text-align: center;
-    }
-
-    .user-details #btn button {
-        width: 120px;
-        height: 35px;
-        font-size: 16px;
-        color: white;
-        background-color: #45c3d2;
-        border: none;
-        outline: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .user-details #btn button:hover {
-        background-color: #008998;
-    }
-
-    .user-details #error {
-        color: red;
-        font-size: 14px;
+    @media only screen and (min-width: 992px) {
+        padding-top: 100px;
+        margin-bottom: 250px;
     }
 }

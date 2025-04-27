@@ -21,41 +21,20 @@ const CustomerApi = {
             }
         });
     },
-    inforAdmin: () => {
-        return axiosInstanceAdmin.get("/api/v1/customers/infor", {
-            headers: {
-                Authorization: `Bearer ${getToken(true)}`
-            }
-        });
-    },
     create: (data) => {
         return axiosInstance.post("/api/v1/customers", data);
     },
-    update: (id, data) => {
-        return axiosInstance.put(`/api/v1/customers/${id}`, data, {
+    update: (data) => {
+        return axiosInstance.put(`/api/v1/customers`, data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
-    changePassword: (id, data) => {
-        return axiosInstance.put(`/api/v1/customers/password/${id}`, data, {
+    changePassword: (data) => {
+        return axiosInstance.put(`/api/v1/customers/password`, data, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
-            }
-        });
-    },
-    updateAdmin: (id, data) => {
-        return axiosInstanceAdmin.put(`/api/v1/customers/${id}`, data, {
-            headers: {
-                Authorization: `Bearer ${getToken(true)}`
-            }
-        });
-    },
-    changePasswordAdmin: (id, data) => {
-        return axiosInstanceAdmin.put(`/api/v1/customers/password/${id}`, data, {
-            headers: {
-                Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
@@ -75,9 +54,6 @@ const CustomerApi = {
     },
     activate: (id) => {
         return axiosInstance.patch(`/api/v1/customers/activate/${id}`);
-    },
-    activateByAdmin: (id) => {
-        return axiosInstanceAdmin.patch(`/api/v1/customers/activate/${id}`);
     },
 };
 

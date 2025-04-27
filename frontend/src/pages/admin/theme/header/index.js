@@ -4,6 +4,7 @@ import './style.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthApi } from 'services';
 import { AuthContext } from '../masterLayout';
+import { ToastContainer } from 'react-toastify';
 
 const Navbar = () => {
     const location = useLocation();
@@ -89,6 +90,8 @@ const Header = () => {
             </div>
 
             <Navbar />
+            
+            <ToastContainer />
         </div>
     );
 };

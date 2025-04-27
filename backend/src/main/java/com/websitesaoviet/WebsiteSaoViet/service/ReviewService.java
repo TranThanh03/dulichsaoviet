@@ -56,4 +56,14 @@ public class ReviewService {
 
         reviewRepository.deleteById(id);
     }
+
+    public boolean checkReview(String bookingId, String customerId) {
+        var booking = bookingService.getBookingReviewValid(bookingId, customerId, true);
+
+        if (booking != null) {
+            return true;
+        }
+
+        return false;
+    }
 }

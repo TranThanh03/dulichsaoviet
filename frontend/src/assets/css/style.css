@@ -7279,6 +7279,7 @@
         font-weight: 500;
         margin-right: 10px; }
         .comment-review-wrap .comment-ratting-item .ratting i {
+        cursor: pointer;
         font-size: 20px; }
 
     /*******************************************************/

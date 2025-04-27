@@ -35,7 +35,7 @@ public class ReviewController {
         ApiResponse<ReviewResponse> apiResponse = ApiResponse.<ReviewResponse>builder()
                 .code(2000)
                 .message("Thêm đánh giá mới thành công.")
-                .result(reviewService.createReview(bookingId, customerId,request))
+                .result(reviewService.createReview(bookingId, customerId, request))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
@@ -74,6 +74,22 @@ public class ReviewController {
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(2002)
                 .message("Xóa đánh giá thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/check/{bookingId}")
+    ResponseEntity<ApiResponse<Boolean>> checkReview(
+            @PathVariable String bookingId,
+            @RequestHeader("Authorization") String authorizationHeader) {
+
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String customerId = authenticationService.getIdByToken(token);
+
+        ApiResponse<Boolean> apiResponse = ApiResponse.<Boolean>builder()
+                .code(2003)
+                .result(reviewService.checkReview(bookingId, customerId))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { AssignmentApi, TourApi, GuideApi } from "services";
+import { ScheduleApi, TourApi, GuideApi } from "services";
 import "./insert.scss";
 
-const AddAssignmentForm = ({ onClose, onAdded }) => {
+const AddScheduleForm = ({ onClose, onAdded }) => {
     const [tours, setTours] = useState([]);
     const [guides, setGuides] = useState([]);
     const getCurrentDate = () => {
@@ -26,8 +26,8 @@ const AddAssignmentForm = ({ onClose, onAdded }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const tourResponse = await TourApi.getToursByAssignment();
-                const guideResponse = await GuideApi.getGuidesByAssignment();
+                const tourResponse = await TourApi.getToursBySchedule();
+                const guideResponse = await GuideApi.getGuidesBySchedule();
 
                 if (tourResponse?.code === 2989) {
                     setTours(tourResponse.result);
@@ -59,7 +59,7 @@ const AddAssignmentForm = ({ onClose, onAdded }) => {
                 guidePrice: parseInt(formData.guidePrice, 10) || 0,
             };
 
-            const response = await AssignmentApi.create(formattedData);
+            const response = await ScheduleApi.create(formattedData);
             
             if (response?.code === 1979) {
                 Swal.fire("Thành công", "Lịch phân công đã được thêm", "success");
@@ -116,4 +116,4 @@ const AddAssignmentForm = ({ onClose, onAdded }) => {
     );
 };
 
-export default AddAssignmentForm;
+export default AddScheduleForm;

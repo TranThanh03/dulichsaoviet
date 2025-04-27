@@ -1,21 +1,39 @@
 import { memo, useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import './detail.scss';
 import { TourApi } from 'services';
 import formaterCurrency from 'utils/formatCurrency';
 import { sanitizeHtml } from 'utils/sanitizeHtml';
 import { noImage } from 'assets';
 import ReviewList from "component/users/review/index";
+import CalendarCustom from "component/users/calendar/index";
+import formatDatetime from 'utils/formatDatetime';
 
 const TourDetailPage = () => {
     const { id } = useParams();
     const [tour, setTour] = useState({});
     const navigate = useNavigate();
-    const [review, setReviews] = useState({
-        rating: 5,
-        comment: ''
+    const [searchParams] = useSearchParams();
+    const bookingId = searchParams.get('bookingId');
+    const [iShow, setIsShow] = useState(false);
+    const [data, setData] = useState({
+        id: "",
+        startDate: "",
+        endDate: "",
+        adultPrice: 0,
+        childrenPrice: 0,
+        quantityPeople: 0,
+        totalPeople: 0
     });
 
+    const handleDateSelect = (data) => {
+        setData(data);
+    };
+
+    const handleClose = () => {
+        setIsShow(false);
+    };
+    
     useEffect(() => {
         const fetchTour = async () => {
             try {
@@ -28,7 +46,7 @@ const TourDetailPage = () => {
                 }
             } catch (error) {
                 console.error("Failed to fetch tour: ", error);
-                navigate("/error/404");
+                // navigate("/error/404");
             }
         }
 
@@ -84,7 +102,7 @@ const TourDetailPage = () => {
             <section className="tour-details-page pb-100">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-8">
+                        <div className="col-lg-7">
                             <div className="tour-details-content">
                                 <h3>Khám phá Tours</h3>
                                 <p>{tour.description}</p>
@@ -119,112 +137,79 @@ const TourDetailPage = () => {
                             </div>
                             <h3>Lịch trình</h3>
                             <div className="accordion-two mt-25 mb-60" id="faq-accordion-two">
-                                {/* @php
-                                    $day = 1;
-                                @endphp
-                                @foreach ($tourDetail->timeline as $timeline)
-                                    <div className="accordion-item">
-                                        <h5 className="accordion-header">
-                                            <button className="accordion-button collapsed" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseTwo{{ $timeline->timeLineId }}">
-                                                Ngày {{ $day++ }} - {{ $timeline->title }}
-                                            </button>
-                                        </h5>
-                                        <div id="collapseTwo{{ $timeline->timeLineId }}" className="accordion-collapse collapse"
-                                            data-bs-parent="#faq-accordion-two">
-                                            <div className="accordion-body">
-                                                <p>{!! $timeline->description !!}</p>
+                               {tour.itinerary && tour.itinerary.length > 0 && (
+                                    tour.itinerary.map((item, index) => (
+                                        <div key={index} className="accordion-item">
+                                            <h5 className="accordion-header">
+                                                <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#collapseTwo${item.dayNumber}`}>
+                                                    Ngày {item.dayNumber} - {item.title}
+                                                </button>
+                                            </h5>
+                                            <div id={`collapseTwo${item.dayNumber}`} className="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
+                                                <div className="accordion-body">
+                                                    <p>{item.description ?? ''}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach */}
+                                    ))
+                                )}
                             </div>
 
-                            <div id="partials_reviews">
-                                <ReviewList tourId={id} />
-                            </div>
+                            <ReviewList tourId={id} bookingId={bookingId}/>
+                        </div>    
 
-                            <h3 className="{{ $checkDisplay }}">Thêm đánh giá</h3>
-                            <form id="comment-form" className="comment-form bgc-lighter z-1 rel mt-30" name="review-form" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                <div className="comment-review-wrap">
-                                    <div className="comment-ratting-item">
-                                        <span className="title">Đánh giá:</span>
-                                        <div className="ratting" id="rating-stars">
-                                            <div className="ratting" id="rating-stars">
-                                                {[1, 2, 3, 4, 5].map((value) => (
-                                                    <i
-                                                        key={value}
-                                                        className={value <= review.rating ? "fas fa-star" : "far fa-star"}
-                                                        data-value={value}
-                                                        onClick={() => setReviews(prev => ({ ...prev, rating: value }))}
-                                                    ></i>
-                                                ))}
-                                            </div>
+                        <div className="col-lg-5 col-md-8 col-sm-10 rmt-75">
+                            <div className="blog-sidebar tour-sidebar" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <CalendarCustom
+                                    tourId={id}
+                                    onDateSelect={handleDateSelect}
+                                    isShow={iShow}
+                                    onClose={handleClose}
+                                />
 
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <hr className="mt-30 mb-40" />
-                                <h5>Để lại phản hồi</h5>
-                                <div className="row gap-20 mt-20">
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <label for="message">Nội dung:</label>
-                                            <textarea name="message" id="message" className="form-control" rows="5" required=""></textarea>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <div className="form-group mb-0">
-                                            <button type="submit" className="theme-btn bgc-secondary style-two" id="submit-reviews">
-                                                <span data-hover="Gửi đánh giá">Gửi đánh giá</span>
-                                                <i className="fal fa-arrow-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className="col-lg-4 col-md-8 col-sm-10 rmt-75">
-                            <div className="blog-sidebar tour-sidebar">
-                                <div className="widget widget-booking" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                <div className="widget widget-booking">
                                     <h5 className="widget-title fw-bold text-center">Đặt Tour</h5>
-                                    <form>
-                                        <div className="date mb-25">
-                                            <b>Ngày bắt đầu</b>
-                                            <input type="text" value="" name="startdate" disabled />
+                                    <div className="form-custom">
+                                        <div className="date">
+                                            <b>Ngày bắt đầu:</b>
+                                            <div className="date-input">
+                                                <i className="fa-solid fa-calendar-days cursor-pointer" onClick={() => setIsShow(true)}></i>
+                                                <input type="text" value={data.startDate ? formatDatetime(data.startDate) : ''} disabled />
+                                            </div>
                                         </div>
                                         <hr />
-                                        <div className="date mb-25">
-                                            <b>Ngày kết thúc</b>
-                                            <input type="text" value="" name="enddate" disabled />
+                                        <div className="date">
+                                            <b>Ngày kết thúc:</b>
+                                            <div className="date-input">
+                                                <i className="fa-solid fa-calendar-days"></i>
+                                                <input type="text" value={data.endDate ? formatDatetime(data.endDate) : ''} disabled />
+                                            </div>
                                         </div>
                                         <hr />
                                         <div className="time py-5">
                                             <b>Thời gian :</b>
-                                            <p>$time</p>
-                                            <input type="hidden" name="time" />
+                                            <p id="p-custom">{tour.quantityDay ? `${tour.quantityDay} ngày ${tour.quantityDay-1} đêm` : ''}</p>
                                         </div>
                                         <hr className="mb-25" />
-                                        <h6>Vé:</h6>
+                                        <h6 className="fw-bold">Vé:</h6>
                                         <ul className="tickets clearfix">
                                             <li>
-                                                Người lớn <span
-                                                    className="price">$priceAdult VND
-                                                </span>
+                                                Người lớn: <span className="price">{formaterCurrency(data.adultPrice)}</span>
                                             </li>
                                             <li>
-                                                Trẻ em <span
-                                                    className="price">priceChild VND
-                                                </span>
+                                                Trẻ em: <span className="price">{formaterCurrency(data.childrenPrice)}</span>
+                                            </li>
+                                            <li>
+                                                Còn nhận: <span className="people">
+                                                            {data.totalPeople - data.quantityPeople}<i className="far fa-user ms-1"></i>
+                                                        </span>
                                             </li>
                                         </ul>
-                                        <button type="submit" className="theme-btn style-two w-100 mt-15 mb-5">
+                                        <button type="submit" className="theme-btn style-two w-100 mt-25 mb-5">
                                             <span data-hover="Đặt ngay">Đặt ngay</span>
                                             <i className="fal fa-arrow-right"></i>
                                         </button>
-                                    </form>
+                                    </div>
                                 </div>
 
                                 {/* @if (!empty($tourRecommendations))

@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './index.scss';
 import formatCurrency from 'utils/formatCurrency';
-import { AssignmentApi, CustomerApi, PaymentApi } from 'services';
+import { ScheduleApi, CustomerApi, PaymentApi } from 'services';
 import formatDatetime from 'utils/formatDatetime';
 import Swal from 'sweetalert2';
 import { ScrollToTop } from 'utils/ScrollToTop';
@@ -10,7 +10,7 @@ import { noImage } from 'assets';
 
 const BookingPage = () => {
     const [user, setUser] = useState({ fullName: "", phone: "", email: "" });
-    const [assignment, setAssignment] = useState({
+    const [assignment, setSchedule] = useState({
         tourName: "",
         tourImage: "",
         startDate: Date(),
@@ -26,7 +26,7 @@ const BookingPage = () => {
     const { id } = useParams();
     const [people, setPeople] = useState(1);
     const [userId, setUserId] = useState(null);
-    const [assignmentId, setAssignmentId] = useState(null);
+    const [assignmentId, setScheduleId] = useState(null);
     const [numberOfPeople, setNumberOfPeople] = useState(0);
     const [totalPeople, setTotalPeople] = useState(0);
     const [tourCost, setTourCost] = useState(0);
@@ -42,20 +42,20 @@ const BookingPage = () => {
         const fetchData = async () => {
             try {
                 const resUser = await CustomerApi.getByToken();
-                const resAssignment = await AssignmentApi.getById(id);
+                const resSchedule = await ScheduleApi.getById(id);
 
                 if (resUser?.code === 1996) {
                     setUser(resUser.result);
                     setUserId(resUser.result.id);
                 }
 
-                if (resAssignment?.code === 1973 && resAssignment?.result) {
-                    setAssignment(resAssignment.result);
-                    setTourCost(resAssignment.result.tourPrice);
-                    setGuideCost(resAssignment.result.guidePrice);
-                    setNumberOfPeople(resAssignment.result.numberOfPeople);
-                    setTotalPeople(resAssignment.result.totalPeople);
-                    setAssignmentId(resAssignment.result.id);
+                if (resSchedule?.code === 1973 && resSchedule?.result) {
+                    setSchedule(resSchedule.result);
+                    setTourCost(resSchedule.result.tourPrice);
+                    setGuideCost(resSchedule.result.guidePrice);
+                    setNumberOfPeople(resSchedule.result.numberOfPeople);
+                    setTotalPeople(resSchedule.result.totalPeople);
+                    setScheduleId(resSchedule.result.id);
                 }
             }
             catch(error) {

@@ -164,10 +164,10 @@ const HomePage = () => {
                                                 <Link to={`/tour/detail/${item.id}`}>
                                                     <div className="destination-item style-two" data-aos-duration="1500" data-aos-offset="50">
                                                         <div className="image img-custom">
-                                                            <span class="badge">Popular</span>
+                                                            <span className="badge">Popular</span>
                                                             <span className="order">
                                                                 <span id="quantity">{formatNumberShort(item.quantityOrder)}</span>
-                                                                <i class="fas fa-ticket-alt ms-1"></i>
+                                                                <i className="fas fa-ticket-alt ms-1"></i>
                                                             </span>
                                                             <img src={item.image[0] ?? noImage} alt="tour-image" />
                                                         </div>

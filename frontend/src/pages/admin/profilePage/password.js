@@ -1,41 +1,16 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useState } from 'react';
 import './password.scss';
-import { useNavigate } from 'react-router-dom';
 import { userPassword } from 'assets';
-import Swal from 'sweetalert2';
-import { CustomerApi } from 'services';
+import { AdminApi } from 'services';
+import { SuccessToast } from 'component/notifi';
 
 const PasswordPage = () => {
     const [error, setError] = useState(null);
-    const [id, setId] = useState();
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({ 
         currentPassword: '', 
         newPassword: '',
         confirmPassword: ''
     });
-    const [isLoading, setLoading] = useState(false);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await CustomerApi.inforAdmin();
-
-                if (response?.code === 1996) {
-                    setId(response.result.id);
-                }
-            }
-            catch (error) {
-                console.error("Failed to fetch user:", error);
-                navigate("/manage/error/404");
-            }
-            finally {
-                setLoading(true);
-            }
-        };
-
-        fetchData();
-    }, [navigate]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -62,21 +37,16 @@ const PasswordPage = () => {
         }
 
         try {
-            const response = await CustomerApi.changePasswordAdmin(id, formData);
+            const response = await AdminApi.changePassword(formData);
 
-            if (response?.code === 1992) {
+            if (response?.code === 1202) {
                 setFormData((prev) =>
                     Object.keys(prev).reduce((acc, key) => ({ ...acc, [key]: '' }), {})
                 );
 
-                Swal.fire({
-                    title: 'Thành công',
-                    text: 'Thay đổi mật khẩu thành công',
-                    icon: 'success',
-                    confirmButtonText: 'Đóng'
-                });
+                SuccessToast("Thay đổi mật khẩu thành công.");
             } 
-            else if (response?.code === 1028) {
+            else if (response?.code === 1015) {
                 setError("Mật khẩu hiện tại không chính xác!");
             }
             else {
@@ -87,32 +57,59 @@ const PasswordPage = () => {
         }
     };
 
-    if (!isLoading) {
-        return (
-            <div style={{height: 500}}></div>
-        );
-    }
-
     return (
-        <div className="manage-password">
-            <div className="avatar-container">
-                <img src={userPassword} alt="avatar" className="avatar" />
-            </div>
-            <div className="user-details">
-                <h2>Thay đổi mật khẩu</h2>
-                <form onSubmit={handleUpdate} className="password-form">
-                    <label htmlFor="currentPassword">Mật khẩu hiện tại</label>
-                    <input type="password" id="currentPassword" name="currentPassword" value={formData.currentPassword} onChange={handleInputChange} />
-                    
-                    <label htmlFor="newPassword">Mật khẩu mới</label>
-                    <input type="password" id="newPassword" name="newPassword" value={formData.newPassword} onChange={handleInputChange} />
-                    
-                    <label htmlFor="confirmPassword">Nhập lại mật khẩu</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} />
-                    
-                    {error && <p className="error-message">{error}</p>}
-                    <button type="submit" className="submit-btn">Xác nhận</button>
-                </form>
+        <div className="manage-password container">
+            <div className="card mx-auto shadow" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                <div className="card shadow-sm p-4">
+                    <div className="text-center mb-4">
+                        <img src={userPassword} alt="avatar" className="avatar rounded-circle" />
+                    </div>
+                    <div className="text-center">
+                        <h2 className="fs-4 mb-4">Thay đổi mật khẩu</h2>
+                        <div className="d-flex flex-column gap-3">
+                            <div className="text-start">
+                                <label htmlFor="currentPassword" className="form-label fw-bold text-muted">Mật khẩu hiện tại</label>
+                                <input
+                                    type="password"
+                                    id="currentPassword"
+                                    name="currentPassword"
+                                    className="form-custom custom-input"
+                                    value={formData.currentPassword}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="text-start">
+                                <label htmlFor="newPassword" className="form-label fw-bold text-muted">Mật khẩu mới</label>
+                                <input
+                                    type="password"
+                                    id="newPassword"
+                                    name="newPassword"
+                                    className="form-custom custom-input"
+                                    value={formData.newPassword}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="text-start">
+                                <label htmlFor="confirmPassword" className="form-label fw-bold text-muted">Nhập lại mật khẩu</label>
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    className="form-custom custom-input"
+                                    value={formData.confirmPassword}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            {error && <p className="text-danger text-start">{error}</p>}
+                            <button
+                                className="btn custom-btn text-white w-100"
+                                onClick={handleUpdate}
+                            >
+                                Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

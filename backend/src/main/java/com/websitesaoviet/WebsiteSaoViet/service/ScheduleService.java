@@ -61,7 +61,7 @@ public class ScheduleService {
     }
 
     public List<ScheduleSummaryResponse> getSchedulesByTourId(String tourId) {
-        return scheduleRepository.findSchedulesByTourIdAndStatus(tourId, CommonStatus.NOT_STARTED.getValue());
+        return scheduleRepository.findSchedulesByTourId(tourId);
     }
 
     public void deleteSchedule(String id) {

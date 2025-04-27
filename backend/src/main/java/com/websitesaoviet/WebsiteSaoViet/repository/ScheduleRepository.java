@@ -13,7 +13,12 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, String> {
-    List<ScheduleSummaryResponse> findSchedulesByTourIdAndStatus(String tourId, String status);
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse(" +
+            "s.id, s.startDate, s.endDate, s.adultPrice, s.childrenPrice, s.quantityPeople, s.totalPeople) " +
+            "FROM Schedule s " +
+            "WHERE s.tourId = :tourId AND s.status = 'Chưa diễn ra' AND s.quantityPeople <= s.totalPeople " +
+            "ORDER BY s.startDate ASC")
+    List<ScheduleSummaryResponse> findSchedulesByTourId(String tourId);
 
     boolean existsByIdAndStatus(String id, String status);
 

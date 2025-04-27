@@ -4,7 +4,7 @@ import getToken from "utils/getToken";
 
 const AssignmentApi = {
     getAll: (params) => {
-        return axiosInstanceAdmin.get("/api/v1/assignments", { 
+        return axiosInstanceAdmin.get("/api/v1/schedules", { 
             params,
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
@@ -12,32 +12,28 @@ const AssignmentApi = {
         });
     },
     getById: (id) => {
-        return axiosInstance.get(`/api/v1/assignments/${id}`, {
+        return axiosInstance.get(`/api/v1/schedules/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     create: (data) => {
-        return axiosInstanceAdmin.post("/api/v1/assignments", data, {
+        return axiosInstanceAdmin.post("/api/v1/schedules", data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     delete: (id) => {
-        return axiosInstanceAdmin.delete(`/api/v1/assignments/${id}`, {
+        return axiosInstanceAdmin.delete(`/api/v1/schedules/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
-    getTourListByGuideId: (id) => {
-        return axiosInstance.get(`/api/v1/assignments/guide/${id}`);
-    },
-    getGuideListByTourId: (id, page = 0, size = 6) => {
-        return axiosInstance.get(`/api/v1/assignments/tour/${id}`, {
-            params: { page, size },
+    getByTourId: (id) => {
+        return axiosInstance.get(`/api/v1/schedules/tour/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }

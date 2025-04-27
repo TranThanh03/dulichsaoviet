@@ -3,9 +3,12 @@
         max-width: 70% !important;
     }
 
+    .row {
+        --bs-gutter-y: 0px !important;
+    }
+
     .left-box {
         background: #1087be;
-
 
         img {
             width: 280px;
@@ -34,6 +37,25 @@
                 width: 100%;
                 border-radius: 7px !important;
             }
+        }
+    }
+
+    @media only screen and (max-width: 992px) {
+        .left-box {
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .right-box {
+            width: 100%;
+        }
+    }
+
+    @media only screen and (max-width: 576px) {
+        .left-box {
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
     }
 }

@@ -5,6 +5,7 @@ import { logo } from "assets";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
 import "./style.scss";
+import { ToastContainer } from "react-toastify";
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -192,6 +193,8 @@ const Header = () => {
                     </div>
                 </div>
             </div>
+
+            <ToastContainer />
         </header>
     );
 };

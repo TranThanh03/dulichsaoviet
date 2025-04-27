@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
-import { AssignmentApi } from "services";
-import AddAssignmentForm from "./insert";
+import { ScheduleApi } from "services";
+import AddScheduleForm from "./insert";
 import formatDatetime from "utils/formatDatetime";
 import "./index.scss";
 import formatCurrency from "utils/formatCurrency";
 
-const AssignmentPage = () => {
-    const [assignments, setAssignments] = useState([]);
+const SchedulePage = () => {
+    const [assignments, setSchedules] = useState([]);
     const [search, setSearch] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -15,12 +15,12 @@ const AssignmentPage = () => {
     const pageSize = 6;
     const [isLoading, setLoading] = useState(false);
     
-    const fetchAssignments = useCallback(async () => {
+    const fetchSchedules = useCallback(async () => {
         try {
-            const response = await AssignmentApi.getAll({ page: currentPage, size: pageSize });
+            const response = await ScheduleApi.getAll({ page: currentPage, size: pageSize });
 
             if (response?.code === 1978) {
-                setAssignments(response.result.content);
+                setSchedules(response.result.content);
                 setTotalPages(response.result.totalPages);
             }
         }
@@ -33,8 +33,8 @@ const AssignmentPage = () => {
     }, [currentPage, pageSize]);
 
     useEffect(() => {
-        fetchAssignments();
-    }, [fetchAssignments]);
+        fetchSchedules();
+    }, [fetchSchedules]);
 
     const handleDelete = async (id, assignmentCode) => {
         const confirm = await Swal.fire({
@@ -48,10 +48,10 @@ const AssignmentPage = () => {
 
         if (confirm.isConfirmed) {
             try {
-                const response = await AssignmentApi.delete(id);
+                const response = await ScheduleApi.delete(id);
 
                 if (response?.code === 1975) {
-                    fetchAssignments();
+                    fetchSchedules();
                     Swal.fire("Thành công", "Xóa lịch phân công thành công", "success");
                 }
                 else if (response?.code === 1026) {
@@ -66,7 +66,7 @@ const AssignmentPage = () => {
         }
     };
 
-    const filteredAssignments = assignments.filter((assignment) =>
+    const filteredSchedules = assignments.filter((assignment) =>
         assignment.assignmentCode?.toLowerCase().includes(search.toLowerCase()) ||
         assignment.tourId?.toLowerCase().includes(search.toLowerCase()) ||
         assignment.guideId?.toLowerCase().includes(search.toLowerCase())
@@ -111,8 +111,8 @@ const AssignmentPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredAssignments.length > 0 ? (
-                            filteredAssignments.map((assignment, index) => (
+                        {filteredSchedules.length > 0 ? (
+                            filteredSchedules.map((assignment, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>{assignment.assignmentCode}</td>
@@ -151,9 +151,9 @@ const AssignmentPage = () => {
                 </button>
             </div>
 
-            {showForm && <AddAssignmentForm onClose={() => setShowForm(false)} onAdded={fetchAssignments} />}
+            {showForm && <AddScheduleForm onClose={() => setShowForm(false)} onAdded={fetchSchedules} />}
         </div>
     );
 };
 
-export default AssignmentPage;
+export default SchedulePage;
