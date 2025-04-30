@@ -1,6 +1,9 @@
 import React, { memo, useEffect, useState } from "react";
 import "./index.scss";
-import { ScheduleApi } from "services";
+import { AuthApi, ScheduleApi } from "services";
+import { useNavigate } from "react-router-dom";
+import getToken from "utils/getToken";
+import { ErrorToast } from "component/notifi";
 
 const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
     const [currentMonthIndex, setCurrentMonthIndex] = React.useState(0);
@@ -16,6 +19,8 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
             totalPeople: 0,
         }
     ]);
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,6 +37,37 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
 
         fetchData();
     }, [tourId]);
+
+    useEffect(() => {
+        const fetchAuth = async () => {
+            try {
+                const token = getToken();
+                setIsLoading(true);
+
+                if (token) {
+                    const response = await AuthApi.introspect();
+
+                    if (response?.code === 9998 && response?.result === true) {
+                        setIsLoading(false);
+                    }
+                } else {
+                    ErrorToast("Vui lòng đăng nhập để đặt tour.");
+                    setTimeout(() => {
+                        navigate("/auth/login");
+                    }, 2000);
+                }
+            } catch (error) {
+                ErrorToast("Vui lòng đăng nhập để đặt tour.");
+                setTimeout(() => {
+                    navigate("/auth/login");
+                }, 2000);
+            }
+        };
+
+        if (isShow) {
+            fetchAuth();
+        }
+    }, [isShow]);
 
     const availableMonths = [...new Set(
         calendarData.map(item => {
@@ -124,6 +160,10 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
 
         return days;
     };
+
+    if (isLoading) {
+        return null;
+    }
 
     return isShow ? (
         <div className="calendar-container">

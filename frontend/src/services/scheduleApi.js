@@ -39,6 +39,13 @@ const AssignmentApi = {
             }
         });
     },
+    getScheduleTourById: (id) => {
+        return axiosInstance.get(`/api/v1/schedules/schedule-tour/${id}`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`
+            }
+        });
+    },
 };
 
 export default AssignmentApi;

@@ -24,8 +24,6 @@ public class SecurityConfig {
     private final String[] GET_PUBLIC_ENDPOINTS = {
             "/tours", "/tours/area-count", "/tours/popular",
             "/tours/{id:[0-9a-f\\-]{36}}", "/tours/search",
-            "/guides", "/guides/{id:[A-Z]{3}\\d+}", "/guides/evaluate",
-            "/assignments/guide/{id:[A-Z]{3}\\d+}",
             "/reviews/{id:[0-9a-f\\-]{36}}",
     };
 

@@ -4,8 +4,10 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.ScheduleCreationReque
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ScheduleResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
+import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
 import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
 import com.websitesaoviet.WebsiteSaoViet.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -71,14 +73,23 @@ public class ScheduleController {
     }
 
     @GetMapping("/tour/{id}")
-    ResponseEntity<ApiResponse<List<ScheduleSummaryResponse>>> getSchedulesByTourId(@PathVariable String id) {
-
-        ApiResponse<List<ScheduleSummaryResponse>> apiResponse = ApiResponse.<List<ScheduleSummaryResponse>>builder()
+    public ResponseEntity<ApiResponse<List<ScheduleSummaryResponse>>> getSchedulesByTourId(@PathVariable String id) {
+        ApiResponse<List<ScheduleSummaryResponse>> successResponse = ApiResponse.<List<ScheduleSummaryResponse>>builder()
                 .code(1603)
                 .result(scheduleService.getSchedulesByTourId(id))
                 .build();
 
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok(successResponse);
+    }
+
+    @GetMapping("/schedule-tour/{id}")
+    public ResponseEntity<ApiResponse<ScheduleTourResponse>> getScheduleTourById(@PathVariable String id) {
+        ApiResponse<ScheduleTourResponse> successResponse = ApiResponse.<ScheduleTourResponse>builder()
+                .code(1604)
+                .result(scheduleService.getScheduleTourById(id))
+                .build();
+
+        return ResponseEntity.ok(successResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -91,7 +102,7 @@ public class ScheduleController {
         scheduleService.deleteSchedule(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1604)
+                .code(1605)
                 .message("Xóa lịch trình thành công.")
                 .build();
 

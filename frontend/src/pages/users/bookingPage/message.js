@@ -45,7 +45,7 @@ const MessagePage = () => {
             }
             catch (error) {
                 console.error("Failed to fetch payment status:", error);
-                navigate("/error/404");
+                // navigate("/error/404");
             }
             finally {
                 setLoading(true);

@@ -3,6 +3,7 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.ScheduleCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ScheduleResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Schedule;
 import com.websitesaoviet.WebsiteSaoViet.enums.CommonStatus;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -28,6 +29,7 @@ public class ScheduleService {
     ScheduleMapper scheduleMapper;
     SequenceService sequenceService;
     TourService tourService;
+    AuthenticationService authenticationService;
 
     public ScheduleResponse createSchedule(ScheduleCreationRequest request) {
         LocalDate today = LocalDate.now();
@@ -62,6 +64,10 @@ public class ScheduleService {
 
     public List<ScheduleSummaryResponse> getSchedulesByTourId(String tourId) {
         return scheduleRepository.findSchedulesByTourId(tourId);
+    }
+
+    public ScheduleTourResponse getScheduleTourById(String id) {
+        return scheduleRepository.findScheduleTourById(id);
     }
 
     public void deleteSchedule(String id) {

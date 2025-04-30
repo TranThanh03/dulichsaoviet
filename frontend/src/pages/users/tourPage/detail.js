@@ -8,6 +8,7 @@ import { noImage } from 'assets';
 import ReviewList from "component/users/review/index";
 import CalendarCustom from "component/users/calendar/index";
 import formatDatetime from 'utils/formatDatetime';
+import { ErrorToast } from 'component/notifi';
 
 const TourDetailPage = () => {
     const { id } = useParams();
@@ -52,6 +53,14 @@ const TourDetailPage = () => {
 
         fetchTour();
     }, [id])
+
+    const handleBooking = () => {
+        if (data.startDate !== '' && data.id !== '') {
+            navigate(`/booking/${data.id}`);
+        } else {
+            ErrorToast("Vui lòng chọn ngày khởi hành trước.");
+        }
+    }
 
     return (
         <div className="tour-detail-page">
@@ -171,7 +180,7 @@ const TourDetailPage = () => {
                                     <h5 className="widget-title fw-bold text-center">Đặt Tour</h5>
                                     <div className="form-custom">
                                         <div className="date">
-                                            <b>Ngày bắt đầu:</b>
+                                            <b>Ngày khởi hành:</b>
                                             <div className="date-input">
                                                 <i className="fa-solid fa-calendar-days cursor-pointer" onClick={() => setIsShow(true)}></i>
                                                 <input type="text" value={data.startDate ? formatDatetime(data.startDate) : ''} disabled />
@@ -205,7 +214,7 @@ const TourDetailPage = () => {
                                                         </span>
                                             </li>
                                         </ul>
-                                        <button type="submit" className="theme-btn style-two w-100 mt-25 mb-5">
+                                        <button type="button" className="theme-btn style-two w-100 mt-25 mb-5" onClick={handleBooking}>
                                             <span data-hover="Đặt ngay">Đặt ngay</span>
                                             <i className="fal fa-arrow-right"></i>
                                         </button>

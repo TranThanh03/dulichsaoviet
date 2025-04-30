@@ -1,6 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,7 +19,14 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
             "FROM Schedule s " +
             "WHERE s.tourId = :tourId AND s.status = 'Chưa diễn ra' AND s.quantityPeople <= s.totalPeople " +
             "ORDER BY s.startDate ASC")
-    List<ScheduleSummaryResponse> findSchedulesByTourId(String tourId);
+    List<ScheduleSummaryResponse> findSchedulesByTourId(@Param("tourId") String tourId);
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse(" +
+            "t.code, t.name, s.startDate, s.endDate, t.quantityDay, s.totalPeople - s.quantityPeople, s.adultPrice, s.childrenPrice) " +
+            "FROM Schedule s " +
+            "INNER JOIN Tour t on s.tourId = t.id " +
+            "WHERE s.id = :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople <= s.totalPeople")
+    ScheduleTourResponse findScheduleTourById(@Param("id") String id);
 
     boolean existsByIdAndStatus(String id, String status);
 

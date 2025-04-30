@@ -6,6 +6,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.user.UrlCheckoutResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.*;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +30,10 @@ public class CheckoutController {
     @PostMapping("/process")
     ResponseEntity<ApiResponse<UrlCheckoutResponse>> processCheckout(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody CheckoutProcessionRequest request) {
+            @Valid @RequestBody CheckoutProcessionRequest request) {
+        if (request.getQuantityAdult() + request.getQuantityChildren() <= 0) {
+            throw new AppException(ErrorCode.QUANTITY_PEOPLE_INVALID);
+        }
 
         var schedule = scheduleService.getScheduleById(request.getScheduleId());
 

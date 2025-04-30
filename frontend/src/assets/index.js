@@ -44,6 +44,7 @@ export { default as failedSvg } from './icons/failed.svg';
 export { default as noImage } from './img/no-image.jpg';
 export { default as momo } from './img/payment/momo.jpg';
 export { default as vnpay } from './img/payment/vnpay.jpg';
+export { default as cash } from './img/payment/cash.jpg';
 export { default as aboutBanner } from './img/about/banner.png';
 export { default as aboutFeature1 } from './img/about/about-feature1.jpg';
 export { default as aboutFeature2 } from './img/about/about-feature2.jpg';

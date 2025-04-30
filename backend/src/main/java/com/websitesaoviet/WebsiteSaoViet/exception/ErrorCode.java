@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public enum ErrorCode {
+    TOKEN_NOT_EXITED(4449, "Token không tồn tại!", HttpStatus.OK),
     UNCATEGORIZED_EXCEPTION(1001, "Uncategorized error!", HttpStatus.INTERNAL_SERVER_ERROR),
     UNAUTHENTICATED(1002, "Unauthenticated!", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1003, "Unauthorized!", HttpStatus.FORBIDDEN),
@@ -72,9 +73,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(1044, "Lỗi máy chủ nội bộ!", HttpStatus.INTERNAL_SERVER_ERROR),
     CHECKOUT_NOT_EXITED(1045, "Thanh toán không tồn tại!", HttpStatus.OK),
 
-    QUANTITY_ADULT(1046, "Số người lớn nằm trong khoảng 1-100!", HttpStatus.OK),
+    QUANTITY_ADULT(1046, "Số người lớn nằm trong khoảng 0-99!", HttpStatus.OK),
 
-    QUANTITY_CHILDREN(1047, "Số trẻ em nằm trong khoảng 1-100!", HttpStatus.OK),
+    QUANTITY_CHILDREN(1047, "Số trẻ em nằm trong khoảng 0-99!", HttpStatus.OK),
 
     BOOKING_NOT_EXITED(1048, "Lịch đặt không tồn tại!", HttpStatus.OK),
     BOOKING_PROCESSING(1049, "Lịch đặt đang xử lý!", HttpStatus.OK),
@@ -86,6 +87,7 @@ public enum ErrorCode {
     REVIEW_NOT_EXITED(1052, "Đánh giá không tồn tại!", HttpStatus.OK),
     REVIEW_INVALID(1053, "Đánh giá không hợp lệ!", HttpStatus.OK),
     NEWS_NOT_EXITED(1054, "Tin tức không tồn tại!", HttpStatus.OK),
+    QUANTITY_PEOPLE_INVALID(1055, "Số lượng hành khách phải lớn hơn 0!", HttpStatus.OK)
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

@@ -5,7 +5,6 @@ import { logo } from "assets";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
 import "./style.scss";
-import { ToastContainer } from "react-toastify";
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -52,7 +51,9 @@ const Header = () => {
                         setAuthenticated(response?.result);
                     }
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.error(error);
+            }
         };
 
         fetchAuth();
@@ -193,8 +194,6 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-
-            <ToastContainer />
         </header>
     );
 };
