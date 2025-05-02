@@ -13,32 +13,6 @@ const TourSidebar = ({ filters, setFilters }) => {
         });
     };
 
-    const [listCount, setListCount] = useState({
-        'totalNorth': 0,
-        'totalCentral': 0,
-        'totalSouth': 0
-    })
-
-    useEffect(() => {
-        const fetchAreaCount = async () => {
-            try {
-                const response = await TourApi.areaCount();
-
-                if (response?.code === 1506) {
-                    setListCount({
-                        totalNorth: response?.result?.totalNorth,
-                        totalCentral: response?.result?.totalCentral,
-                        totalSouth: response?.result?.totalSouth 
-                    })
-                }
-            } catch(error) {
-                console.error("Failed to fetch count tours by area: ", error);
-            }
-        }
-
-        fetchAreaCount();
-    }, [])
-
     return (
         <div className="tour-sidebar-custom col-lg-3 col-md-6 col-sm-10">
             <div className="shop-sidebar">
@@ -68,9 +42,9 @@ const TourSidebar = ({ filters, setFilters }) => {
                     <h6 className="widget-title">Điểm đến</h6>
                     <ul className="radio-filter">
                         {[
-                            { id: 'b', label: 'Miền Bắc' , value: listCount.totalNorth },
-                            { id: 't', label: 'Miền Trung', value: listCount.totalCentral },
-                            { id: 'n', label: 'Miền Nam', value: listCount.totalSouth }
+                            { id: 'b', label: 'Miền Bắc'},
+                            { id: 't', label: 'Miền Trung'},
+                            { id: 'n', label: 'Miền Nam'}
                         ].map((item) => (
                             <li key={item.id}>
                                 <input
@@ -84,7 +58,6 @@ const TourSidebar = ({ filters, setFilters }) => {
                                 />
                                 <label htmlFor={item.id}>
                                     {item.label}
-                                    <span>{item.value}</span>
                                 </label>
                             </li>
                         ))}

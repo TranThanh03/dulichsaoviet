@@ -1,9 +1,10 @@
-.order-message {
+.checkout-message {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 560px;
+    height: 620px;
     background-color: #f7f9fc;
+    padding: 0px 25px 140px 25px;
 
     .message {
         text-align: center;
@@ -69,6 +70,11 @@
         .failed a:hover {
             background-color: #c82333;
         }
+    }
+
+    @media only screen and (min-width: 768px) {
+        height: 966px;
+        padding-bottom: 420px;
     }
 }
 

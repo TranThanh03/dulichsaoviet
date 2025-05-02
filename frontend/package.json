@@ -9,6 +9,7 @@
     "bootstrap": "^5.3.5",
     "cra-template": "1.2.0",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "dompurify": "^3.2.4",
     "js-cookie": "^3.0.5",
     "rc-slider": "^11.1.8",

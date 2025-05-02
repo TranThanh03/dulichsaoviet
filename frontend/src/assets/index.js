@@ -54,3 +54,4 @@ export { default as pShape3 } from './img/paper/shape3.png';
 export { default as tourBanner } from './img/tour/banner.jpg';
 export { default as tourCta } from './img/tour/cta.png';
 export { default as desBanner } from './img/destinations/banner.png';
+export { default as voucherImg } from './img/voucher/voucher.png';

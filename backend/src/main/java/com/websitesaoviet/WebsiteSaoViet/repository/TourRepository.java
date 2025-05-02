@@ -25,14 +25,15 @@ public interface TourRepository extends JpaRepository<Tour, String> {
         (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
         t.quantity_day,
         MIN(s.adult_price) AS adult_price,
-        SUM(s.total_people - s.quantity_people) AS people,
+        SUM(DISTINCT s.total_people - s.quantity_people) AS people,
         IFNULL(FLOOR(AVG(r.rating)), 0) AS rating,
         MAX(s.created_time) AS created_time
     FROM tour t
-    LEFT JOIN schedule s ON s.tour_id = t.id
-    LEFT JOIN review r ON r.tour_id = t.id
+    INNER JOIN schedule s ON t.id = s.tour_id
+    LEFT JOIN review r ON t.id = r.tour_id
     WHERE
         (s.status = 'Chưa diễn ra') AND
+        (s.quantity_people < s.total_people) AND
         (:minPrice IS NULL OR s.adult_price >= :minPrice) AND
         (:maxPrice IS NULL OR s.adult_price <= :maxPrice) AND
         (:area IS NULL OR t.area = :area) AND
@@ -43,10 +44,11 @@ public interface TourRepository extends JpaRepository<Tour, String> {
             countQuery = """
     SELECT COUNT(DISTINCT t.id)
     FROM tour t
-    LEFT JOIN schedule s ON s.tour_id = t.id
-    LEFT JOIN review r ON r.tour_id = t.id
+    INNER JOIN schedule s ON t.id = s.tour_id
+    LEFT JOIN review r ON t.id = r.tour_id
     WHERE
         (s.status = 'Chưa diễn ra') AND
+        (s.quantity_people < s.total_people) AND
         (:minPrice IS NULL OR s.adult_price >= :minPrice) AND
         (:maxPrice IS NULL OR s.adult_price <= :maxPrice) AND
         (:area IS NULL OR t.area = :area) AND

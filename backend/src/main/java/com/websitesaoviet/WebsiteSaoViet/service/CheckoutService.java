@@ -89,6 +89,7 @@ public class CheckoutService {
         if (checkoutRepository.existsCheckoutByCode(checkoutCode)) {
             throw new AppException(ErrorCode.CHECKOUT_EXITED);
         }
+
         try {
             int resultCode = Integer.parseInt(params.getOrDefault("resultCode", "-1"));
 
@@ -207,7 +208,7 @@ public class CheckoutService {
         var schedule = scheduleService.getScheduleById(scheduleId);
         LocalDate startDate = schedule.getStartDate();
 
-        if (currentDate.isBefore(startDate.minusDays(1))) {
+        if (currentDate.isBefore(startDate.minusDays(2))) {
             LocalDateTime currentTime = LocalDateTime.now();
             int quantityAdult = request.getQuantityAdult();
             int quantityChildren = request.getQuantityChildren();
@@ -224,7 +225,7 @@ public class CheckoutService {
 
             return String.format("Vui lòng đến quầy thanh toán trước %s!", formattedTime);
         } else {
-            return "Vui lòng thay đổi phương thức thanh toán khác!";
+            throw new AppException(ErrorCode.METHOD_PAYMENT_INVALID);
         }
     }
 

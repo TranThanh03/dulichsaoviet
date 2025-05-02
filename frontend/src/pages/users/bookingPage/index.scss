@@ -132,8 +132,9 @@
 
         .order-summary {
             border-top: 1px solid #d6d6d6;
-            margin-top: 20px;
-            padding-top: 20px;
+            border-bottom: 1px solid #d6d6d6;
+            margin: 20px 0;
+            padding: 20px 0;
         }
 
         .summary-item {
@@ -149,17 +150,6 @@
         .quantity__adults-booked,
         .quantity__children-booked {
             font-weight: bold;
-        }
-
-        .promotion-btn {
-            width: 30%;
-            padding: 10px;
-            background-color: var(--secondary-color);
-            color: white;
-            font-weight: 700;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         .booking-btn {
@@ -179,6 +169,7 @@
             box-shadow: 10px 10px 36px rgba(0, 0, 0, 0.08);
             position: sticky;
             top: 80px;
+            z-index: 99;
 
             .tour-infor {
                 span {
@@ -193,25 +184,39 @@
         }
 
         .order-coupon {
-            border-top: 1px solid #d6d6d6;
             margin: 20px 0;
-            padding: 20px 0;
-            display: flex;
-            justify-content: space-between;
-            gap: 2px;
+            padding-bottom: 20px;
             border-bottom: 1px solid #d6d6d6;
             
+            #title {
+                padding: 10px;
+                background-color: var(--secondary-color);
+                color: white;
+                font-weight: 700;
+                border: none;
+                border-radius: 5px 0 0 5px;
+                display: inline-block;
+                height: 49px;
+            }
+
             input {
-                width: 65%;
-                border-radius: 8px;
+                border-radius: 0 5px 5px 0;
                 border: 1px solid #e2e4e5;
                 padding: 10px;
+                height: 50px;
             }
         }
 
         .btn-submit-booking.inactive {
             background-color: #f3d5b1;
             cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .hidden {
+            display: none;
+            cursor: not-allowed;
+            pointer-events: none;
         }
     }
 
@@ -219,6 +224,99 @@
     input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
+    }
+
+    .order-coupon {
+        position: relative;
+        max-width: 400px;
+        margin: 20px auto;
+
+        .input-coupon {
+            padding: 8px 12px;
+            width: 65%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn-coupon {
+            margin-left: 10px;
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .voucher-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            z-index: 1000;
+            margin-top: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .voucher-item {
+            display: flex;
+            align-items: center;
+            border: 1px solid #28a745;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .voucher-item:hover {
+            background-color: #f1fdf4;
+        }
+
+        .voucher-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 12px;
+        }
+
+        .voucher-info {
+            width: 100%;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        .voucher-code {
+            color: #9c9c9c;
+            font-size: 14px;
+        }
+
+        .voucher-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .voucher-desc {
+            color: #555;
+        }
+
+        .voucher-expiry {
+            font-size: 13px;
+            color: #8a8a8a;
+        }
+
+        #voucher-qty {
+            float: right;
+        }
     }
 
     @media (max-width: 768px) {
@@ -234,9 +332,5 @@
             width: 100% !important;
             margin-top: 20px;
         }
-    }
-
-    .hide {
-        display: none !important;
     }
 }

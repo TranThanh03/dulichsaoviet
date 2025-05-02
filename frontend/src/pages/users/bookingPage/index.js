@@ -2,11 +2,13 @@ import { memo, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './index.scss';
 import formatCurrency from 'utils/formatCurrency';
-import { ScheduleApi, CustomerApi, PaymentApi } from 'services';
+import { ScheduleApi, CustomerApi, CheckoutApi, PromotionApi } from 'services';
 import formatDatetime from 'utils/formatDatetime';
 import Swal from 'sweetalert2';
-import { cash, momo, vnpay } from 'assets';
+import { cash, momo, vnpay, voucherImg } from 'assets';
 import { ErrorToast } from 'component/notifi';
+import { ToastContainer } from 'react-toastify';
+import dayjs from 'dayjs';
 
 const BookingPage = () => {
     const [user, setUser] = useState({
@@ -36,9 +38,9 @@ const BookingPage = () => {
         method: ''
     });
     const paymentOptions = [
-        { value: 'momo', label: 'Thanh toán bằng MoMo', img: momo },
-        { value: 'vnpay', label: 'Thanh toán bằng VNPay', img: vnpay },
-        { value: 'cash', label: 'Thanh toán tại văn phòng', img: cash },
+        { value: 'momo', label: 'Thanh toán bằng MoMo', img: momo},
+        { value: 'vnpay', label: 'Thanh toán bằng VNPay', img: vnpay},
+        { value: 'cash', label: 'Thanh toán tại văn phòng', img: cash},
     ];
 
     const { id } = useParams();
@@ -46,6 +48,11 @@ const BookingPage = () => {
     const [quantityChildren, setQuantityChildren] = useState(0);
     const [totalCost, setTotalCost] = useState(0);
     const [method, setMethod] = useState('');
+    const [agree, setAgree] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
+    const [isShow, setIsShow] = useState(true);
+    const [vouchers, setVouchers] = useState([]);
+    const [isActive, setIsActive] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -70,7 +77,7 @@ const BookingPage = () => {
             }
             catch(error) {
                 console.error("Failed to fetch data: " + error);
-                // navigate("/error/404");
+                navigate("/error/404");
             }
             finally {
                 setIsLoading(false);
@@ -81,11 +88,49 @@ const BookingPage = () => {
     }, [id])
 
     useEffect(() => {
-        setTotalCost(quantityAdult * schedule.adultPrice + quantityChildren * schedule.childrenPrice);
-    }, [quantityAdult, quantityChildren]);
+        const fetchPromotions = async () => {
+            try {
+                const response = await PromotionApi.getList();
+
+                if (response?.code === 1702) {
+                    setVouchers(response?.result);
+                }
+            } catch (error) {
+                console.error("Failed to fetch promotions: ", error);
+            }
+        }
+
+        fetchPromotions();
+    }, []);
 
     useEffect(() => {
-        console.log(formData);
+        const currentDate = dayjs();
+        const startDate = dayjs(schedule.startDate);
+
+        if (currentDate.isBefore(startDate.subtract(2, 'day'))) {
+            setIsHidden(false);
+        } else {
+            setIsHidden(true);
+        }
+    }, [schedule.startDate]);
+
+    useEffect(() => {
+        if (formData.method === 'cash') {
+            setIsShow(false);
+            setPromotion(prev => ({
+                ...prev,
+                discount: 0
+            }));
+        } else {
+            setIsShow(true);
+        }
+    }, [formData.method]);
+
+    useEffect(() => {
+        setTotalCost(quantityAdult * schedule.adultPrice + quantityChildren * schedule.childrenPrice - promotion.discount);
+    }, [quantityAdult, quantityChildren, promotion.discount]);
+
+    useEffect(() => {
         setFormData({
             scheduleId: id,
             promotionId: promotion.id,
@@ -93,7 +138,6 @@ const BookingPage = () => {
             quantityChildren: quantityChildren,
             method: method
         });
-        console.log(formData);
     }, [id, promotion.id, quantityAdult, quantityChildren, method]);
 
     const handleIncreaseAdult = () => {
@@ -120,63 +164,37 @@ const BookingPage = () => {
         setQuantityChildren(prev => Math.max(prev - 1, 0));
     };
     
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    //     try {
-    //         const response = await PaymentApi.process(formData);
+        if (agree && formData.method) {
+            try {
+                const response = await CheckoutApi.process(formData);
 
-    //         if (response?.code === 1022) {
-    //             Swal.fire({
-    //                 title: 'Lỗi',
-    //                 text: 'Số lượng người vượt quá số lượng người tối đa!',
-    //                 icon: 'error',
-    //                 confirmButtonText: 'Đóng'
-    //             });
-    //         }
-    //         else if (response?.code === 1023) {
-    //             Swal.fire({
-    //                 title: 'Lỗi',
-    //                 text: 'MoMo đang bảo trì. Vui lòng chọn phương thức thanh toán khác!',
-    //                 icon: 'error',
-    //                 confirmButtonText: 'Đóng'
-    //             });
-    //         }
-    //         else if (response?.code === 1944) {
-    //             Swal.fire({
-    //                 title: 'Thành công',
-    //                 html: `<p style="color: green; margin-bottom: 5px;">Đặt tour thành công</p>
-    //                        <p style="color: red;">${response.result.paymentUrl}</p>`,
-    //                 icon: 'success',
-    //                 confirmButtonText: 'Đóng'
-    //             }).then(() => {
-    //                 navigate("/calendars/index");
-    //             });
-    //         }
-    //         else if (response?.code === 1945 && response?.result?.paymentUrl) {
-    //             window.location.href = response.result.paymentUrl;
-    //         }
-    //         else {
-    //             Swal.fire({
-    //                 title: 'Lỗi',
-    //                 text: 'Đang xảy ra lỗi thanh toán. Vui lòng thử lại!',
-    //                 icon: 'error',
-    //                 confirmButtonText: 'Đóng'
-    //             });
-    //         }
-    //     } catch (error) {
-    //         Swal.fire({
-    //             title: 'Lỗi',
-    //             text: 'Đã xảy ra lỗi không xác định. Vui lòng thử lại!',
-    //             icon: 'error',
-    //             confirmButtonText: 'Đóng'
-    //         });
-    //     } 
-    // }
+                if (response?.code === 1901 || response?.code === 1902) {
+                    window.location.href = response?.result?.checkoutUrl;
+                } else if (response?.code === 1903) {
+                    Swal.fire({
+                        title: 'Thành công',
+                        html: `<p style="color: green; margin-bottom: 5px;">Đặt tour thành công</p>
+                            <p style="color: red;">${response.result.checkoutUrl}</p>`,
+                        icon: 'success',
+                        confirmButtonText: 'Đóng'
+                    }).then(() => {
+                        navigate("/calendar/index");
+                    });
+                } else {
+                    ErrorToast(response?.message);
+                }
+            } catch (error) {
+                ErrorToast("Đã xảy ra lỗi không xác định. Vui lòng thử lại!")
+            }
+        }
+    }
 
     if (isLoading) {
         return (
-            <div style={{height: 500}}></div>
+            <div style={{height: 1000}}></div>
         );
     }
 
@@ -228,14 +246,14 @@ const BookingPage = () => {
                         này sẽ được áp dụng. Vui lòng đọc kỹ điều kiện điều khoản trước khi lựa chọn sử dụng dịch vụ của
                         Sao Việt.</p>
                         <div className="privacy-checkbox">
-                            <input type="checkbox" id="agree" name="agree" required />
-                            <label htmlFor="agree">Tôi đã đọc và đồng ý với <a href="#" target="_blank">Điều khoản thanh toán.</a></label>
+                            <input type="checkbox" id="agree" onClick={() => setAgree(!agree)} />
+                            <span>Tôi đã đọc và đồng ý với <a href="#" target="_blank">Điều khoản thanh toán.</a></span>
                         </div>
                     </div>
 
                     <h2 className="booking-header mt-40">Phương thức thanh toán</h2>
                     {paymentOptions.map((option) => (
-                        <label key={option.value} className="payment-option">
+                        <label key={option.value} className={`payment-option ${option.value === 'cash' && isHidden ? 'hidden' : ''}`}>
                             <input
                                 type="radio"
                                 name="payment"
@@ -290,15 +308,38 @@ const BookingPage = () => {
                             </div>
                         </div>
 
-                        <div className="order-coupon">
-                            <input type="text" placeholder="Mã giảm giá" />
-                            <button className="promotion-btn btn-coupon">Áp dụng</button>
-                        </div>
+                        {isShow && (
+                            <div className="order-coupon">
+                            <span id="title">Khuyến mãi</span>          
+                            <input type="text" placeholder="Mã giảm giá" onFocus={() => setIsActive(true)} onBlur={() => setIsActive(false)} className="input-coupon" />
 
-                        <button type="button" className="booking-btn btn-submit-booking" data-hover="Xác nhận">Xác nhận</button>
+                            {isActive && (
+                                <div className="voucher-dropdown">
+                                {vouchers.map((voucher) => (
+                                    <div key={voucher.id} className="voucher-item" onClick={() => setIsActive(false)}>
+                                        <img src={voucherImg} alt="Voucher" className="voucher-image" />
+                                        <div className="voucher-info">
+                                            <p className="voucher-code">Mã: {voucher.code}</p>
+                                            <p className="voucher-title">{voucher.title}</p>
+                                            <p className="voucher-desc">{voucher.description}</p>
+                                            <p className="voucher-expiry">
+                                                <i className="fa-regular fa-clock me-1"></i>{voucher.endDate ? formatDatetime(voucher.endDate) : ''}
+                                                <span id="voucher-qty"><i className="fal fa-ticket me-1"></i>{voucher.quantity}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                                </div>
+                            )}
+                            </div>
+                        )}
+
+                        <button type="button" className={`booking-btn btn-submit-booking ${agree && formData.method ? '' : 'inactive'}`} onClick={handleSubmit}>Xác nhận</button>
                     </div>
                 </div>
             </div>
+
+            <ToastContainer />
         </section>
     );
 };

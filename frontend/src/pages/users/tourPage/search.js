@@ -38,7 +38,7 @@ const SearchPage = () => {
 
     if (!isLoading) {
         return (
-            <div style={{height: 500}}></div>
+            <div style={{height: 1000}}></div>
         );
     }
 

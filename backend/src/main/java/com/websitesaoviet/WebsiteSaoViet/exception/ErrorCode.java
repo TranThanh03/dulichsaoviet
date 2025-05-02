@@ -87,7 +87,8 @@ public enum ErrorCode {
     REVIEW_NOT_EXITED(1052, "Đánh giá không tồn tại!", HttpStatus.OK),
     REVIEW_INVALID(1053, "Đánh giá không hợp lệ!", HttpStatus.OK),
     NEWS_NOT_EXITED(1054, "Tin tức không tồn tại!", HttpStatus.OK),
-    QUANTITY_PEOPLE_INVALID(1055, "Số lượng hành khách phải lớn hơn 0!", HttpStatus.OK)
+    QUANTITY_PEOPLE_INVALID(1055, "Số lượng hành khách phải lớn hơn 0!", HttpStatus.OK),
+    METHOD_PAYMENT_INVALID(1056, "Vui lòng thay đổi phương thức thanh toán khác!", HttpStatus.OK)
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

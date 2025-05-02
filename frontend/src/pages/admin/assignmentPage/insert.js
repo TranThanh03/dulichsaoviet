@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { ScheduleApi, TourApi, GuideApi } from "services";
+import { ScheduleApi, TourApi } from "services";
 import "./insert.scss";
 
 const AddScheduleForm = ({ onClose, onAdded }) => {
@@ -27,15 +27,11 @@ const AddScheduleForm = ({ onClose, onAdded }) => {
         const fetchData = async () => {
             try {
                 const tourResponse = await TourApi.getToursBySchedule();
-                const guideResponse = await GuideApi.getGuidesBySchedule();
 
                 if (tourResponse?.code === 2989) {
                     setTours(tourResponse.result);
                 }
 
-                if (guideResponse?.code === 1963) {
-                    setGuides(guideResponse.result);
-                }
             } catch (error) {
                 console.error("Failed fetch to data: ", error);
             }

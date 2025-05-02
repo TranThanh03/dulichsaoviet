@@ -17,7 +17,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse(" +
             "s.id, s.startDate, s.endDate, s.adultPrice, s.childrenPrice, s.quantityPeople, s.totalPeople) " +
             "FROM Schedule s " +
-            "WHERE s.tourId = :tourId AND s.status = 'Chưa diễn ra' AND s.quantityPeople <= s.totalPeople " +
+            "WHERE s.tourId = :tourId AND s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople " +
             "ORDER BY s.startDate ASC")
     List<ScheduleSummaryResponse> findSchedulesByTourId(@Param("tourId") String tourId);
 
@@ -25,7 +25,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
             "t.code, t.name, s.startDate, s.endDate, t.quantityDay, s.totalPeople - s.quantityPeople, s.adultPrice, s.childrenPrice) " +
             "FROM Schedule s " +
             "INNER JOIN Tour t on s.tourId = t.id " +
-            "WHERE s.id = :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople <= s.totalPeople")
+            "WHERE s.id = :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople")
     ScheduleTourResponse findScheduleTourById(@Param("id") String id);
 
     boolean existsByIdAndStatus(String id, String status);

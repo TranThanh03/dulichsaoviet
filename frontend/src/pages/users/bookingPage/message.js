@@ -1,68 +1,87 @@
 import { memo, useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./message.scss";
-import { PaymentApi } from "services";
+import { CheckoutApi } from "services";
 import { failedSvg, successSvg } from "assets";
 
 const MessagePage = () => {
-    const [status, setStatus] = useState(null);
+    const [status, setStatus] = useState();
     const [countdown, setCountdown] = useState(5);
-    const navigate = useNavigate();
+    const [scheduleId, setScheduleId] = useState('');
     const location = useLocation();
-    const [isLoading, setLoading] = useState(false);
+    const queryParams = new URLSearchParams(location.search);
+    const navigate = useNavigate();
+    const [isLoading, setLoading] = useState(true);
 
-    const getQueryParam = (param) => {
-        const searchParams = new URLSearchParams(location.search);
-        return searchParams.get(param);
-    };
+    const processScheduleIdByMomo = () => {
+        const extraData = queryParams.get("extraData");
 
-    const getAssignmentData = (extraData) => {
-        if (!extraData) return { assignmentId: "", later: "" };
+        if (extraData) {
+            const decodedData = decodeURIComponent(extraData);
+            const scheduleMatch = decodedData.match(/scheduleId=([^;]*)/);
+            setScheduleId(scheduleMatch ? scheduleMatch[1] : "");
+        }
+    }
 
-        const decodedData = decodeURIComponent(extraData);
+    const processScheduleIdByVnpay = () => {
+        const orderInfo = queryParams.get("vnp_OrderInfo");
 
-        const assignmentMatch = decodedData.match(/assignmentId=([^;]*)/);
-        const laterMatch = decodedData.match(/later=([^;]*)/);
-
-        return {
-            assignmentId: assignmentMatch ? assignmentMatch[1] : "",
-            later: laterMatch ? laterMatch[1] : ""
-        };
-    };
-
-    const transId = getQueryParam("transId");
-    const extraData = getQueryParam("extraData");
-    const { assignmentId, later } = getAssignmentData(extraData);
+        if (orderInfo) {
+            const decodedData = decodeURIComponent(orderInfo);
+            const scheduleMatch = decodedData.match(/scheduleId=([^;]*)/);
+            setScheduleId(scheduleMatch ? scheduleMatch[1] : "");
+        }
+    }
 
     useEffect(() => {
-        const fetchPaymentStatus = async () => {
+        const fetchCheckoutCallback = async () => {
             try {
-                const response = await PaymentApi.getStatus(transId);
-                
-                if (response?.result?.status) {
-                    setStatus(response.result.status);
+                const isMoMo = queryParams.get("partnerCode");
+
+                if (isMoMo) {
+                    processScheduleIdByMomo();
+                    const response = await CheckoutApi.momoCallback(queryParams);
+
+                    if (response?.code === 1904) {
+                        setStatus('success');
+                    } else if (response?.code === 1905) {
+                        setStatus('failed');
+                    } else {
+                        navigate("/error/404");
+                    }
+                } else {
+                    processScheduleIdByVnpay();
+                    const response = await CheckoutApi.vnpayCallback(queryParams);
+
+                    if (response?.code === 1906) {
+                        setStatus('success');
+                    } else if (response?.code === 1907) {
+                        setStatus('failed');
+                    } else {
+                        navigate("/error/404");
+                    }
                 }
             }
             catch (error) {
-                console.error("Failed to fetch payment status:", error);
-                // navigate("/error/404");
+                console.error("Failed to fetch checkout callback: ", error);
+                navigate("/error/404");
             }
             finally {
-                setLoading(true);
+                setLoading(false);
             }
         };
 
-        fetchPaymentStatus();
-    }, [transId, navigate]);
+        fetchCheckoutCallback();
+    }, []);
 
     useEffect(() => {
-        if (status === "success" || later === "true") {
+        if (status === "success") {
             const interval = setInterval(() => {
                 setCountdown((prev) => prev - 1);
             }, 1000);
 
             const timeout = setTimeout(() => {
-                navigate("/calendars/index");
+                navigate("/calendar/index");
             }, 5000);
 
             return () => {
@@ -70,40 +89,31 @@ const MessagePage = () => {
                 clearTimeout(timeout);
             };
         }
-    }, [status, later, navigate]);
+    }, [status]);
 
-    if (!isLoading) {
+    if (isLoading) {
         return (
-            <div style={{height: 500}}></div>
+            <div style={{height: 1000}}></div>
         );
     }
 
     return (
-        <div className="order-message">
+        <div className="checkout-message">
             <div className="message">
                 {status === "success" ? (
                     <div className="success">
                         <img src={successSvg} alt="success"/>
                         <h2>Thanh toán thành công</h2>
-                        <p>Cảm ơn bạn đã đặt tour với chúng tôi</p>
+                        <p>Cảm ơn bạn đã đặt tour tại Sao Việt</p>
                         <p>Chuyển hướng đến danh sách lịch đặt sau <span style={{color: 'red'}}>{countdown}</span> giây</p>
                     </div>
                 ) : status === "failed" ? (
-                    later === "true" ? (
-                        <div className="failed">
-                            <img src={failedSvg} alt="failed"/>
-                            <h2>Thanh toán thất bại</h2>
-                            <p>Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại!</p>
-                            <p>Chuyển hướng đến danh sách lịch đặt sau <span style={{color: 'red'}}>{countdown}</span> giây</p>
-                        </div>
-                    ) : (
-                        <div className="failed">
-                            <img src={failedSvg} alt="failed"/>
-                            <h2>Thanh toán thất bại</h2>
-                            <p>Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại!</p>
-                            <Link to={`/orders/${assignmentId}`}>Đặt tour</Link>
-                        </div>
-                    )
+                    <div className="failed">
+                        <img src={failedSvg} alt="failed"/>
+                        <h2>Thanh toán thất bại</h2>
+                        <p>Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại!</p>
+                        <Link to={`/booking/${scheduleId}`}>Đặt tour</Link>
+                    </div>
                 ) : null}
             </div>
         </div>

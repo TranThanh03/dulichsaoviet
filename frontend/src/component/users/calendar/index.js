@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import "./index.scss";
 import { AuthApi, ScheduleApi } from "services";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,8 @@ import getToken from "utils/getToken";
 import { ErrorToast } from "component/notifi";
 
 const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
-    const [currentMonthIndex, setCurrentMonthIndex] = React.useState(0);
-    const [selectedId, setSelectedId] = React.useState(null);
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
+    const [selectedId, setSelectedId] = useState(null);
     const [calendarData, setCalendarData] = useState([
         {
             id: '',
@@ -27,8 +27,10 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
             try {
                 const response = await ScheduleApi.getByTourId(tourId);
 
-                if (response?.code === 1603) {
-                    setCalendarData(response?.result);
+                if (response?.code === 1603 && response?.result.length > 0) {
+                    setCalendarData(response.result);
+                } else {
+                    navigate("/error/404");
                 }
             } catch (error) {
                 console.log("Failed to fetch data: ", error);
@@ -137,7 +139,7 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
         }
 
         for (let day = 1; day <= daysInMonth; day++) {
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`; // Format as YYYY-MM-DD
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             
             const priceEntry = calendarData.find(entry => entry.startDate === dateStr);
 

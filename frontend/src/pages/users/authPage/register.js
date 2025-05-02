@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './register.scss';
 import { CustomerApi } from 'services';
 import { SuccessToast } from 'component/notifi/index';
+import { ToastContainer } from 'react-toastify';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -165,6 +166,8 @@ const RegisterPage = () => {
                     </p>
                 </div>
             </div>
+
+            <ToastContainer />
         </div>
     );
 };

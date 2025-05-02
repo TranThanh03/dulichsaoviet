@@ -25,6 +25,7 @@ public class SecurityConfig {
             "/tours", "/tours/area-count", "/tours/popular",
             "/tours/{id:[0-9a-f\\-]{36}}", "/tours/search",
             "/reviews/{id:[0-9a-f\\-]{36}}",
+            "/promotions/list",
     };
 
     private final String[] POST_PUBLIC_ENDPOINTS = {

@@ -1,9 +1,9 @@
 .tour-detail-page {
     padding-top: 15px;
 
-    .container {
+    .container-fluid {
         .row {
-            --bs-gutter-y: 0px !important
+            --bs-gutter-y: 0px !important;
         }
 
         #p-custom {

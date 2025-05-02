@@ -59,7 +59,6 @@ public class PromotionController {
 
     @GetMapping("/list")
     ResponseEntity<ApiResponse<List<PromotionSummaryResponse>>> getPromotionList() {
-
         ApiResponse<List<PromotionSummaryResponse>> apiResponse = ApiResponse.<List<PromotionSummaryResponse>>builder()
                 .code(1702)
                 .result(promotionService.getPromotionList())

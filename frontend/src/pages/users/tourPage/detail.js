@@ -9,6 +9,7 @@ import ReviewList from "component/users/review/index";
 import CalendarCustom from "component/users/calendar/index";
 import formatDatetime from 'utils/formatDatetime';
 import { ErrorToast } from 'component/notifi';
+import { ToastContainer } from 'react-toastify';
 
 const TourDetailPage = () => {
     const { id } = useParams();
@@ -47,7 +48,7 @@ const TourDetailPage = () => {
                 }
             } catch (error) {
                 console.error("Failed to fetch tour: ", error);
-                // navigate("/error/404");
+                navigate("/error/404");
             }
         }
 
@@ -114,7 +115,7 @@ const TourDetailPage = () => {
                         <div className="col-lg-7">
                             <div className="tour-details-content">
                                 <h3>Khám phá Tours</h3>
-                                <p>{tour.description}</p>
+                                <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.description) }}></p>
                                 <div className="row pb-55">
                                     <div className="col-md-6" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                         <div className="tour-include-exclude mt-30">
@@ -183,7 +184,7 @@ const TourDetailPage = () => {
                                             <b>Ngày khởi hành:</b>
                                             <div className="date-input">
                                                 <i className="fa-solid fa-calendar-days cursor-pointer" onClick={() => setIsShow(true)}></i>
-                                                <input type="text" value={data.startDate ? formatDatetime(data.startDate) : ''} disabled />
+                                                <input type="text" value={data.startDate ? formatDatetime(data.startDate) : ""} disabled />
                                             </div>
                                         </div>
                                         <hr />
@@ -191,7 +192,7 @@ const TourDetailPage = () => {
                                             <b>Ngày kết thúc:</b>
                                             <div className="date-input">
                                                 <i className="fa-solid fa-calendar-days"></i>
-                                                <input type="text" value={data.endDate ? formatDatetime(data.endDate) : ''} disabled />
+                                                <input type="text" value={data.endDate ? formatDatetime(data.endDate) : ""} disabled />
                                             </div>
                                         </div>
                                         <hr />
@@ -255,6 +256,8 @@ const TourDetailPage = () => {
                     </div>
                 </div>
             </section>
+
+            <ToastContainer />
         </div>
     )
 }

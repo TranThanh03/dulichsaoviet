@@ -102,7 +102,7 @@ public class CheckoutController {
 
         if (result) {
             code = 1904;
-            message = "Thanh toán Momo thành công!";
+            message = "Thanh toán Momo thành công.";
         } else {
             code = 1905;
             message = "Thanh toán Momo thất bại!";
@@ -124,7 +124,7 @@ public class CheckoutController {
 
         if (result) {
             code = 1906;
-            message = "Thanh toán Vnpay thành công!";
+            message = "Thanh toán Vnpay thành công.";
         } else {
             code = 1907;
             message = "Thanh toán Vnpay thất bại!";
