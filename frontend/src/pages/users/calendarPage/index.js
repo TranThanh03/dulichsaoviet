@@ -5,226 +5,263 @@ import Swal from 'sweetalert2';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
 import { noImage } from 'assets';
+import { BookingApi, TourApi } from 'services';
+import { ErrorToast, SuccessToast } from 'component/notifi';
+import { ToastContainer } from 'react-toastify';
 
 const CalendarPage = () => {
-//     const [calendars, setCalendars] = useState([]);
-//     const paymentClassMap = {
-//         "Đã thanh toán": "paid",
-//         "Chưa thanh toán": "unpaid",
-//     };
-//     const statusClassMap = {
-//         "Đã xác nhận": "confirm",
-//         "Đã hủy": "cancel",
-//         "Đang xử lý": "processing",
-//     };
-//     const navigate = useNavigate();
-//     const [isLoading, setLoading] = useState(false);
+    const statusClassMap = {
+        'Đang xử lý': 'pending',
+        'Đã xác nhận': 'confirm',
+        'Đã hủy': 'cancel'
+    };
 
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const response = await OrderApi.getByUserId();
-//                 if (response?.code === 1957 && response?.result) {
-//                     setCalendars(response.result);
-//                 }
-//             }
-//             catch (error) {
-//                 console.error("Failed to fetch data:", error);
+    const [toursPopular, setToursPopular] = useState([]);
+    const [bookings, setBookings] = useState([]);
+    const navigate = useNavigate();
+    const [isLoading, setLoading] = useState(false);
 
-//                 if (error?.status === 401 || error === 'Network Error') {
-//                     navigate("/auth/login");
-//                 }
-//             }
-//             finally {
-//                 setLoading(true);
-//             }
-//         };
+    useEffect(() => {
+        const fetchPopularTours = async () => {
+            setLoading(true);
 
-//         fetchData();
-//     }, [navigate]);
+            try {
+                const response = await TourApi.threePopular();
 
-//     const handleCancel = async (id, orderId) => {
-//         const result = await Swal.fire({
-//             title: "Xác nhận",
-//             html: `Bạn có chắc chắn muốn hủy lịch đặt <b>${orderId}</b> không?`,
-//             icon: "warning",
-//             showCancelButton: true,
-//             confirmButtonText: "Có",
-//             cancelButtonText: "Không",
-//         });
+                if (response?.code === 1508) {
+                    setToursPopular(response?.result);                    
+                }
+            }
+            catch (error) {
+                console.error("Failed to fetch tours: ", error);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
 
-//         if (result.isConfirmed) {
-//             try {
-//                 const response = await OrderApi.cancel(id);
+        fetchPopularTours();
+    }, []);
 
-//                 if (response.code === 1955) {
-//                     Swal.fire({
-//                         title: "Thành công",
-//                         text: "Lịch đặt đã được hủy thành công",
-//                         icon: "success",
-//                         confirmButtonText: "Đóng",
-//                     });
+    useEffect(() => {
+        const fetchBookings = async () => {
+            setLoading(true);
 
-//                     setCalendars((prev) =>
-//                         prev.map((item) =>
-//                             item.id === id ? { ...item, orderStatus: "Đã hủy" } : item
-//                         )
-//                     );
-//                 } else {
-//                     Swal.fire({
-//                         title: "Lỗi",
-//                         text: response.message || "Hủy lịch đặt không thành công!",
-//                         icon: "error",
-//                         confirmButtonText: "Đóng",
-//                     });
-//                 }
-//             } catch (error) {
-//                 Swal.fire({
-//                     title: "Lỗi",
-//                     text: "Đã xảy ra lỗi khi hủy lịch đặt!",
-//                     icon: "error",
-//                     confirmButtonText: "Đóng",
-//                 });
-//             }
-//         }
-//     };
+            try {
+                const response = await BookingApi.getByCustomerId();
 
-//     const handlePayment = async (item) => {
-//         try {
-//             const response = await PaymentApi.processLater(item.id, { method: 'momo' });
+                if (response?.code === 1801) {
+                    setBookings(response?.result);
+                }
+            }
+            catch (error) {
+                console.error("Failed to fetch bookings: ", error);
 
-//             if (response?.code === 1942 && response?.result?.paymentUrl) {
-//                 window.location.href = response.result.paymentUrl;
-//             }
-//             else if (response?.code === 1022) {
-//                 Swal.fire({
-//                     title: 'Lỗi',
-//                     html: `<p style="color: red; padding-bottom: 5px">Số người của lịch đặt vượt quá số người tối đa!</p>
-//                             <p>Vui lòng hủy lịch đặt và đặt lại.</p>`,
-//                     icon: 'error',
-//                     confirmButtonText: 'Đóng'
-//                 });
-//             }
-//             else if (response?.code === 1023) {
-//                 Swal.fire({
-//                     title: 'Lỗi',
-//                     text: 'MoMo đang bảo trì. Vui lòng chọn phương thức thanh toán khác!',
-//                     icon: 'error',
-//                     confirmButtonText: 'Đóng'
-//                 });
-//             }
-//             else {
-//                 Swal.fire({
-//                     title: "Lỗi",
-//                     text: "Đã xảy ra lỗi thanh toán. Vui lòng thử lại!",
-//                     icon: "error",
-//                     confirmButtonText: "Đóng",
-//                 });
-//             }
-//         } catch (error) {
-//             Swal.fire({
-//                 title: "Lỗi",
-//                 text: "Đã xảy ra lỗi thanh toán. Vui lòng thử lại sau!",
-//                 icon: "error",
-//                 confirmButtonText: "Đóng",
-//             });
-//         }
-//     };
+                if (error?.status === 401) {
+                    navigate("/auth/login");
+                }
+            }
+            finally {
+                setLoading(false);
+            }
+        };
 
-//     if (!isLoading) {
-//         return (
-//             <div style={{height: 1000}}></div>
-//         );
-//     }
+        fetchBookings();
+    }, []);
 
-//     return (
-//         <div className="calendar-page">
-//             {calendars && Array.isArray(calendars) && calendars.length > 0 ? (
-//                 <div className="container">
-//                     <h1>Danh sách Tour đã đặt</h1>
-//                     <div className="list">
-//                         {calendars.map((item, index) => (
-//                             <div className="item" key={index}>
-//                                 <div className="image">
-//                                     <Link to={`/tours/detail/${item.tourId}`}>
-//                                         <img src={item.tourImage ? item.tourImage : noImage} id={item.tourImage ? 'img' : 'no-img'} alt={`${item.tourName}`} />
-//                                     </Link>
-//                                 </div>
-//                                 <div className="infor">
-//                                     <div className="name">
-//                                         <h3>
-//                                             <Link to={`/tours/detail/${item.tourId}`}>
-//                                                 {item.tourName}(<span id="start-date">{formatDatetime(item.startDate)}</span> - <span id="end-date">{formatDatetime(item.endDate)}</span>)
-//                                             </Link>
-//                                         </h3>
-//                                     </div>
-//                                     <div className="context">
-//                                         <table>
-//                                             <tbody>
-//                                                 <tr>
-//                                                     <td className="bold">Mã lịch đặt:</td>
-//                                                     <td>{item.orderId}</td>
-//                                                     <td className="bold p-left">Mã giao dịch:</td>
-//                                                     <td>{item.paymentId}</td>
-//                                                 </tr>
-//                                                 <tr>
-//                                                     <td className="bold">Thời gian đặt:</td>
-//                                                     <td>{formatDatetime(item.orderDatetime)}</td>
-//                                                     <td className="bold p-left">Phương thức thanh toán:</td>
-//                                                     <td>{item.method}</td>
-//                                                 </tr>
-//                                                 <tr>
-//                                                     <td className="bold">Hướng dẫn viên:</td>
-//                                                     <td>
-//                                                         <Link to={`/guides/detail/${item.guideId}`}>{item.guideName}</Link>
-//                                                     </td>
-//                                                     <td className="bold p-left">Trạng thái thanh toán:</td>
-//                                                     <td className={paymentClassMap[item.paymentStatus] || ""}>{item.paymentStatus}</td>
-//                                                 </tr>
-//                                                 <tr>
-//                                                     <td className="bold">Số người:</td>
-//                                                     <td>{item.numberOfPeople}</td>
-//                                                     <td className="bold p-left">Thời gian thanh toán:</td>
-//                                                     <td>{item.paymentDatetime != null ? formatDatetime(item.paymentDatetime) : ''}</td>
-//                                                 </tr>
-//                                                 <tr>
-//                                                     <td className="bold">Trạng thái lịch đặt:</td>
-//                                                     <td className={statusClassMap[item.orderStatus] || ""}>{item.orderStatus}</td>
-//                                                     <td className="bold p-left">Tổng tiền:</td>
-//                                                     <td style={{color: 'red'}}>{formatCurrency(item.totalPrice)}</td>
-//                                                 </tr>
-//                                             </tbody>
-//                                         </table>
-//                                     </div>
-//                                     <div className="control">
-//                                         {item.orderStatus && item.orderStatus === "Đang xử lý" && (
-//                                             <button type="button" id="btn-cancel" 
-//                                                 onClick={() => handleCancel(item.id, item.orderId)}
-//                                             >
-//                                                 Hủy tour
-//                                             </button>
-//                                         )}
-                                        
-//                                         {item.orderStatus && item.orderStatus === "Đang xử lý" && item.paymentStatus && item.paymentStatus === "Chưa thanh toán" && (
-//                                             <button type="button" id="btn-payment"
-//                                                 onClick={() => handlePayment(item)}
-//                                             >
-//                                                 Thanh toán
-//                                             </button>
-//                                         )}
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         ))}
-//                     </div>
-//                 </div>
-//             ) : (
-//                 <div className="calendar-none">
-//                     <h2>Chưa có tour nào được đặt. Hãy tìm hiểu các lựa chọn du lịch tuyệt vời cùng Sao Việt!</h2>
-//                 </div>
-//             )}
-//         </div>
-//     );
+    const handleCancel = async (id, code) => {
+        const result = await Swal.fire({
+            title: "Xác nhận",
+            html: `Bạn có chắc chắn muốn hủy lịch đặt <b>${code}</b> không?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: "Không",
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await BookingApi.cancel(id);
+
+                if (response.code === 1803) {
+                    SuccessToast("Lịch đặt đã được hủy thành công.");
+
+                    setBookings((prev) =>
+                        prev.map((item) =>
+                            item.id === id ? { ...item, status: "Đã hủy" } : item
+                        )
+                    );
+                } else {
+                    ErrorToast(response.message || "Hủy lịch đặt không thành công.")
+                }
+            } catch (error) {
+                console.log("Failed to fetch cancel: ", error);
+                ErrorToast("Đã xảy ra lỗi khi hủy lịch đặt! Vui lòng thử lại sau.")
+            }
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div style={{height: 1000}}></div>
+        );
+    }
+
+    return (
+        <>
+            <section className="calendar-page tour-list-page pt-50 pb-100 rel z-1">
+                <div className="container">
+                    <div className="row">
+                        <div className="tour-list-custom col-lg-3 col-md-6 col-sm-10 rmb-75">
+                            <div className="shop-sidebar mb-30">
+                                <div className="widget widget-tour" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                    <h6 className="widget-title fw-bold">Tours phổ biến</h6>
+                                    {toursPopular.length > 0 && (
+                                        toursPopular.map((item, index) => (
+                                            <div key={index} className="destination-item tour-grid style-three bgc-lighter">
+                                                <div className="image">
+                                                    <img src={item.image || noImage} alt="Tour" />
+                                                </div>
+                                                <div className="content">
+                                                    <div className="destination-header">
+                                                        <span className="location">
+                                                            <i className="fal fa-map-marker-alt"></i>
+                                                            {item.destination}
+                                                        </span>
+                                                        <div className="ratting">
+                                                            {[...Array(5)].map((_, i) =>
+                                                                i < item.rating ? (
+                                                                    <i key={i} className="fas fa-star"></i>
+                                                                ) : (
+                                                                    <i key={i} className="far fa-star"></i>
+                                                                )
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <h6>
+                                                        <Link to={`/tour/detail/${item.id}`} className="fw-bold">{item.name}</Link>
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="calendar col-lg-9" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            {bookings.length > 0 && (
+                                bookings.map((item, index) => (
+                                    <div key={index} className="destination-item style-three bgc-lighter">
+                                        <div className="image">
+                                            <Link to={`/tour/detail/${item.tourId}`}>
+                                                <span className={`badge ${statusClassMap[item.status] || ''}`}>
+                                                    {item.status}
+                                                </span>
+                                                <img src={item.image ?? noImage} alt="Tour" />
+                                            </Link>
+                                        </div>
+                                        <div className="content">
+                                            <div className="destination-header">
+                                                <div className="booking-code">
+                                                    Mã lịch đặt:
+                                                    <span className="ms-2">{item.code}</span>
+                                                </div>
+                                                <div className="booking-info">
+                                                    <span className="location">
+                                                        <i className="fal fa-map-marker-alt"></i>
+                                                        {item.destination}
+                                                    </span>
+                                                    <div className="ratting">
+                                                        {[...Array(5)].map((_, i) =>
+                                                            i < item.rating ? (
+                                                                <i key={i} className="fas fa-star"></i>
+                                                            ) : (
+                                                                <i key={i} className="far fa-star"></i>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <h5>
+                                                <Link to={`/tour/detail/${item.tourId}`}>{item.tourName}</Link>
+                                            </h5>
+
+                                            <ul className="blog-meta">
+                                                <li className="w-100">
+                                                    <ul className="sub-meta">
+                                                        <li>
+                                                            <i className="fa-solid fa-calendar-days"></i>
+                                                            {item.quantityDay ? `${item.quantityDay} ngày ${item.quantityDay-1} đêm` : ''}
+                                                        </li>
+                                                        <li style={{paddingRight: '31px'}}>
+                                                            <i className="far fa-user"></i>
+                                                            {item.people}
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li className="w-100">
+                                                    <ul className="sub-meta">
+                                                        <li>
+                                                            <i className="far fa-clock"></i>
+                                                            {item.bookingTime ? formatDatetime(item.bookingTime) : ''}
+                                                        </li>
+                                                        <li style={{minWidth: '92px'}}>
+                                                            <i className="fa-regular fa-credit-card"></i>
+                                                            {item.method}
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+
+                                            <div className="destination-footer">
+                                                <div>
+                                                    <span className="price">
+                                                        <span>{item.totalPrice ? formatCurrency(item.totalPrice) : 0}</span>
+                                                    </span>
+                                                </div>
+
+                                                {item.status === 'Đang xử lý' || item.reviewed ? (
+                                                    <div className="control">
+                                                        {item.status === 'Đang xử lý' && (
+                                                            <button className="theme-btn bg-red style-two style-three" onClick={() => handleCancel(item.id, item.code)}>
+                                                                <span data-hover="Hủy">Hủy</span>
+                                                            </button>
+                                                        )}
+
+                                                        {item.reviewed && (
+                                                            <Link to={`/tour/detail/${item.tourId}?bookingId=${item.id}`} className="theme-btn bg-yellow style-two style-three">
+                                                                <span data-hover="Đánh giá">Đánh giá</span>
+                                                            </Link>
+                                                        )}
+
+                                                        <Link to={`/calendar/detail/${item.id}`} className="theme-btn style-two style-three float-right">
+                                                            <span data-hover="Chi tiết">Chi tiết</span>
+                                                            <i className="fal fa-arrow-right"></i>
+                                                        </Link>
+                                                    </div>
+                                                ) : (
+                                                    <div>
+                                                        <Link to={`/calendar/detail/${item.id}`} className="theme-btn style-two style-three float-right">
+                                                            <span data-hover="Chi tiết">Chi tiết</span>
+                                                            <i className="fal fa-arrow-right"></i>
+                                                        </Link>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <ToastContainer />
+        </>
+    );
 };
 
 export default memo(CalendarPage);

@@ -6,10 +6,8 @@ import './detail.scss';
 const NewsPage = () => {
     return (
         <div className='news-page'>
-            <h1>Tin tức du lịch</h1>
-            
             <section className="featured-news">
-                <h2>Tin nổi bật</h2>
+                <h2 className="fw-bold">Tin nổi bật</h2>
                 <article className="featured-article">
                     <img src={featuredTravel} alt="Ảnh tin tức nổi bật" />
                     <h3>Khám phá 5 bãi biển đẹp nhất Việt Nam năm 2024</h3>
@@ -19,7 +17,7 @@ const NewsPage = () => {
             </section>
 
             <section className="news-list">
-                <h2>Tin tức mới nhất</h2>
+                <h2 className="fw-bold">Tin tức mới nhất</h2>
                 <article className="news-item">
                     <img src={travelNews1} alt="Ảnh tin tức 1" />
                     <h3>Hướng dẫn du lịch Sapa mùa lúa chín</h3>

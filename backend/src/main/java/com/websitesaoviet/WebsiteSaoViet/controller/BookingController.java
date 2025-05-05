@@ -2,6 +2,8 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.BookingResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.service.AuthenticationService;
 import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
 import com.websitesaoviet.WebsiteSaoViet.service.CustomerService;
@@ -39,30 +41,29 @@ public class BookingController {
 //        return ResponseEntity.ok(apiResponse);
 //    }
 //
-//    @GetMapping("/list")
-//    ResponseEntity<ApiResponse<List<BookingResponse>>> getBookingsByCustomerId(@RequestHeader("Authorization") String authorizationHeader)
-//            throws ParseException, JOSEException {
-//        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
-//        String id = authenticationService.getCustomerIdByToken(token);
-//
-//        ApiResponse<List<BookingResponse>> apiResponse = ApiResponse.<List<BookingResponse>>builder()
-//                .code(1801)
-//                .result(bookingService.getBookingsByCustomerId(id))
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
-//    @GetMapping("/{id}")
-//    ResponseEntity<ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>> getBookingById(@PathVariable String id) {
-//        ApiResponse<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse> apiResponse = ApiResponse.<com.websitesaoviet.WebsiteSaoViet.dto.response.BookingResponse>builder()
-//                .code(1802)
-//                .result(bookingService.getBookingById(id))
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
+    @GetMapping("/list")
+    ResponseEntity<ApiResponse<List<BookingSummaryResponse>>> getBookingsByCustomerId(@RequestHeader("Authorization") String authorizationHeader){
+        String token = authenticationService.extractTokenFromHeader(authorizationHeader);
+        String id = authenticationService.getIdByToken(token);
+
+        ApiResponse<List<BookingSummaryResponse>> apiResponse = ApiResponse.<List<BookingSummaryResponse>>builder()
+                .code(1801)
+                .result(bookingService.getBookingsByCustomerId(id))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponse<BookingDetailResponse>> getBookingById(@PathVariable String id) {
+        ApiResponse<BookingDetailResponse> apiResponse = ApiResponse.<BookingDetailResponse>builder()
+                .code(1802)
+                .result(bookingService.getBookingDetail(id))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @PatchMapping("/cancel/{id}")
     ResponseEntity<ApiResponse<BookingResponse>> cancelBooking(@PathVariable String id) {
         bookingService.cancelBooking(id);

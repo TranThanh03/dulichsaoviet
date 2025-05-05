@@ -72,12 +72,20 @@ const RenderRouter = () => {
             component: <usersPage.CalendarPage />
         },
         {
+            path: ROUTERS.USER.CALENDARDETAIL,
+            component: <usersPage.CalendarDetailPage />
+        },
+        {
             path: ROUTERS.USER.BOOKINGMESSAGE,
             component: <usersPage.MessagePage />
         },
         {
             path: ROUTERS.USER.SEARCH,
             component: <usersPage.SearchPage />
+        },
+        {
+            path: ROUTERS.USER.SEARCHDESTINATION,
+            component: <usersPage.SearchDestinationPage />
         },
         {
             path: ROUTERS.USER.ACTIVATE,

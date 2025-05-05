@@ -66,6 +66,9 @@ public class Booking {
     @Column(name = "children_price")
     Double childrenPrice;
 
+    @Column(name = "promotion_id")
+    String promotionId;
+
     @Column(name = "discount")
     Double discount;
 

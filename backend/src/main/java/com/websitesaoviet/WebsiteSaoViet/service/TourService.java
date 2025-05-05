@@ -3,10 +3,9 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PopularTourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -15,15 +14,16 @@ import com.websitesaoviet.WebsiteSaoViet.repository.TourRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -149,10 +149,87 @@ public class TourService {
         return tourRepository.countToursByArea();
     }
 
-    public List<PopularTourResponse> getPopularTourResponse() {
-        return tourRepository.findPopularTourResponse()
+    public List<PopularToursResponse> getPopularTours() {
+        return tourRepository.findPopularTours()
                 .stream()
-                .map(tourMapper::toPopularTourResponse)
+                .map(tourMapper::toPopularToursResponse)
                 .collect(Collectors.toList());
     }
+
+    public List<ThreePopularToursResponse> getThreePopularTours() {
+        List<Object[]> rawResult = tourRepository.findThreePopularTours();
+
+        return rawResult.stream()
+                .map(obj -> new ThreePopularToursResponse(
+                        (String) obj[0],
+                        (String) obj[1],
+                        (String) obj[2],
+                        (String) obj[3],
+                        ((Number) obj[4]).intValue()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public Page<SearchToursResponse> getSearchTours(SearchToursRequest request, int page, int size) {
+        String keyword = normalize(request.getKeyword() == null ? "" : request.getKeyword());
+        String sort = request.getSort() == null ? "default" : request.getSort();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<Object[]> rawResult = tourRepository.findSearchTours();
+
+        List<SearchToursResponse> allTours = rawResult.stream()
+                .map(obj -> new SearchToursResponse(
+                        (String) obj[0],
+                        (String) obj[1],
+                        (String) obj[2],
+                        (String) obj[3],
+                        ((Number) obj[4]).intValue(),
+                        (Double) obj[5],
+                        ((Number) obj[6]).intValue(),
+                        ((Number) obj[7]).intValue(),
+                        ((Timestamp) obj[8]).toLocalDateTime()
+                ))
+                .toList();
+
+        List<SearchToursResponse> filtered = allTours.stream()
+                .filter(tour -> {
+                    String name = normalize(tour.getName());
+                    String dest = normalize(tour.getDestination());
+                    return name.contains(keyword) || dest.contains(keyword);
+                })
+                .toList();
+
+        Comparator<SearchToursResponse> comparator = switch (sort) {
+            case "new" -> Comparator.comparing(SearchToursResponse::getCreatedTime).reversed();
+            case "old" -> Comparator.comparing(SearchToursResponse::getCreatedTime);
+            case "high-to-low" -> Comparator.comparing(SearchToursResponse::getAdultPrice).reversed();
+            case "low-to-high" -> Comparator.comparing(SearchToursResponse::getAdultPrice);
+            default -> Comparator.comparing(SearchToursResponse::getQuantityDay);
+        };
+
+        List<SearchToursResponse> sorted = filtered.stream()
+                .sorted(comparator)
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), sorted.size());
+        List<SearchToursResponse> paged = sorted.subList(start, end);
+
+        return new PageImpl<>(paged, pageable, sorted.size());
+    }
+
+    public static String normalize(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String noDiacritics = pattern.matcher(normalized).replaceAll("")
+                .replaceAll("đ", "d")
+                .replaceAll("Đ", "D")
+                .toLowerCase();
+
+        noDiacritics = noDiacritics.trim().replaceAll("\\s+", " ");
+
+        return noDiacritics;
+    }
+
 }

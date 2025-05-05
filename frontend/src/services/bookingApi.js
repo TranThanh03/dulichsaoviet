@@ -2,9 +2,9 @@ import axiosInstance from "utils/axiosInstance";
 import axiosInstanceAdmin from "utils/axiosInstanceAdmin";
 import getToken from "utils/getToken";
 
-const OrderApi = {
+const BookingApi = {
     getAll: (params) => {
-        return axiosInstanceAdmin.get("/api/v1/orders/all", {
+        return axiosInstanceAdmin.get("/api/v1/bookings", {
             params,
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
@@ -12,63 +12,63 @@ const OrderApi = {
         });
     },
     getById: (id) => {
-        return axiosInstanceAdmin.get(`/api/v1/orders/detail/${id}`, {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/${id}`, {
             headers: {
-                Authorization: `Bearer ${getToken(true)}`
+                Authorization: `Bearer ${getToken()}`
             }
         });
     },
-    getByUserId: () => {
-        return axiosInstance.get("/api/v1/orders/list", {
+    getByCustomerId: () => {
+        return axiosInstance.get("/api/v1/bookings/list", {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     cancel: (id) => {
-        return axiosInstance.post(`/api/v1/orders/cancel/${id}`, {}, {
+        return axiosInstance.patch(`/api/v1/bookings/cancel/${id}`, {}, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
         });
     },
     cancelAdmin: (id) => {
-        return axiosInstanceAdmin.post(`/api/v1/orders/cancel/${id}`, {}, {
+        return axiosInstanceAdmin.patch(`/api/v1/bookings/cancel/${id}`, {}, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     confirm: (id) => {
-        return axiosInstanceAdmin.post(`/api/v1/orders/confirm/${id}`, {}, {
+        return axiosInstanceAdmin.patch(`/api/v1/bookings/confirm/${id}`, {}, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     info: () => {
-        return axiosInstanceAdmin.get(`/api/v1/orders/info`, {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/info`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     latest: () => {
-        return axiosInstanceAdmin.get(`/api/v1/orders/latest`, {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/latest`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     statusCounts: () => {
-        return axiosInstanceAdmin.get(`/api/v1/orders/counts`, {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/counts`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     getStatistics: () => {
-        return axiosInstanceAdmin.get(`/api/v1/orders/statistics`, {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/statistics`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
@@ -76,4 +76,4 @@ const OrderApi = {
     }
 };
 
-export default OrderApi;
+export default BookingApi;

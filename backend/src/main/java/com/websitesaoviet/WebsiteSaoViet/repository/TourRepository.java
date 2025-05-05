@@ -25,12 +25,19 @@ public interface TourRepository extends JpaRepository<Tour, String> {
         (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
         t.quantity_day,
         MIN(s.adult_price) AS adult_price,
-        SUM(DISTINCT s.total_people - s.quantity_people) AS people,
-        IFNULL(FLOOR(AVG(r.rating)), 0) AS rating,
+        (
+            SELECT IFNULL(SUM(s2.total_people - s2.quantity_people), 0)
+            FROM schedule s2
+            WHERE s2.tour_id = t.id AND s2.status = 'Chưa diễn ra' AND s2.quantity_people < s2.total_people
+        ) AS people,
+        IFNULL(FLOOR((
+            SELECT AVG(r2.rating)
+            FROM review r2
+            WHERE r2.tour_id = t.id
+        )), 0) AS rating,
         MAX(s.created_time) AS created_time
     FROM tour t
     INNER JOIN schedule s ON t.id = s.tour_id
-    LEFT JOIN review r ON t.id = r.tour_id
     WHERE
         (s.status = 'Chưa diễn ra') AND
         (s.quantity_people < s.total_people) AND
@@ -39,13 +46,16 @@ public interface TourRepository extends JpaRepository<Tour, String> {
         (:area IS NULL OR t.area = :area) AND
         (:quantityDay IS NULL OR t.quantity_day = :quantityDay)
     GROUP BY t.id, t.name, t.destination, t.quantity_day
-    HAVING (:rating IS NULL OR FLOOR(AVG(r.rating)) = :rating)
+    HAVING (:rating IS NULL OR FLOOR((
+        SELECT AVG(r3.rating)
+        FROM review r3
+        WHERE r3.tour_id = t.id
+    )) = :rating)
     """,
             countQuery = """
     SELECT COUNT(DISTINCT t.id)
     FROM tour t
     INNER JOIN schedule s ON t.id = s.tour_id
-    LEFT JOIN review r ON t.id = r.tour_id
     WHERE
         (s.status = 'Chưa diễn ra') AND
         (s.quantity_people < s.total_people) AND
@@ -54,7 +64,11 @@ public interface TourRepository extends JpaRepository<Tour, String> {
         (:area IS NULL OR t.area = :area) AND
         (:quantityDay IS NULL OR t.quantity_day = :quantityDay)
     GROUP BY t.id
-    HAVING (:rating IS NULL OR FLOOR(AVG(r.rating)) = :rating)
+    HAVING (:rating IS NULL OR FLOOR((
+        SELECT AVG(r3.rating)
+        FROM review r3
+        WHERE r3.tour_id = t.id
+    )) = :rating)
     """,
             nativeQuery = true)
     Page<Object[]> findFilteredToursNative(
@@ -77,5 +91,40 @@ public interface TourRepository extends JpaRepository<Tour, String> {
             "FROM Tour t " +
             "ORDER BY t.quantityOrder DESC " +
             "LIMIT 5")
-    List<Tour> findPopularTourResponse();
+    List<Tour> findPopularTours();
+
+    @Query(value = """
+    SELECT t.id, t.name, t.destination,
+        (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
+        IFNULL(FLOOR(AVG(r.rating)), 0) AS rating
+    FROM tour t
+    LEFT JOIN review r ON t.id = r.tour_id
+    GROUP BY t.id
+    ORDER BY t.quantity_order DESC
+    LIMIT 3
+    """, nativeQuery = true)
+    List<Object[]> findThreePopularTours();
+
+    @Query(value = """
+    SELECT t.id, t.name, t.destination,
+        (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
+        t.quantity_day,
+        MIN(s.adult_price) AS adult_price,
+        (
+            SELECT IFNULL(SUM(s2.total_people - s2.quantity_people), 0)
+            FROM schedule s2
+            WHERE s2.tour_id = t.id AND s2.status = 'Chưa diễn ra' AND s2.quantity_people < s2.total_people
+        ) AS people,
+        (
+            SELECT IFNULL(FLOOR(AVG(r2.rating)), 0)
+            FROM review r2
+            WHERE r2.tour_id = t.id
+        ) AS rating,
+        MAX(s.created_time) AS created_time
+    FROM tour t
+    INNER JOIN schedule s ON t.id = s.tour_id
+    WHERE s.status = 'Chưa diễn ra' AND s.quantity_people < s.total_people
+    GROUP BY t.id, t.name, t.destination, t.quantity_day
+    """, nativeQuery = true)
+    List<Object[]> findSearchTours();
 }

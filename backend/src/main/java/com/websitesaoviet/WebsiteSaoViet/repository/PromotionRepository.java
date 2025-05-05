@@ -31,4 +31,9 @@ public interface PromotionRepository extends JpaRepository<Promotion, String> {
     @Modifying
     @Query("UPDATE Promotion p SET p.quantity = p.quantity - :quantity WHERE p.id = :id")
     void minusQuantity(@Param("id") String id, @Param("quantity") int quantity);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Promotion p SET p.quantity = p.quantity + :quantity WHERE p.id = :id")
+    void addQuantity(@Param("id") String id, @Param("quantity") int quantity);
 }

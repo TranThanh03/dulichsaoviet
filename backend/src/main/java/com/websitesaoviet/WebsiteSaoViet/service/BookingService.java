@@ -1,6 +1,9 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.BookingResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingSummaryResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ThreePopularToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
 import com.websitesaoviet.WebsiteSaoViet.enums.BookingStatus;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -12,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +29,11 @@ public class BookingService {
     CustomerService customerService;
     ScheduleService scheduleService;
     TourService tourService;
+    PromotionService promotionService;
 
     public BookingResponse createBooking (String bookingCode, String customerId, String scheduleId,
                                           int quantityAdult, int quantityChildren,
-                                          Double amount, Double discount, boolean isReserved) {
+                                          Double amount, String promotionId, Double discount, boolean isReserved) {
         Booking booking = new Booking();
         var customer = customerService.getCustomerById(customerId);
         var schedule = scheduleService.getScheduleById(scheduleId);
@@ -52,6 +59,7 @@ public class BookingService {
 
         booking.setQuantityAdult(quantityAdult);
         booking.setQuantityChildren(quantityChildren);
+        booking.setPromotionId(promotionId);
         booking.setDiscount(discount);
         booking.setTotalPrice(amount);
         booking.setBookingTime(currentTime);
@@ -66,14 +74,36 @@ public class BookingService {
 //        return bookingRepository.findBookings(pageable);
 //    }
 //
-//    public List<BookingResponse> getBookingsByCustomerId(String id) {
-//        return bookingRepository.findBookingListByCustomerId(id);
-//    }
+    public List<BookingSummaryResponse> getBookingsByCustomerId(String customerId) {
+        List<Object[]> rawResult = bookingRepository.findBookingsByCustomerId(customerId);
 
-//    public Booking getBookingById(String id) {
-//        return bookingRepository.findById(id)
-//                .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXITED));
-//    }
+        return rawResult.stream()
+                .map(obj -> new BookingSummaryResponse(
+                        (String) obj[0],
+                        (String) obj[1],
+                        (String) obj[2],
+                        (String) obj[3],
+                        (String) obj[4],
+                        (String) obj[5],
+                        ((Number) obj[6]).intValue(),
+                        ((Number) obj[7]).intValue(),
+                        ((Number) obj[8]).doubleValue(),
+                        ((Number) obj[9]).intValue(),
+                        ((Timestamp) obj[10]).toLocalDateTime(),
+                        (String) obj[11],
+                        (boolean) obj[12],
+                        (String) obj[13]
+                        ))
+                .collect(Collectors.toList());
+    }
+
+    public BookingDetailResponse getBookingDetail(String id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new AppException(ErrorCode.BOOKING_NOT_EXITED);
+        }
+
+        return bookingRepository.findBookingDetail(id);
+    }
 
     public void updateBookingByReview(String id, boolean isReviewed) {
         var booking = bookingRepository.findById(id)
@@ -98,6 +128,10 @@ public class BookingService {
 
             booking.setStatus(BookingStatus.CANCEL.getValue());
             bookingRepository.save(booking);
+
+            if (!booking.getPromotionId().equals("")) {
+                promotionService.addQuantity(booking.getPromotionId(), 1);
+            }
 
             if (booking.isReserved()) {
                 int people = booking.getQuantityAdult() + booking.getQuantityChildren();

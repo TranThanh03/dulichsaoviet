@@ -1,166 +1,70 @@
 .calendar-page {
-    .container {
-        margin: 0;
-        padding: 20px;
+    .calendar {
+        max-height: 1400px;
+        overflow-y: scroll;
+
+        a {
+            font-weight: bold;
+            text-decoration: none !important;
+        }
+
+        .destination-item {
+            height: auto !important;
+            margin-bottom: 30px;
+        }
+
+        .booking-code {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .confirm {
+            background-color: green !important;
+            font-weight: bold;
+        }
+
+        .cancel {
+            background-color: red !important;
+            font-weight: bold;
+        }
+
+        .pending {
+            background-color: #e5af10 !important;
+            font-weight: bold;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        .sub-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .booking-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 1px;
+        }
+
+        .control {
+            display: flex;
+            justify-content: space-between;
+            flex: 1 1 50%;
+            min-width: 100%;
+        }
+
+        .destination-footer {
+            row-gap: 10px;
+        }
     }
 
-    .list {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        margin: 40px;
-        align-items: center;
-        max-height: 1000px;
-        overflow-y: auto;
-        padding: 10px;
-        min-width: 1276px;
-    }
-
-    .item {
-        background-color: #fff;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 15px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        min-height: 330px;
-        max-width: 1254px;
-        min-width: 1237px;
-    }
-
-    .item:hover {
-        transform: scale(1.02);
-    }
-
-    .item a {
-        text-decoration: none;
-    }
-
-    .image img {
-        width: 479px;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    .image #no-img {
-        width: 288px;
-        margin-right: 80px;
-    }
-
-    .infor {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding-left: 20px;
-    }
-
-    .infor #start-date {
-        color: #ffc107;
-        font-size: 18px;
-    }
-
-    .infor #end-date {
-        color: #34b7c6;
-        font-size: 18px;
-    }
-
-    .infor #confirm {
-        color: green;
-    }
-
-    .infor #cancel {
-        color: red;
-    }
-
-    .name h3 {
-        margin: 0;
-        font-size: 22px;
-        text-align: center;
-    }
-
-    .name a {
-        color: #2c3e50;
-    }
-
-    .context {
-        margin-top: 10px;
-    }
-
-    .context table {
-        width: 100%;
-    }
-
-    .context td {
-        padding: 5px 10px;
-    }
-
-    .context .confirm {
-        color: green;
-        font-weight: bold;
-    }
-
-    .context .cancel {
-        color: red;
-        font-weight: bold;
-    }
-
-    .context .processing {
-        color: #e5af10;
-        font-weight: bold;
-    }
-
-    .context .paid {
-        color: green;
-    }
-
-    .context .unpaid {
-        color: red;
-    }
-
-    .bold {
-        font-weight: bold;
-    }
-
-    .p-left {
-        padding-left: 20px !important;
-    }
-
-    .control {
-        padding: 10px;
-        display: flex;
-        gap: 30px;
-        justify-content: center;
-    }
-
-    .control button {
-        border: none;
-        padding: 10px 20px;
-        color: white;
-        background-color: red;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .control #btn-cancel:hover { 
-        background-color: rgb(170, 0, 0);
-    }
-
-    .control #btn-payment {
-        background-color: rgb(0, 184, 0);
-    }
-
-    .control #btn-payment:hover {
-        background-color: rgb(0, 118, 0);
-    }
-
-    .calendar-none {
-        height: 500px;
-        padding: 20px;
+    @media only screen and (max-width: 992px) {
+        .tour-list-custom {
+            display: none;
+        }
     }
 }

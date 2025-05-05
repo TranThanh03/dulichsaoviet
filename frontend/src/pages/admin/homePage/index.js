@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo, useContext } from 'react';
 import './style.scss';
-import { OrderApi, TourApi, CustomerApi } from 'services';
+import { BookingApi, TourApi } from 'services';
 import { AuthContext } from '../theme/masterLayout';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
@@ -22,7 +22,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchHomeInfo = async () => {
             try {
-                const response = await OrderApi.info();
+                const response = await BookingApi.info();
 
                 if (response?.code === 1951) {
                     setData(response.result);
@@ -38,7 +38,7 @@ const HomePage = () => {
 
         const fetchLatestOrders = async () => {
             try {
-                const response = await OrderApi.latest();
+                const response = await BookingApi.latest();
 
                 if (response?.code === 1950) {
                     setOrders(response.result);
@@ -69,19 +69,19 @@ const HomePage = () => {
         };
 
         const fetchLatestUsers = async () => {
-            try {
-                const response = await CustomerApi.latest();
+            // try {
+            //     const response = await CustomerApi.latest();
 
-                if (response?.code === 1993) {
-                    setUsers(response.result);
-                }
-            }
-            catch (error) {
-                console.error("Failed to fetch users: ", error);
-            }
-            finally {
-                setLoading(true);
-            }
+            //     if (response?.code === 1993) {
+            //         setUsers(response.result);
+            //     }
+            // }
+            // catch (error) {
+            //     console.error("Failed to fetch users: ", error);
+            // }
+            // finally {
+            //     setLoading(true);
+            // }
         };
 
         fetchHomeInfo();

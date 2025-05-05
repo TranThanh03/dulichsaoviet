@@ -1,8 +1,10 @@
 .global-loader {
     z-index: 9999;
-    transition: opacity 0.1s ease-in-out;
+    .global-loader-custom {
+        display: none;
+    }
 
-    .hidden {
-        display: none !important;
+    .show {
+        display: block;
     }
 }

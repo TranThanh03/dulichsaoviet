@@ -5,7 +5,7 @@ import Pagination from 'component/pagination';
 const TourList = ({ tours, totalPages, currentPage, setCurrentPage }) => {
     return (
         <div className="tour-grid-wrap">
-            <div className="row" id="tours-container">
+            <div className="row" style={tours.length > 0 ? {} : { height: '428px' }}>
                 {tours.length > 0 && tours.map((item, index) => (
                     <TourCard key={index} tour={item} />
                 ))}

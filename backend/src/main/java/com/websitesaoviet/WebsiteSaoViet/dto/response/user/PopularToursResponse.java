@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PopularTourResponse {
+public class PopularToursResponse {
     String id;
     String name;
     List<String> image;

@@ -104,10 +104,10 @@ public class PromotionService {
     }
 
     public void minusQuantity(String id, int quantity) {
-        try {
-            promotionRepository.minusQuantity(id, quantity);
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.PROMOTION_NOT_EXITED);
-        }
+        promotionRepository.minusQuantity(id, quantity);
+    }
+
+    public void addQuantity(String id, int quantity) {
+        promotionRepository.addQuantity(id, quantity);
     }
 }

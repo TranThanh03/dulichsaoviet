@@ -40,6 +40,12 @@ const Header = () => {
     }, [location.pathname, menuItems]);
 
     useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const searchValue = queryParams.get('p') || '';
+        setSearchQuery(searchValue);
+    }, [location.search])
+
+    useEffect(() => {
         const fetchAuth = async () => {
             try {
                 const token = getToken();

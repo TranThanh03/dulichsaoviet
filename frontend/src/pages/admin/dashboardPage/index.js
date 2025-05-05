@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import "./index.scss";
 import formatCurrency from "utils/formatCurrency";
-import { OrderApi } from "services";
+import { BookingApi } from "services";
 
 const DashboardPage = () => {
     const [isLoading, setLoading] = useState(false);
@@ -32,7 +32,7 @@ const DashboardPage = () => {
     useEffect(() => {
         const fetchOrdersStatus = async () => {
             try {
-                const response = await OrderApi.statusCounts();
+                const response = await BookingApi.statusCounts();
 
                 if (response?.code === 2959 && response?.result) {
                     setPieData((prevData) =>
@@ -56,7 +56,7 @@ const DashboardPage = () => {
 
         const fetchOrdersStatistics = async () => {
             try {
-                const res = await OrderApi.getStatistics();
+                const res = await BookingApi.getStatistics();
 
                 if (res?.code === 2958 && res?.result) {
                     setLineData((prevData) =>

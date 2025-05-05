@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
 import "./style.scss";
-import { OrderApi } from "services";
+import { BookingApi } from "services";
 import formatCurrency from "utils/formatCurrency";
 import formatDatetime from "utils/formatDatetime";
 import { Link } from "react-router-dom";
@@ -26,7 +26,7 @@ const CalendarPage = () => {
     useEffect(() => {
         const fetchCalendars = async () => {
             try {
-                const response = await OrderApi.getAll({ page: currentPage, size: pageSize });
+                const response = await BookingApi.getAll({ page: currentPage, size: pageSize });
 
                 if (response?.code === 1953) {
                     setCalendars(response.result.content);

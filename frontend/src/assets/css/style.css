@@ -4453,6 +4453,7 @@
         border-radius: 10px; }
         .destination-item .image img {
         width: 100%;
+        height: 200px;
         -webkit-transition: 0.5s;
         -o-transition: 0.5s;
         transition: 0.5s; }

@@ -118,7 +118,7 @@ public class CheckoutService {
                     promotionService.minusQuantity(promotionId, 1);
                 }
 
-                var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, discount, true);
+                var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId, discount, true);
 
                 createCheckout(newBooking.getId(), checkoutCode, method, currentTime, status);
 
@@ -187,7 +187,7 @@ public class CheckoutService {
                     promotionService.minusQuantity(promotionId, 1);
                 }
 
-                var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, discount, true);
+                var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, promotionId, discount, true);
 
                 createCheckout(newBooking.getId(), checkoutCode, method, currentTime, status);
 
@@ -216,7 +216,7 @@ public class CheckoutService {
             String status = CheckoutStatus.UNPAID.getValue();
             Double discount = 0.0;
 
-            var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, discount, false);
+            var newBooking = bookingService.createBooking(bookingCode, customerId, scheduleId, quantityAdult, quantityChildren, amount, "", discount, false);
 
             createCheckout(newBooking.getId(), "", method, null, status);
 

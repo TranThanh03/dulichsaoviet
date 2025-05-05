@@ -5,7 +5,7 @@ import { memo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TourApi } from 'services';
 
-const SearchPage = () => {
+const SearchDestinationPage = () => {
     const [tours, setTours] = useState([]);
     const location = useLocation();
     const [currentPage, setCurrentPage] = useState(0);
@@ -13,7 +13,9 @@ const SearchPage = () => {
     const pageSize = 6;
     const [isLoading, setLoading] = useState(true);
     const [search, setSearch] = useState({
-        keyword: '',
+        destination: '',
+        startDate: '',
+        endDate: '',
         sort: 'default'
     });
 
@@ -22,27 +24,44 @@ const SearchPage = () => {
             ...prev,
             sort: newSort
         }));
+
+        console.log(search);
     }
 
     useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const des = queryParams.get('des').trim() || '';
+        const sd = queryParams.get('sd').trim() || '';
+        const ed = queryParams.get('ed').trim() || '';
+
+        setSearch((prev) => ({
+            ...prev,
+            destination: des,
+            startDate: sd,
+            endDate: ed
+        }))
+
+        console.log(search);
+    }, [location.search])
+
+    useEffect(() => {
         const fetchTourList = async () => {
-            const queryParams = new URLSearchParams(location.search);
-            const searchQuery = queryParams.get('p') || '';
+           
 
             try {
-                const response = await TourApi.searchTours(
-                    {
-                        ...search,
-                        keyword: searchQuery
-                    },
-                    currentPage,
-                    pageSize
-                );
+                // const response = await TourApi.searchTours(
+                //     {
+                //         ...search,
+                //         keyword: searchQuery
+                //     },
+                //     currentPage,
+                //     pageSize
+                // );
 
-                if (response?.code === 1509) {
-                    setTours(response?.result?.content);
-                    setTotalPages(response?.result?.totalPages);
-                }
+                // if (response?.code === 1509) {
+                //     setTours(response?.result?.content);
+                //     setTotalPages(response?.result?.totalPages);
+                // }
             } catch (error) {
                 console.error("Failed to fetch tours:", error);
             } finally {
@@ -101,4 +120,4 @@ const SearchPage = () => {
     );
 }
 
-export default memo(SearchPage);
+export default memo(SearchDestinationPage);

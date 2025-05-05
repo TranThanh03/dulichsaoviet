@@ -91,19 +91,11 @@ public class ScheduleService {
     }
 
     public void addQuantityPeople(String id, int people) {
-        try {
-            scheduleRepository.addQuantityPeople(id, people);
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.SCHEDULE_NOT_EXITED);
-        }
+        scheduleRepository.addQuantityPeople(id, people);
     }
 
     public void minusQuantityPeople(String id, int people) {
-        try {
-            scheduleRepository.minusQuantityPeople(id, people);
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.SCHEDULE_NOT_EXITED);
-        }
+        scheduleRepository.minusQuantityPeople(id, people);
     }
 
     public String getNextCode(String type) {

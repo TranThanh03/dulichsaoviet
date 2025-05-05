@@ -4,9 +4,9 @@ export const setLoading = (isLoading) => {
     
     if (loader) {
         if (isLoading) {
-            loader.classList.remove("hidden");
+            loader.classList.add("show");
         } else {
-            loader.classList.add("hidden");
+            loader.classList.remove("show");
         }
 
         if(mainPage) {

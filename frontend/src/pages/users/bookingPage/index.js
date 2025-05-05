@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, use } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './index.scss';
 import formatCurrency from 'utils/formatCurrency';
@@ -53,6 +53,7 @@ const BookingPage = () => {
     const [isShow, setIsShow] = useState(true);
     const [vouchers, setVouchers] = useState([]);
     const [isActive, setIsActive] = useState(false);
+    const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -116,11 +117,12 @@ const BookingPage = () => {
 
     useEffect(() => {
         if (formData.method === 'cash') {
-            setIsShow(false);
-            setPromotion(prev => ({
-                ...prev,
+            setPromotion({
+                id: '',
                 discount: 0
-            }));
+            });
+            setInputValue('');
+            setIsShow(false);
         } else {
             setIsShow(true);
         }
@@ -164,6 +166,15 @@ const BookingPage = () => {
         setQuantityChildren(prev => Math.max(prev - 1, 0));
     };
     
+    const handleVoucherClick = (voucher) => {
+        setPromotion({
+            id: voucher.id,
+            discount: voucher.discount
+        })
+        setInputValue(voucher.code);
+        setIsActive(false);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -272,7 +283,7 @@ const BookingPage = () => {
                     <div className="summary-section">
                         <div className="tour-infor">
                             <p>Mã Tour: <span>{schedule.tourCode}</span></p>
-                            <h5 className="widget-title">{schedule.tourName}</h5>
+                            <h5 className="widget-title fw-bold">{schedule.tourName}</h5>
                             <p>Ngày khởi hành: <span>{schedule.startDate ? formatDatetime(schedule.startDate) : ''}</span></p>
                             <p>Ngày kết thúc: <span>{schedule.endDate ? formatDatetime(schedule.endDate) : ''}</span></p>
                             <p>Thời gian: <span>{schedule.quantityDay ? `${schedule.quantityDay} ngày ${schedule.quantityDay-1} đêm` : ''}</span></p>
@@ -310,27 +321,27 @@ const BookingPage = () => {
 
                         {isShow && (
                             <div className="order-coupon">
-                            <span id="title">Khuyến mãi</span>          
-                            <input type="text" placeholder="Mã giảm giá" onFocus={() => setIsActive(true)} onBlur={() => setIsActive(false)} className="input-coupon" />
+                                <span className={`${formData.quantityAdult + formData.quantityChildren > 0 ? '' : 'inactive'}`} id="title" onClick={() => setIsActive(!isActive)}>Khuyến mãi</span>          
+                                <input type="text" placeholder="Mã giảm giá" className="input-coupon" value={inputValue} disabled/>
 
-                            {isActive && (
-                                <div className="voucher-dropdown">
-                                {vouchers.map((voucher) => (
-                                    <div key={voucher.id} className="voucher-item" onClick={() => setIsActive(false)}>
-                                        <img src={voucherImg} alt="Voucher" className="voucher-image" />
-                                        <div className="voucher-info">
-                                            <p className="voucher-code">Mã: {voucher.code}</p>
-                                            <p className="voucher-title">{voucher.title}</p>
-                                            <p className="voucher-desc">{voucher.description}</p>
-                                            <p className="voucher-expiry">
-                                                <i className="fa-regular fa-clock me-1"></i>{voucher.endDate ? formatDatetime(voucher.endDate) : ''}
-                                                <span id="voucher-qty"><i className="fal fa-ticket me-1"></i>{voucher.quantity}</span>
-                                            </p>
-                                        </div>
+                                {isActive && (
+                                    <div className="voucher-dropdown">
+                                        {vouchers.map((voucher) => (
+                                            <div key={voucher.id} className="voucher-item" onClick={() => handleVoucherClick(voucher)}>
+                                                <img src={voucherImg} alt="Voucher" className="voucher-image" />
+                                                <div className="voucher-info">
+                                                    <p className="voucher-code">Mã: {voucher.code}</p>
+                                                    <p className="voucher-title">{voucher.title}</p>
+                                                    <p className="voucher-desc">{voucher.description}</p>
+                                                    <p className="voucher-expiry">
+                                                        <i className="fa-regular fa-clock me-1"></i>{voucher.endDate ? formatDatetime(voucher.endDate) : ''}
+                                                        <span id="voucher-qty"><i className="fal fa-ticket me-1"></i>{voucher.quantity}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                                </div>
-                            )}
+                                )}
                             </div>
                         )}
 

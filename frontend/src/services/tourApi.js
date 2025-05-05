@@ -30,18 +30,6 @@ const TourApi = {
             }
         });
     },
-    searchTours: (searchQuery, page = 0, size = 6) => {
-        return axiosInstance.get(`/api/v1/tours/search?p=${searchQuery}`, {
-            params: { page, size },
-        });
-    },
-    // popular: () => {
-    //     return axiosInstanceAdmin.get(`/api/v1/tours/popular`, {
-    //         headers: {
-    //             Authorization: `Bearer ${getToken(true)}`
-    //         }
-    //     });
-    // },
     filter: (data, params) => {
         return axiosInstance.post("/api/v1/tours/filter", data, {
             params: params,
@@ -52,6 +40,14 @@ const TourApi = {
     },
     popular: () => {
         return axiosInstance.get("/api/v1/tours/popular");
+    },
+    threePopular: () => {
+        return axiosInstance.get("/api/v1/tours/three-popular");
+    },
+    searchTours: (data, params) => {
+        return axiosInstance.post("/api/v1/tours/search", data, {
+            params: params,
+        });
     }
 };
 

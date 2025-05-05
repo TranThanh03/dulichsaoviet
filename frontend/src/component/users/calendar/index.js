@@ -29,8 +29,6 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
 
                 if (response?.code === 1603 && response?.result.length > 0) {
                     setCalendarData(response.result);
-                } else {
-                    navigate("/error/404");
                 }
             } catch (error) {
                 console.log("Failed to fetch data: ", error);
@@ -56,7 +54,7 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
                     ErrorToast("Vui lòng đăng nhập để đặt tour.");
                     setTimeout(() => {
                         navigate("/auth/login");
-                    }, 2000);
+                    }, 1500);
                 }
             } catch (error) {
                 ErrorToast("Vui lòng đăng nhập để đặt tour.");

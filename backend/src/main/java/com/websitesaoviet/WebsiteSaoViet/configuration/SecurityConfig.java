@@ -22,8 +22,8 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] GET_PUBLIC_ENDPOINTS = {
-            "/tours", "/tours/area-count", "/tours/popular",
-            "/tours/{id:[0-9a-f\\-]{36}}", "/tours/search",
+            "/tours", "/tours/area-count", "/tours/popular", "/tours/three-popular",
+            "/tours/{id:[0-9a-f\\-]{36}}",
             "/reviews/{id:[0-9a-f\\-]{36}}",
             "/promotions/list",
     };
@@ -31,7 +31,7 @@ public class SecurityConfig {
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login", "/auth/register", "/auth/admin/login",
             "/customers",
-            "/tours/filter",
+            "/tours/filter", "/tours/search",
     };
 
     private final String[] PATCH_PUBLIC_ENDPOINTS = {

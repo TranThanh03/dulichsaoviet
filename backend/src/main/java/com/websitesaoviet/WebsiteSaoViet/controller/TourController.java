@@ -3,11 +3,10 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.FilterToursResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PopularTourResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
@@ -130,10 +129,33 @@ public class TourController {
     }
 
     @GetMapping("/popular")
-    ResponseEntity<ApiResponse<List<PopularTourResponse>>> getPopularTourResponse() {
-        ApiResponse<List<PopularTourResponse>> apiResponse = ApiResponse.<List<PopularTourResponse>>builder()
+    ResponseEntity<ApiResponse<List<PopularToursResponse>>> getPopularTours() {
+        ApiResponse<List<PopularToursResponse>> apiResponse = ApiResponse.<List<PopularToursResponse>>builder()
                 .code(1507)
-                .result(tourService.getPopularTourResponse())
+                .result(tourService.getPopularTours())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/three-popular")
+    ResponseEntity<ApiResponse<List<ThreePopularToursResponse>>> getThreePopularTours() {
+        ApiResponse<List<ThreePopularToursResponse>> apiResponse = ApiResponse.<List<ThreePopularToursResponse>>builder()
+                .code(1508)
+                .result(tourService.getThreePopularTours())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/search")
+    ResponseEntity<ApiResponse<Page<SearchToursResponse>>> getThreePopularTours(
+            @RequestBody SearchToursRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        ApiResponse<Page<SearchToursResponse>> apiResponse = ApiResponse.<Page<SearchToursResponse>>builder()
+                .code(1509)
+                .result(tourService.getSearchTours(request, page, size))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

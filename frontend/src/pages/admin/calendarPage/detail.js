@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from "react";
 import "./detail.scss";
-import { OrderApi } from "services";
+import { BookingApi } from "services";
 import formatCurrency from "utils/formatCurrency";
 import formatDatetime from "utils/formatDatetime";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,7 +27,7 @@ const CalendarDetailPage = () => {
     useEffect(() => {
         const fetchCalendar = async () => {
             try {
-                const response = await OrderApi.getById(id);
+                const response = await BookingApi.getById(id);
 
                 if (response?.code === 1952 && response?.result) {
                     setCalendar(response.result);
@@ -57,7 +57,7 @@ const CalendarDetailPage = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await OrderApi.cancelAdmin(id);
+                const response = await BookingApi.cancelAdmin(id);
 
                 if (response.code === 1955) {
                     Swal.fire({
@@ -102,7 +102,7 @@ const CalendarDetailPage = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await OrderApi.confirm(id);
+                const response = await BookingApi.confirm(id);
 
                 if (response.code === 1954) {
                     Swal.fire({
