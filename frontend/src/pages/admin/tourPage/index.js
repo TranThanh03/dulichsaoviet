@@ -4,7 +4,7 @@ import "./index.scss";
 import { TourApi } from "services";
 import { Link } from "react-router-dom";
 import formatCurrency from "utils/formatCurrency";
-import { noImage } from "assets";
+import { noImage } from "assets/user";
 
 const TourPage = () => {
     const [tours, setTours] = useState([]);

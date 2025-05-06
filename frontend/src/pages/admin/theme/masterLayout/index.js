@@ -1,9 +1,9 @@
 import { memo, useState, useEffect, createContext } from "react";
-import Header from "../header";
 import Footer from "../footer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
+import Sidebar from "../sidebar";
 
 export const AuthContext = createContext(null);
 
@@ -56,10 +56,14 @@ const MasterLayout = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ authenticated }}>
-            <div className="page-saoviet">
-                {!isLoginPage && isValidPath && <Header authenticated={authenticated} />}
-                {children}
-                {!isLoginPage && isValidPath && <Footer />}
+            <div className="page-saoviet nav-md">
+                <div className="container body">
+                    <div className="main_container">
+                        {!isLoginPage && isValidPath && <Sidebar authenticated={authenticated} />}
+                        {children}
+                        {!isLoginPage && isValidPath && <Footer />}
+                    </div>
+                </div>     
             </div>
         </AuthContext.Provider>
     );

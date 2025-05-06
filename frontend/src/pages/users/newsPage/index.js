@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { featuredTravel, travelNews1, travelNews2, travelNews3 } from 'assets';
+import { featuredTravel, travelNews1, travelNews2, travelNews3 } from 'assets/user';
 import './detail.scss';
 
 const NewsPage = () => {

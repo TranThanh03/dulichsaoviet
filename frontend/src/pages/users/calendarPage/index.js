@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import formatCurrency from 'utils/formatCurrency';
 import formatDatetime from 'utils/formatDatetime';
-import { noImage } from 'assets';
+import { noImage } from 'assets/user';
 import { BookingApi, TourApi } from 'services';
 import { ErrorToast, SuccessToast } from 'component/notifi';
 import { ToastContainer } from 'react-toastify';

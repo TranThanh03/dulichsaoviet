@@ -4,7 +4,7 @@ import './detail.scss';
 import { TourApi } from 'services';
 import formaterCurrency from 'utils/formatCurrency';
 import { sanitizeHtml } from 'utils/sanitizeHtml';
-import { noImage } from 'assets';
+import { noImage } from 'assets/user';
 import ReviewList from "component/users/review/index";
 import CalendarCustom from "component/users/calendar/index";
 import formatDatetime from 'utils/formatDatetime';

@@ -1,4 +1,4 @@
-import { userAvatar } from 'assets';
+import { userAvatar } from 'assets/user';
 import { memo, useState, useEffect } from 'react';
 import ReviewApi from 'services/reviewApi';
 import "./index.scss";

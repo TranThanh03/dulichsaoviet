@@ -1,4 +1,4 @@
-import { tourBanner } from 'assets';
+import { tourBanner } from 'assets/user';
 import Banner from 'component/banner';
 import TourList from 'component/users/tour/TourList';
 import { memo, useState, useEffect } from 'react';

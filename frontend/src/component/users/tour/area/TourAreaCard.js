@@ -1,4 +1,4 @@
-import { noImage } from 'assets';
+import { noImage } from 'assets/user';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import formatCurrency from 'utils/formatCurrency';

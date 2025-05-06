@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { featuredTravel, contentImg1, contentImg2, popularPost1, popularPost2, popularPost3 } from 'assets';
+import { featuredTravel, contentImg1, contentImg2, popularPost1, popularPost2, popularPost3 } from 'assets/user';
 import './style.scss';
 
 const NewsDetailPage = () => {

@@ -5,7 +5,7 @@ import formatCurrency from "utils/formatCurrency";
 import formatDatetime from "utils/formatDatetime";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { noImage } from "assets";
+import { noImage } from "assets/user";
 
 const CalendarDetailPage = () => {
     const [calendar, setCalendar] = useState([]);

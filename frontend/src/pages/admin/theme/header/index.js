@@ -1,10 +1,10 @@
 import { memo, useState, useEffect, useRef, useMemo, useContext } from 'react';
-import { logo } from 'assets';
+import { logo } from 'assets/user';
 import './style.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthApi } from 'services';
 import { AuthContext } from '../masterLayout';
-import { ToastContainer } from 'react-toastify';
+import { FaUserCircle, FaAngleDown } from 'react-icons/fa';
 
 const Navbar = () => {
     const location = useLocation();
@@ -64,35 +64,32 @@ const Header = () => {
     const { authenticated } = useContext(AuthContext);
 
     return (
-        <div className="header-manage">
-            <div className="header-container" id="manage-page">
-                <div className="logo">
-                    <img src={logo} alt="logo" />
-                    <p>Sao Việt</p>
-                </div>
-                <div className="content-right">
-                    <div className="icon-account">
-                        {authenticated && (
-                            <div className="account-info">
-                                <img src={logo} alt="Tài khoản" onClick={() => {setShow(!isShow)}} />
-                                <p onClick={() => {setShow(!isShow)}}>Tai khoan</p>
-                                {isShow && (
-                                    <ul id="slidebar">
-                                        <li><Link to="/manage/infor">Thông tin</Link></li>
-                                        <li><Link to="/manage/password">Mật khẩu</Link></li>
-                                        <li><span onClick={ handleLogout }>Đăng xuất</span></li>
-                                    </ul>
+        <header className="header-manage-custom main-header header-one shadow-sm bg-white">
+            <div className="header-upper py-10 rpy-0">
+                <div className="container-fluid clearfix">
+                    <div className="dropdown">
+                        <button
+                            className="btn btn-link p-0 text-dark d-flex align-items-center"
+                            onClick={() => setShow(!isShow)}
+                        >
+                            <FaUserCircle size={30} />
+                            <FaAngleDown className="ms-1" />
+                        </button>
+                        {isShow && (
+                            <ul className="dropdown-menu dropdown-menu-end show mt-2">
+                                {authenticated && (
+                                    <>
+                                        <li><Link className="dropdown-item" to="/customer/infor" onClick={() => setShow(false)}>Thông tin</Link></li>
+                                        <li><Link className="dropdown-item" to="/customer/password" onClick={() => setShow(false)}>Mật khẩu</Link></li>
+                                        <li><button className="dropdown-item" onClick={handleLogout}>Đăng xuất</button></li>
+                                    </>
                                 )}
-                            </div>
+                            </ul>
                         )}
                     </div>
                 </div>
             </div>
-
-            <Navbar />
-            
-            <ToastContainer />
-        </div>
+        </header>
     );
 };
 
