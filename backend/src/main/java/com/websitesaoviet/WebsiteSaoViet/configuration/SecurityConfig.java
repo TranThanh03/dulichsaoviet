@@ -31,7 +31,8 @@ public class SecurityConfig {
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login", "/auth/register", "/auth/admin/login",
             "/customers",
-            "/tours/filter", "/tours/search",
+            "/tours/filter", "/tours/filter-area",
+            "/tours/search", "/tours/search-destination",
     };
 
     private final String[] PATCH_PUBLIC_ENDPOINTS = {

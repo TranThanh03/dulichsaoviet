@@ -2,7 +2,9 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursAreaRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursDestinationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
@@ -17,8 +19,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.Normalizer;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Comparator;
@@ -99,8 +103,8 @@ public class TourService {
             }
         }
 
-        if (request.getDestination() != null) {
-            switch (request.getDestination().toLowerCase()) {
+        if (request.getArea() != null) {
+            switch (request.getArea().toLowerCase()) {
                 case "b" -> area = "b";
                 case "t" -> area = "t";
                 case "n" -> area = "n";
@@ -129,7 +133,7 @@ public class TourService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Object[]> rawResult = tourRepository.findFilteredToursNative(
+        Page<Object[]> rawResult = tourRepository.findFilteredTours(
                 minPrice, maxPrice, area, rating, quantityDay, pageable
         );
 
@@ -230,6 +234,113 @@ public class TourService {
         noDiacritics = noDiacritics.trim().replaceAll("\\s+", " ");
 
         return noDiacritics;
+    }
+
+    public Page<SearchToursResponse> getSearchToursByDestination(SearchToursDestinationRequest request, int page, int size) {
+        String sort = request.getSort() == null ? "default" : request.getSort();
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<Object[]> rawResult = tourRepository.findSearchToursByDestination(request.getDestination().trim(), request.getStartDate(), request.getEndDate());
+
+        List<SearchToursResponse> allTours = rawResult.stream()
+                .map(obj -> new SearchToursResponse(
+                        (String) obj[0],
+                        (String) obj[1],
+                        (String) obj[2],
+                        (String) obj[3],
+                        ((Number) obj[4]).intValue(),
+                        (Double) obj[5],
+                        ((Number) obj[6]).intValue(),
+                        ((Number) obj[7]).intValue(),
+                        ((Timestamp) obj[8]).toLocalDateTime()
+                ))
+                .toList();
+
+        Comparator<SearchToursResponse> comparator = switch (sort) {
+            case "new" -> Comparator.comparing(SearchToursResponse::getCreatedTime).reversed();
+            case "old" -> Comparator.comparing(SearchToursResponse::getCreatedTime);
+            case "high-to-low" -> Comparator.comparing(SearchToursResponse::getAdultPrice).reversed();
+            case "low-to-high" -> Comparator.comparing(SearchToursResponse::getAdultPrice);
+            default -> Comparator.comparing(SearchToursResponse::getQuantityDay);
+        };
+
+        List<SearchToursResponse> sorted = allTours.stream()
+                .sorted(comparator)
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), sorted.size());
+        List<SearchToursResponse> paged = sorted.subList(start, end);
+
+        return new PageImpl<>(paged, pageable, sorted.size());
+    }
+
+    public Page<FilterToursAreaResponse> getFilteredToursByArea(FilterToursAreaRequest request, int page, int size) {
+        Double minPrice = null;
+        Double maxPrice = null;
+        String area = null;
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+        Sort sort = Sort.unsorted();
+
+        if (request.getPrice() != null && request.getPrice().size() > 0) {
+            if (request.getPrice().get(0) >= 0) {
+                minPrice = request.getPrice().get(0);
+            }
+            if (request.getPrice().size() > 1) {
+                maxPrice = request.getPrice().get(1);
+            }
+        }
+
+        if (request.getArea() != null) {
+            switch (request.getArea().toLowerCase()) {
+                case "b" -> area = "b";
+                case "t" -> area = "t";
+                case "n" -> area = "n";
+                default -> area = null;
+            }
+        }
+
+        Integer quantityDay = (request.getDuration() != null && request.getDuration() >= 1 && request.getDuration() <= 100)
+                ? request.getDuration() : null;
+
+        if (request.getSort() != null) {
+            sort = switch (request.getSort()) {
+                case "high-to-low" -> Sort.by(Sort.Direction.DESC, "adult_price");
+                case "low-to-high" -> Sort.by(Sort.Direction.ASC, "adult_price");
+                case "new" -> Sort.by(Sort.Direction.DESC, "created_time");
+                case "old" -> Sort.by(Sort.Direction.ASC, "created_time");
+                case "default" -> Sort.by(Sort.Direction.DESC, "quantity_order");
+                default -> Sort.unsorted();
+            };
+        }
+
+        if (startDate != null && endDate != null) {
+            sort = sort.and(Sort.by(Sort.Direction.ASC, "start_date"));
+        } else if (startDate != null) {
+            sort = sort.and(Sort.by(Sort.Direction.ASC, "start_date"));
+        } else if (endDate != null) {
+            sort = sort.and(Sort.by(Sort.Direction.DESC, "end_date"));
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Object[]> rawResult = tourRepository.findFilteredToursByArea(
+                minPrice, maxPrice, area, startDate, endDate, quantityDay, pageable
+        );
+
+        return rawResult.map(obj -> new FilterToursAreaResponse(
+                (String) obj[0],
+                (String) obj[1],
+                (String) obj[2],
+                (String) obj[3],
+                ((Number) obj[4]).intValue(),
+                (Double) obj[5],
+                ((Date) obj[6]).toLocalDate(),
+                ((Date) obj[7]).toLocalDate(),
+                ((Number) obj[8]).intValue(),
+                ((Number) obj[9]).intValue()
+        ));
     }
 
 }

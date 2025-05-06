@@ -35,6 +35,11 @@ const TourApi = {
             params: params,
         });
     },
+    filterArea: (data, params) => {
+        return axiosInstance.post("/api/v1/tours/filter-area", data, {
+            params: params,
+        });
+    },
     areaCount: () => {
         return axiosInstance.get("/api/v1/tours/area-count");
     },
@@ -46,6 +51,11 @@ const TourApi = {
     },
     searchTours: (data, params) => {
         return axiosInstance.post("/api/v1/tours/search", data, {
+            params: params,
+        });
+    },
+    searchToursDestination: (data, params) => {
+        return axiosInstance.post("/api/v1/tours/search-destination", data, {
             params: params,
         });
     }

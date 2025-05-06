@@ -1,8 +1,7 @@
-import { memo, useEffect, useState } from 'react';
+import { memo } from 'react';
 import { pShape3, tourCta } from 'assets';
 import PriceFilter from './PriceFilter';
 import './TourSidebar.scss';
-import { TourApi } from 'services';
 
 const TourSidebar = ({ filters, setFilters }) => {
     
@@ -22,7 +21,7 @@ const TourSidebar = ({ filters, setFilters }) => {
                         name="btn_clear"
                         onClick={() => setFilters({
                             price: null,
-                            destination: null,
+                            area: null,
                             rating: null,
                             duration: null,
                             sort: 'default',
@@ -38,7 +37,7 @@ const TourSidebar = ({ filters, setFilters }) => {
                     onChangeRange={(range) => handleFilterChange('price', range)}
                 />
 
-                <div className="widget widget-activity">
+                <div className="widget widget-activity" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                     <h6 className="widget-title">Điểm đến</h6>
                     <ul className="radio-filter">
                         {[
@@ -53,8 +52,8 @@ const TourSidebar = ({ filters, setFilters }) => {
                                     name="domain"
                                     id={item.id}
                                     value={item.id}
-                                    checked={filters.destination === item.id}
-                                    onChange={(e) => handleFilterChange('destination', e.target.value)}
+                                    checked={filters.area === item.id}
+                                    onChange={(e) => handleFilterChange('area', e.target.value)}
                                 />
                                 <label htmlFor={item.id}>
                                     {item.label}
@@ -64,7 +63,7 @@ const TourSidebar = ({ filters, setFilters }) => {
                     </ul>
                 </div>
 
-                <div className="widget widget-reviews">
+                <div className="widget widget-reviews" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                     <h6 className="widget-title">Đánh giá</h6>
                     <ul className="radio-filter">
                         {[5, 4, 3, 2, 1].map((star) => (
@@ -90,7 +89,7 @@ const TourSidebar = ({ filters, setFilters }) => {
                     </ul>
                 </div>
 
-                <div className="widget widget-duration">
+                <div className="widget widget-duration" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                     <h6 className="widget-title">Thời gian</h6>
                     <ul className="radio-filter">
                         {[
@@ -113,7 +112,7 @@ const TourSidebar = ({ filters, setFilters }) => {
                     </ul>
                 </div>
 
-                <div className="widget widget-cta mt-30 banner-sidebar-custom">
+                <div className="widget widget-cta mt-30 banner-sidebar-custom" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                     <div className="content text-white">
                         <span className="h6">Khám phá Việt Nam</span>
                         <h3>Điểm đến du lịch tốt nhất</h3>

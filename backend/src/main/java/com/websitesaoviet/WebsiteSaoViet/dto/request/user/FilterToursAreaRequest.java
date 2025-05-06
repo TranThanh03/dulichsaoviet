@@ -3,6 +3,7 @@ package com.websitesaoviet.WebsiteSaoViet.dto.request.user;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -10,10 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FilterToursRequest {
+public class FilterToursAreaRequest {
     List<Double> price;
     String area;
-    Integer rating;
+    LocalDate startDate;
+    LocalDate endDate;
     Integer duration;
     String sort;
 }

@@ -18,7 +18,7 @@ const PriceFilter = ({ maxPrice = 10000000, onChangeRange, value }) => {
     };
 
     return (
-        <div className="widget widget-filter">
+        <div className="widget widget-filter" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
             <h6 className="widget-title">Lọc theo giá</h6>
             <div className="price-filter-wrap">
                 <Slider

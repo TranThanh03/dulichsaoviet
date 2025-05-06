@@ -2,7 +2,9 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursAreaRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursDestinationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
@@ -149,13 +151,40 @@ public class TourController {
     }
 
     @PostMapping("/search")
-    ResponseEntity<ApiResponse<Page<SearchToursResponse>>> getThreePopularTours(
+    ResponseEntity<ApiResponse<Page<SearchToursResponse>>> getSearchTours(
             @RequestBody SearchToursRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
         ApiResponse<Page<SearchToursResponse>> apiResponse = ApiResponse.<Page<SearchToursResponse>>builder()
                 .code(1509)
                 .result(tourService.getSearchTours(request, page, size))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/search-destination")
+    ResponseEntity<ApiResponse<Page<SearchToursResponse>>> getSearchToursByDestination(
+            @RequestBody SearchToursDestinationRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        ApiResponse<Page<SearchToursResponse>> apiResponse = ApiResponse.<Page<SearchToursResponse>>builder()
+                .code(1510)
+                .result(tourService.getSearchToursByDestination(request, page, size))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/filter-area")
+    ResponseEntity<ApiResponse<Page<FilterToursAreaResponse>>> getFilterToursByArea(
+            @RequestBody FilterToursAreaRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+
+        ApiResponse<Page<FilterToursAreaResponse>> apiResponse = ApiResponse.<Page<FilterToursAreaResponse>>builder()
+                .code(1511)
+                .result(tourService.getFilteredToursByArea(request, page, size))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

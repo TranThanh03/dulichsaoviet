@@ -14,7 +14,7 @@ const TourPage = () => {
     const [isLoading, setLoading] = useState(true);
     const [filters, setFilters] = useState({
         price: null,
-        destination: null,
+        area: null,
         rating: null,
         duration: null,
         sort: 'default',

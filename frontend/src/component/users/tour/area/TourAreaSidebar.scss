@@ -1,0 +1,21 @@
+.tour-area-sidebar-custom {
+    .div_filter_clear {
+        display: flex;
+        justify-content: end;
+
+        .clear_filter {
+            background-color: red;
+            border-radius: 8px;
+            padding: 2px 20px;
+            color: white;
+        }
+    }
+
+    .widget-date {
+        input {
+            border: 1px solid #c6c6c6;
+            border-radius: 5px;
+            padding: 3px 8px;
+        }
+    }
+}
