@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { TourApi } from "services";
 import "./update.scss";
-import { noImage } from "assets/user";
+import { noImage } from "assets";
 
 const TourUpdatePage = () => {
     const { id } = useParams();

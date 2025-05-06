@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from 'react';
-import { desBanner } from 'assets/user';
+import { desBanner } from 'assets';
 import AnimatedCounter from 'component/counter';
 import Banner from 'component/banner';
 import TourAreaSidebar from 'component/users/tour/area/TourAreaSidebar';

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { pShape3, tourCta } from 'assets/user';
+import { pShape3, tourCta } from 'assets';
 import PriceFilter from './PriceFilter';
 import './TourSidebar.scss';
 

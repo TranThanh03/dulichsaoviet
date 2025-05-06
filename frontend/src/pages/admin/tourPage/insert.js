@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import "./insert.scss";
 import { TourApi } from "services";
 import { useNavigate } from "react-router-dom";
-import { noImage } from "assets/user";
+import { noImage } from "assets";
 
 const TourInsertPage = () => {
     const introduceEditorRef = useRef(null);

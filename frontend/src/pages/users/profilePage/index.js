@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import './index.scss';
 import { useNavigate } from 'react-router-dom';
-import { userAvatar } from 'assets/user';
+import { userAvatar } from 'assets';
 import { CustomerApi } from 'services';
 import { SuccessToast } from 'component/notifi';
 import { ToastContainer } from 'react-toastify';

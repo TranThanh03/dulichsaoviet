@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useRef, useMemo, useContext } from 'react';
-import { userAvatar } from 'assets/user';
+import { userAvatar } from 'assets';
 import './style.scss';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthApi } from 'services';

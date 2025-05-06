@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaUserCircle, FaAngleDown, FaSearch, FaRegCalendarAlt } from "react-icons/fa";
-import { logo } from "assets/user";
+import { logo } from "assets";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
 import "./style.scss";

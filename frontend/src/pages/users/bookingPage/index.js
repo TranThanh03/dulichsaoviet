@@ -5,7 +5,7 @@ import formatCurrency from 'utils/formatCurrency';
 import { ScheduleApi, CustomerApi, CheckoutApi, PromotionApi } from 'services';
 import formatDatetime from 'utils/formatDatetime';
 import Swal from 'sweetalert2';
-import { cash, momo, vnpay, voucherImg } from 'assets/user';
+import { cash, momo, vnpay, voucherImg } from 'assets';
 import { ErrorToast } from 'component/notifi';
 import { ToastContainer } from 'react-toastify';
 import dayjs from 'dayjs';

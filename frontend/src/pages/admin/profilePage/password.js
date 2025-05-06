@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import './password.scss';
-import { userPassword } from 'assets/user';
+import { userPassword } from 'assets';
 import { AdminApi } from 'services';
 import { SuccessToast } from 'component/notifi';
 import { ToastContainer } from 'react-toastify';

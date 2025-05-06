@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from 'react';
 import './style.scss';
-import { hAuthor1, hAuthor2, hAuthor3, hBoxTwo, hCta1, hCta2, hCta3, hShape1, hShape2, hShape3, hShape4, hShape5, hShape6, hShape7, noImage, slide1, slide2, slide3, slide4, slide5, tourCta } from 'assets/user';
+import { hAuthor1, hAuthor2, hAuthor3, hBoxTwo, hCta1, hCta2, hCta3, hShape1, hShape2, hShape3, hShape4, hShape5, hShape6, hShape7, noImage, slide1, slide2, slide3, slide4, slide5, tourCta } from 'assets';
 import SlideShow from 'component/users/home/SlideShow';
 import SearchForm from 'component/users/home/SearchForm';
 import AnimatedCounter from 'component/counter';

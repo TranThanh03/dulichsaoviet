@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { aboutBanner, aboutFeature1, aboutFeature2, aboutFeature3, pShape1 } from 'assets/user';
+import { aboutBanner, aboutFeature1, aboutFeature2, aboutFeature3, pShape1 } from 'assets';
 import AnimatedCounter from 'component/counter';
 import Banner from 'component/banner';
 
