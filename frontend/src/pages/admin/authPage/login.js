@@ -27,7 +27,7 @@ const LoginPage = () => {
             const response = await AuthApi.loginAdmin(formData);
 
             if (response?.code === 9996) {
-                navigate('/manage');
+                navigate('/manage/dashboard');
             } 
             else if (response?.code === 1009) {
                 setErrorMessage("Tài khoản không tồn tại!");

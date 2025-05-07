@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthApi } from "services";
 import getToken from "utils/getToken";
 import Sidebar from "../sidebar";
+import Header from "../header";
 
 export const AuthContext = createContext(null);
 
@@ -17,6 +18,7 @@ const MasterLayout = ({ children }) => {
 
     const [authenticated, setAuthenticated] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSidebar, setIsSidebar] = useState(false);
 
     // useEffect(() => {
     //     if (isLoginPage) {
@@ -56,11 +58,17 @@ const MasterLayout = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ authenticated }}>
-            <div className="page-saoviet nav-md">
-                <div className="container body">
+            <link rel="stylesheet" href="/admin/css/custom-css.css" />
+            <link rel="stylesheet" href="/admin/css/custom.css" />
+
+            <div className={`page-saoviet ${isSidebar ? 'nav-sm' : 'nav-md'}`}>
+                <div className={isValidPath ? 'container body' : ''}>
                     <div className="main_container">
-                        {!isLoginPage && isValidPath && <Sidebar authenticated={authenticated} />}
-                        {children}
+                        {!isLoginPage && isValidPath && <Sidebar />}
+                        {!isLoginPage && isValidPath && <Header authenticated={authenticated} isSidebar={isSidebar} setIsSidebar={setIsSidebar} />}
+                        <div class="right_col min-vh-100">
+                            {children}
+                        </div>
                         {!isLoginPage && isValidPath && <Footer />}
                     </div>
                 </div>     

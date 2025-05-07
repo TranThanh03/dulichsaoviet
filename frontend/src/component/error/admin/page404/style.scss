@@ -1,4 +1,4 @@
-.error-404-container {
+.error-404-container-manage {
     text-align: center;
 
     .main {
@@ -7,11 +7,11 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
+
     .error-code {
         font-size: 8rem;
         font-weight: bold;
         color: #ff6b6b;
-        margin-bottom: 65px;
     }
 
     .error-message {

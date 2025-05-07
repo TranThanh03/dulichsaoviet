@@ -11,6 +11,11 @@ const MasterLayout = ({ children, ...props }) => {
 
     return (
         <div className="page-saoviet" {...props}>
+            <link rel="stylesheet" href="/user/css/style.css" />
+            <link rel="stylesheet" href="/user/css/fontawesome-5.14.0.min.css" />
+            <link rel="stylesheet" href="/user/css/slick.min.css" />
+            <link rel="stylesheet" href="/user/css/flaticon.min.css" />
+            
             {isValidPath && <Header />}
             {children}
             {isValidPath && <Footer />}

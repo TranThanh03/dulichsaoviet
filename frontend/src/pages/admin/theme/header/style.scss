@@ -1,11 +1,25 @@
-.header-manage-custom {
+.header-manage {
+    position: sticky;
+    top: 0;
+
+    .nav_menu {
+        display: flex;
+        align-items: center;
+        padding: 10px 30px;
+        justify-content: space-between;
+    }
+
     .dropdown {
-        float: right;
-        
+        .btn {
+            margin: 0;
+        }
+
         .dropdown-menu {
-            margin-left: -88px;
+            border-radius: 5px;
+            margin-left: -80px;
             z-index: 1100;
             text-align: center;
+            top: 30px;
     
             .dropdown-item:hover {
                 font-weight: bold;

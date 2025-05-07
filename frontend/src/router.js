@@ -100,10 +100,6 @@ const RenderRouter = () => {
             component: <usersPage.DestinationsPage />
         },
         {
-            path: ROUTERS.ADMIN.HOME,
-            component: <adminPage.HomePage />
-        },
-        {
             path: ROUTERS.ADMIN.LOGINPAGE,
             component: <adminPage.LoginPage />
         },
@@ -124,8 +120,8 @@ const RenderRouter = () => {
             component: <adminPage.TourUpdatePage />
         },
         {
-            path: ROUTERS.ADMIN.ASSIGNMENTSPAGE,
-            component: <adminPage.AssignmentPage />
+            path: ROUTERS.ADMIN.SCHEDULEPAGE,
+            component: <adminPage.SchedulePage />
         },
         {
             path: ROUTERS.ADMIN.CALENDARPAGE,

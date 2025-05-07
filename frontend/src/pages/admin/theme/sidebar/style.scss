@@ -1,17 +1,4 @@
-
-
-.header-manage-custom {
-    .dropdown {
-        float: right;
-        
-        .dropdown-menu {
-            margin-left: -88px;
-            z-index: 1100;
-            text-align: center;
-    
-            .dropdown-item:hover {
-                font-weight: bold;
-            }
-        }
-    }
+.sidebar-manage-custom {
+    position: sticky !important;
+    top: 0;
 }

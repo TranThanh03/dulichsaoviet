@@ -4,8 +4,8 @@ import './style.scss';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-  return (
-    <footer className="footer bg-light pt-2">
+    return (
+        <footer className="footer bg-light pt-2">
         <div className="container">
             <div className="row justify-content-between text-start">
                 <div className="col-lg-5 col-md-6 py-2" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
@@ -67,8 +67,8 @@ const Footer = () => {
                 <span className="fw-bold fs-7">© 2025 Sao Việt</span>
             </div>
         </div>
-    </footer>
-  );
+        </footer>
+    );
 };
 
 export default memo(Footer);

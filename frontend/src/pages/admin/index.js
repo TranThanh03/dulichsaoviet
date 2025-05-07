@@ -1,11 +1,10 @@
 export { default as MasterLayout } from './theme/masterLayout/index';
-export { default as HomePage } from './homePage/index';
 export { default as LoginPage } from './authPage/login';
 export { default as TourPage } from './tourPage/index';
 export { default as TourInsertPage } from './tourPage/insert';
 export { default as TourUpdatePage } from './tourPage/update';
 export { default as CustomerPage } from './customerPage/index';
-export { default as AssignmentPage } from './assignmentPage/index';
+export { default as SchedulePage } from './schedulePage/index';
 export { default as CalendarPage } from './calendarPage/index';
 export { default as CalendarDetailPage } from './calendarPage/detail';
 export { default as ProfilePage } from './profilePage/index';
