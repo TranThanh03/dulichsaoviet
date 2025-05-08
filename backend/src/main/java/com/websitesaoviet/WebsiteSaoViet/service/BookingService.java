@@ -1,9 +1,12 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatisticResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatusCountsResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingsLatestResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.BookingResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingSummaryResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ThreePopularToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
 import com.websitesaoviet.WebsiteSaoViet.enums.BookingStatus;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -16,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -177,23 +181,18 @@ public class BookingService {
         scheduleService.addQuantityPeople(scheduleId, quantityPeople);
     }
 
-//
-//    public long countBookings() {
-//        return bookingRepository.countBookings();
-//    }
-//
-//    public long getTotalRevenue() {
-//        return bookingRepository.getTotalRevenue();
-//    }
-//
-//    public List<LatestBookingsResponse> getLatestBookings() {
-//        return bookingRepository.getLatestBookings();
-//    }
-//
-//    public boolean existsByCustomerId(String customerId) {
-//        return bookingRepository.existsByCustomerId(customerId);
-//    }
-//
+    public long getCountBookings() {
+        return bookingRepository.countBookings();
+    }
+
+    public long getTotalRevenue() {
+        return bookingRepository.totalRevenue();
+    }
+
+    public List<BookingsLatestResponse> getBookingsLatest() {
+        return bookingRepository.findBookingsLatest();
+    }
+
     public boolean existsByCustomerId(String customerId) {
         return bookingRepository.existsByCustomerId(customerId);
     }
@@ -210,14 +209,21 @@ public class BookingService {
         return bookingRepository.findBookingByIdAndCustomerIdAndIsReviewed(id, customerId, isReviewed);
     }
 
-    //
-//    public BookingStatusResponse getBookingStatusCounts() {
-//        return bookingRepository.getBookingStatusCounts();
-//    }
-//
-//    public List<BookingStatisticsResponse> getBookingsStatisticsByMonth() {
-//        int year = LocalDate.now().getYear();
-//
-//        return bookingRepository.getBookingsStatisticsByYear(year);
-//    }
+    public List<PopularToursResponse> getTopPopularTours() {
+        LocalDate currentDate = LocalDate.now();
+
+        return bookingRepository.findTopPopularToursThisMonth(currentDate);
+    }
+
+    public BookingStatusCountsResponse getStatusCounts() {
+        return bookingRepository.findStatusCounts();
+    }
+
+    public List<BookingStatisticResponse> getBookingStatisticByYear(Integer year) {
+        if (year == null || year <= 0) {
+            year = LocalDate.now().getYear();
+        }
+
+        return bookingRepository.findBookingStatisticByYear(year);
+    }
 }

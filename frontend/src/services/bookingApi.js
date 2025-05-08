@@ -46,8 +46,8 @@ const BookingApi = {
             }
         });
     },
-    info: () => {
-        return axiosInstanceAdmin.get(`/api/v1/bookings/info`, {
+    infoCount: () => {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/info-count`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
@@ -60,15 +60,22 @@ const BookingApi = {
             }
         });
     },
-    statusCounts: () => {
-        return axiosInstanceAdmin.get(`/api/v1/bookings/counts`, {
+    popularTours: () => {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/top-popular`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
-    getStatistics: () => {
-        return axiosInstanceAdmin.get(`/api/v1/bookings/statistics`, {
+    statusCount: () => {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/status-count`, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
+    getStatistics: (year) => {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/statistics/${year}`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }

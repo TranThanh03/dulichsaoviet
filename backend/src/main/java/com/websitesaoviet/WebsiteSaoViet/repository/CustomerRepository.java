@@ -9,15 +9,14 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
     boolean existsCustomerByPhone(String phone);
+
     boolean existsCustomerByEmail(String email);
+
     Optional<Customer> findCustomerByPhone(String phone);
+
     Optional<Customer> findCustomerByEmail(String email);
+
     Optional<Customer> findByIdAndStatus(String id, String status);
 
-//    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.LatestCustomersResponse(" +
-//            "c.code, c.fullName, c.registeredTime) " +
-//            "FROM Customer c " +
-//            "ORDER BY c.registeredTime DESC " +
-//            "LIMIT 5")
-//    List<LatestCustomersResponse> getLatestCustomers();
+    long count();
 }

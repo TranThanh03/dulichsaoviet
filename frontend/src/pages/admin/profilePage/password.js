@@ -63,7 +63,7 @@ const PasswordPage = () => {
             <div className="manage-password container">
                 <div className="card mx-auto shadow" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                     <div className="card shadow-sm p-4">
-                        <div className="text-center mb-4">
+                        <div className="d-flex justify-content-center mb-4">
                             <img src={userPassword} alt="avatar" className="avatar rounded-circle" />
                         </div>
                         <div className="text-center">

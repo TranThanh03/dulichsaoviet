@@ -229,4 +229,6 @@ public interface TourRepository extends JpaRepository<Tour, String> {
             @Param("quantityDay") Integer quantityDay,
             Pageable pageable
     );
+
+    long count();
 }

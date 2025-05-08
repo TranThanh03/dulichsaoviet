@@ -343,4 +343,7 @@ public class TourService {
         ));
     }
 
+    public long getCount() {
+        return tourRepository.count();
+    }
 }

@@ -1,5 +1,9 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatisticResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatusCountsResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingsLatestResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
@@ -8,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -64,4 +69,49 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             "INNER JOIN Checkout c ON b.id = c.bookingId " +
             "WHERE b.id = :id")
     BookingDetailResponse findBookingDetail(@Param("id") String id);
+
+    @Query("SELECT COUNT(b) FROM Booking b WHERE b.status = 'Đã xác nhận'")
+    long countBookings();
+
+    @Query("SELECT COALESCE(SUM(b.totalPrice), 0) FROM Booking b WHERE b.status = 'Đã xác nhận'")
+    long totalRevenue();
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingsLatestResponse(" +
+            "b.id, b.code, c.fullName, b.totalPrice, b.bookingTime) " +
+            "FROM Booking b " +
+            "LEFT JOIN Customer c ON b.customerId = c.id " +
+            "WHERE b.status = 'Đang xử lý'" +
+            "ORDER BY b.bookingTime DESC " +
+            "LIMIT 5")
+    List<BookingsLatestResponse> findBookingsLatest();
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse(" +
+            "b.tourCode, b.tourName, COUNT(b)) " +
+            "FROM Booking b " +
+            "WHERE b.status = 'Đã xác nhận' " +
+            "AND FUNCTION('MONTH', b.bookingTime) = FUNCTION('MONTH', :currentDate) " +
+            "AND FUNCTION('YEAR', b.bookingTime) = FUNCTION('YEAR', :currentDate) " +
+            "GROUP BY b.tourCode, b.tourName " +
+            "ORDER BY COUNT(b) DESC " +
+            "LIMIT 5")
+    List<PopularToursResponse> findTopPopularToursThisMonth(@Param("currentDate") LocalDate currentDate);
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatusCountsResponse(" +
+            "SUM(CASE WHEN b.status = 'Đang xử lý' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN b.status = 'Đã hủy' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN b.status = 'Đã xác nhận' THEN 1 ELSE 0 END)) " +
+            "FROM Booking b")
+    BookingStatusCountsResponse findStatusCounts();
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatisticResponse(" +
+            "MONTH(b.bookingTime), " +
+            "SUM(CASE WHEN b.status = 'Đã hủy' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN b.status = 'Đã xác nhận' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN b.status = 'Đã xác nhận' THEN b.totalPrice ELSE 0 END)) " +
+            "FROM Booking b " +
+            "WHERE YEAR(b.bookingTime) = :year " +
+            "GROUP BY MONTH(b.bookingTime) " +
+            "ORDER BY MONTH(b.bookingTime)")
+    List<BookingStatisticResponse> findBookingStatisticByYear(@Param("year") Integer year);
+
 }

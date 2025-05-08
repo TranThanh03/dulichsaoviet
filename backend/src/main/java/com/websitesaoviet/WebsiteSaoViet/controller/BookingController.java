@@ -1,5 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.*;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.BookingResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
@@ -30,17 +31,6 @@ public class BookingController {
     TourService tourService;
     CustomerService customerService;
 
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping()
-//    ResponseEntity<ApiResponse<List<BookingResponse>>> getBookings() {
-//        ApiResponse<List<BookingResponse>> apiResponse = ApiResponse.<List<BookingResponse>>builder()
-//                .code(1800)
-//                .result(bookingService.getBookings())
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
     @GetMapping("/list")
     ResponseEntity<ApiResponse<List<BookingSummaryResponse>>> getBookingsByCustomerId(@RequestHeader("Authorization") String authorizationHeader){
         String token = authenticationService.extractTokenFromHeader(authorizationHeader);
@@ -113,7 +103,7 @@ public class BookingController {
 //        Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse> bookingsPage = bookingService.getAllBookings(pageable);
 //
 //        ApiResponse<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>> apiResponse = ApiResponse.<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>>builder()
-//                .code(1805)
+//                .code(1806)
 //                .result(bookingsPage)
 //                .build();
 //
@@ -124,62 +114,73 @@ public class BookingController {
 //    @GetMapping("/detail/{id}")
 //    ResponseEntity<ApiResponse<BookingDetailResponse>> getBookingDetail(@PathVariable String id) {
 //        ApiResponse<BookingDetailResponse> apiResponse = ApiResponse.<BookingDetailResponse>builder()
-//                .code(1806)
+//                .code(1807)
 //                .result(bookingService.getBookingDetail(id))
 //                .build();
 //
 //        return ResponseEntity.ok(apiResponse);
 //    }
 //
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/info")
-//    ResponseEntity<ApiResponse<HomeResponse>> getAllInfo() {
-//        long quantityTour = tourService.countTours();
-//        long quantityGuide = guideService.countGuides();
-//        long quantityCustomer = customerService.countCustomers();
-//        long quantityBooking = bookingService.countBookings();
-//        long quantityTotalPrice = bookingService.getTotalRevenue();
-//
-//        HomeResponse adminHomeResponse = new HomeResponse(
-//                quantityTour, quantityGuide, quantityCustomer, quantityBooking, quantityTotalPrice);
-//        ApiResponse<HomeResponse> apiResponse = ApiResponse.<HomeResponse>builder()
-//                .code(1800)
-//                .result(adminHomeResponse)
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/latest")
-//    ResponseEntity<ApiResponse<List<LatestBookingsResponse>>> getLatestBookings() {
-//        ApiResponse<List<LatestBookingsResponse>> apiResponse = ApiResponse.<List<LatestBookingsResponse>>builder()
-//                .code(1800)
-//                .result(bookingService.getLatestBookings())
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/counts")
-//    ResponseEntity<ApiResponse<BookingStatusResponse>> getBookingStatusCounts() {
-//        ApiResponse<BookingStatusResponse> apiResponse = ApiResponse.<BookingStatusResponse>builder()
-//                .code(2959)
-//                .result(bookingService.getBookingStatusCounts())
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/statistics")
-//    ResponseEntity<ApiResponse<List<BookingStatisticsResponse>>> getBookingsStatisticsByMonth() {
-//        ApiResponse<List<BookingStatisticsResponse>> apiResponse = ApiResponse.<List<BookingStatisticsResponse>>builder()
-//                .code(2958)
-//                .result(bookingService.getBookingsStatisticsByMonth())
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/info-count")
+    ResponseEntity<ApiResponse<InfoCountsResponse>> getAllInfo() {
+        long countTours = tourService.getCount();
+        long countCustomers = customerService.getCount();
+        long countBookings = bookingService.getCountBookings();
+        long totalRevenue = bookingService.getTotalRevenue();
+
+        InfoCountsResponse adminHomeResponse = new InfoCountsResponse(
+                countTours, countCustomers, countBookings, totalRevenue);
+
+        ApiResponse<InfoCountsResponse> apiResponse = ApiResponse.<InfoCountsResponse>builder()
+                .code(1808)
+                .result(adminHomeResponse)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/latest")
+    ResponseEntity<ApiResponse<List<BookingsLatestResponse>>> getLatestBookings() {
+        ApiResponse<List<BookingsLatestResponse>> apiResponse = ApiResponse.<List<BookingsLatestResponse>>builder()
+                .code(1809)
+                .result(bookingService.getBookingsLatest())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/top-popular")
+    ResponseEntity<ApiResponse<List<PopularToursResponse>>> getTopPopularTours() {
+        ApiResponse<List<PopularToursResponse>> apiResponse = ApiResponse.<List<PopularToursResponse>>builder()
+                .code(1810)
+                .result(bookingService.getTopPopularTours())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/status-count")
+    ResponseEntity<ApiResponse<BookingStatusCountsResponse>> getBookingStatusCounts() {
+        ApiResponse<BookingStatusCountsResponse> apiResponse = ApiResponse.<BookingStatusCountsResponse>builder()
+                .code(1811)
+                .result(bookingService.getStatusCounts())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/statistics/{year}")
+    ResponseEntity<ApiResponse<List<BookingStatisticResponse>>> getBookingsStatisticsByMonth(@PathVariable Integer year) {
+        ApiResponse<List<BookingStatisticResponse>> apiResponse = ApiResponse.<List<BookingStatisticResponse>>builder()
+                .code(1812)
+                .result(bookingService.getBookingStatisticByYear(year))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }

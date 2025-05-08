@@ -96,7 +96,7 @@ const ProfilePage = () => {
             <div className="manage-profile container">
                 <div className="card mx-auto shadow" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                     <div className="card-body text-center">
-                        <div className="mb-4">
+                        <div className="d-flex justify-content-center mb-4">
                             <img src={userAvatar} alt="avatar" className="avatar rounded-circle" />
                         </div>
                         <div className="user-details">

@@ -16,45 +16,45 @@ const MasterLayout = ({ children }) => {
     const isLoginPage = path === "/manage/auth/login";
     const isValidPath = !path.includes("/manage/auth") && !path.includes("/error");
 
-    const [authenticated, setAuthenticated] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
+    const [authenticated, setAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isSidebar, setIsSidebar] = useState(false);
 
-    // useEffect(() => {
-    //     if (isLoginPage) {
-    //         setIsLoading(false);
-    //         return;
-    //     }
+    useEffect(() => {
+        if (isLoginPage) {
+            setIsLoading(false);
+            return;
+        }
 
-    //     const fetchAuth = async () => {
-    //         try {
-    //             const tokenAdmin = getToken(true);
+        const fetchAuth = async () => {
+            try {
+                const tokenAdmin = getToken(true);
 
-    //             if (tokenAdmin) {
-    //                 const response = await AuthApi.introspectAdmin();
+                if (tokenAdmin) {
+                    const response = await AuthApi.introspectAdmin();
 
-    //                 if (response?.code === 9995) {
-    //                     setAuthenticated(response?.result);
-    //                     setIsLoading(false);
-    //                 }
-    //                 else {
-    //                     navigate("/manage/auth/login");
-    //                 }
-    //             }
-    //             else {
-    //                 navigate("/manage/auth/login");
-    //             }
-    //         } catch (error) {
-    //             navigate("/manage/auth/login");
-    //         }
-    //     };
+                    if (response?.code === 9995) {
+                        setAuthenticated(response?.result);
+                        setIsLoading(false);
+                    }
+                    else {
+                        navigate("/manage/auth/login");
+                    }
+                }
+                else {
+                    navigate("/manage/auth/login");
+                }
+            } catch (error) {
+                navigate("/manage/auth/login");
+            }
+        };
 
-    //     fetchAuth();
-    // }, [navigate, isLoginPage]);
+        fetchAuth();
+    }, [navigate, isLoginPage]);
 
-    // if (isLoading) {
-    //     return null;
-    // }
+    if (isLoading) {
+        return null;
+    }
 
     return (
         <AuthContext.Provider value={{ authenticated }}>
@@ -66,7 +66,7 @@ const MasterLayout = ({ children }) => {
                     <div className="main_container">
                         {!isLoginPage && isValidPath && <Sidebar />}
                         {!isLoginPage && isValidPath && <Header authenticated={authenticated} isSidebar={isSidebar} setIsSidebar={setIsSidebar} />}
-                        <div class="right_col min-vh-100">
+                        <div className="right_col min-vh-100">
                             {children}
                         </div>
                         {!isLoginPage && isValidPath && <Footer />}

@@ -29,4 +29,14 @@ body {
     .float-right {
         float: right;
     }
+
+    .coler-red {
+        color: red;
+    }
+
+    .ellipsis {
+        white-space: pre-wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

@@ -10,33 +10,33 @@ const axiosInstanceAdmin = axios.create({
 
 const pendingRequests = new Set();
 
-axiosInstanceAdmin.interceptors.request.use(
-    (config) => {
-            config.metadata = { startTime: new Date().getTime() };
-            const timer = setTimeout(() => {
-                setLoading(true);
-            }, 250);
-            config.metadata.timer = timer;
-            pendingRequests.add(config);
+// axiosInstanceAdmin.interceptors.request.use(
+//     (config) => {
+//             config.metadata = { startTime: new Date().getTime() };
+//             const timer = setTimeout(() => {
+//                 setLoading(true);
+//             }, 250);
+//             config.metadata.timer = timer;
+//             pendingRequests.add(config);
 
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
+//         return config;
+//     },
+//     (error) => {
+//         return Promise.reject(error);
+//     }
+// );
 
 axiosInstanceAdmin.interceptors.response.use(
     (response) => {
-        if (response.config.metadata?.timer) {
-            clearTimeout(response.config.metadata.timer);
-        }
+        // if (response.config.metadata?.timer) {
+        //     clearTimeout(response.config.metadata.timer);
+        // }
 
-        pendingRequests.delete(response.config);
+        // pendingRequests.delete(response.config);
 
-        if (pendingRequests.size === 0) {
-            setLoading(false);
-        }
+        // if (pendingRequests.size === 0) {
+        //     setLoading(false);
+        // }
 
         return response.data;
     },

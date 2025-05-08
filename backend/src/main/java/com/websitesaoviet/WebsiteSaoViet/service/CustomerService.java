@@ -173,4 +173,8 @@ public class CustomerService {
 
         return "KH" + Year.now().getValue() + String.format("%06d", nextCode);
     }
+
+    public long getCount() {
+        return customerRepository.count();
+    }
 }
