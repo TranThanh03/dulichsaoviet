@@ -1,4 +1,4 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.admin;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,13 +10,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewsResponse {
+public class NewsListResponse {
     String id;
     String code;
     String title;
-    String summary;
     String image;
-    String content;
     String type;
     int viewCount;
     LocalDateTime timeStamp;

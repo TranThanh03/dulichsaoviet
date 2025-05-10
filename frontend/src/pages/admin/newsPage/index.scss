@@ -1,4 +1,4 @@
-.tour-manage-page {
+.news-manage-page {
     table {
         font-size: 15px;
         text-align: center;
@@ -57,5 +57,12 @@
             background-color: #0052a3;
             transform: translateY(-2px);
         }
+    }
+
+    .image {
+        width: 150px;
+        height: 75px;
+        object-fit: contain;
+        margin: 5px 0;
     }
 }

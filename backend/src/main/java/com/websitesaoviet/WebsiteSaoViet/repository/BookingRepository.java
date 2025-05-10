@@ -1,7 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.*;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
 import org.springframework.data.domain.Page;

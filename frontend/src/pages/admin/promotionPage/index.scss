@@ -1,4 +1,4 @@
-.tour-manage-page {
+.promotion-manage-page {
     table {
         font-size: 15px;
         text-align: center;
@@ -57,5 +57,17 @@
             background-color: #0052a3;
             transform: translateY(-2px);
         }
+    }
+
+    .not-started {
+        color: #ffc107;
+    }
+
+    .ongoing {
+        color: green;
+    }
+
+    .ended {
+        color: red;
     }
 }

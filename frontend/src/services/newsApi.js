@@ -2,9 +2,9 @@ import axiosInstance from "utils/axiosInstance";
 import axiosInstanceAdmin from "utils/axiosInstanceAdmin";
 import getToken from "utils/getToken";
 
-const PromotionApi = {
+const NewsApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/v1/promotions",  {
+        return axiosInstance.get("/api/v1/news",  {
             params,
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
@@ -12,27 +12,24 @@ const PromotionApi = {
         });
     },
     getById: (id) => {
-        return axiosInstance.get(`/api/v1/promotions/${id}`);
-    },
-    getList: () => {
-        return axiosInstance.get("/api/v1/promotions/list");
+        return axiosInstance.get(`/api/v1/news/${id}`);
     },
     create: (data) => {
-        return axiosInstanceAdmin.post("/api/v1/promotions", data, {
+        return axiosInstanceAdmin.post("/api/v1/news", data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     update: (id, data) => {
-        return axiosInstanceAdmin.put(`/api/v1/promotions/${id}`, data, {
+        return axiosInstanceAdmin.put(`/api/v1/news/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
     },
     delete: (id) => {
-        return axiosInstanceAdmin.delete(`/api/v1/promotions/${id}`, {
+        return axiosInstanceAdmin.delete(`/api/v1/news/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
@@ -40,4 +37,4 @@ const PromotionApi = {
     },
 };
 
-export default PromotionApi;
+export default NewsApi;

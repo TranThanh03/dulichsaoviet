@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.PromotionCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.PromotionUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PromotionListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.PromotionResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PromotionSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Promotion;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -53,8 +55,21 @@ public class PromotionService {
         return promotionMapper.toPromotionResponse(promotionRepository.save(promotion));
     }
 
-    public Page<PromotionResponse> getPromotions(Pageable pageable) {
-        return promotionRepository.findAll(pageable).map(promotionMapper::toPromotionResponse);
+    public Page<PromotionListResponse> getPromotions(String keyword, Pageable pageable) {
+        String keywordText = keyword.trim();
+        LocalDate keywordDate = null;
+
+        if (!keywordText.equals("") && !keywordText.matches("^[a-zA-Z0-9]+$")) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                keywordDate = LocalDate.parse(keyword, formatter);
+                keywordText = null;
+            } catch (Exception ignored) {
+                throw new AppException(ErrorCode.DATETIME_INVALID);
+            }
+        }
+
+        return promotionRepository.findAllPromotions(keywordText, keywordDate, pageable);
     }
 
     public List<PromotionSummaryResponse> getPromotionList() {

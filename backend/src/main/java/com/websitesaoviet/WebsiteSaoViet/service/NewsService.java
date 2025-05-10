@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.NewsListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.NewsResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.News;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -32,7 +33,7 @@ public class NewsService {
         if (request.getType().equals("featured")) {
             news.setType("Nổi bật");
         } else {
-            news.setType("Mới");
+            news.setType("Thường");
         }
 
         news.setCode(String.valueOf(getNextCode("news")));
@@ -42,8 +43,8 @@ public class NewsService {
         return newsMapper.toNewsResponse(newsRepository.save(news));
     }
 
-    public Page<NewsResponse> getNewss(Pageable pageable) {
-        return newsRepository.findAll(pageable).map(newsMapper::toNewsResponse);
+    public Page<NewsListResponse> getNews(String keyword, Pageable pageable) {
+        return newsRepository.findAllNews(keyword.trim(), pageable);
     }
 
     public NewsResponse getNewsById(String id) {

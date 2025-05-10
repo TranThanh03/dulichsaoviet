@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.NewsListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.NewsResponse;
 import com.websitesaoviet.WebsiteSaoViet.service.NewsService;
@@ -12,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,16 +38,16 @@ public class NewsController {
     }
 
     @GetMapping()
-    ResponseEntity<ApiResponse<Page<NewsResponse>>> getNewss(
+    ResponseEntity<ApiResponse<Page<NewsListResponse>>> getNews(
+            @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "9") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startDate")));
-        Page<NewsResponse> newsPage = newsService.getNewss(pageable);
+        Pageable pageable = PageRequest.of(page, size);
 
-        ApiResponse<Page<NewsResponse>> apiResponse = ApiResponse.<Page<NewsResponse>>builder()
+        ApiResponse<Page<NewsListResponse>> apiResponse = ApiResponse.<Page<NewsListResponse>>builder()
                 .code(2101)
-                .result(newsPage)
+                .result(newsService.getNews(keyword, pageable))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

@@ -69,6 +69,8 @@ const TourPage = () => {
                 }
                 else if (response?.code === 1049) {
                     ErrorToast(`Tour ${code} đang có lịch đặt đang xử lý.`);
+                } else if (response?.code === 1029) {
+                    ErrorToast(`Tour ${code} đang có lịch trình.`);
                 }
                 else {
                     ErrorToast(`Xóa tour ${code} không thành công.`)
@@ -119,7 +121,7 @@ const TourPage = () => {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="card-box table-responsive">
-                                        <table id="datatable-listTours" className="table table-striped table-bordered" >
+                                        <table className="table table-striped table-bordered" >
                                             <thead>
                                                 <tr>
                                                     <th>STT</th>
@@ -132,7 +134,7 @@ const TourPage = () => {
                                                     <th colSpan={2}>Thao tác</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbody-listTours">
+                                            <tbody>
                                                 {tours.length > 0 && tours.map((item, index) => (
                                                     <tr key={index}>
                                                         <td> {index + 1} </td>

@@ -1,8 +1,9 @@
-package com.websitesaoviet.WebsiteSaoViet.dto.response.common;
+package com.websitesaoviet.WebsiteSaoViet.dto.response.admin;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -10,14 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewsResponse {
+public class PromotionListResponse {
     String id;
     String code;
     String title;
-    String summary;
-    String image;
-    String content;
-    String type;
-    int viewCount;
-    LocalDateTime timeStamp;
+    Double discount;
+    LocalDate startDate;
+    LocalDate endDate;
+    int quantity;
+    String status;
 }

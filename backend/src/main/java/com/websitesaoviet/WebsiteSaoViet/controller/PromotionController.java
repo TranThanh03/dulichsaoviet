@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.PromotionCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.PromotionUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PromotionListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.PromotionResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PromotionSummaryResponse;
@@ -13,7 +14,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,16 +42,16 @@ public class PromotionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
-    ResponseEntity<ApiResponse<Page<PromotionResponse>>> getPromotions(
+    ResponseEntity<ApiResponse<Page<PromotionListResponse>>> getPromotions(
+            @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "9") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startDate")));
-        Page<PromotionResponse> promotionsPage = promotionService.getPromotions(pageable);
+        Pageable pageable = PageRequest.of(page, size);
 
-        ApiResponse<Page<PromotionResponse>> apiResponse = ApiResponse.<Page<PromotionResponse>>builder()
+        ApiResponse<Page<PromotionListResponse>> apiResponse = ApiResponse.<Page<PromotionListResponse>>builder()
                 .code(1701)
-                .result(promotionsPage)
+                .result(promotionService.getPromotions(keyword, pageable))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

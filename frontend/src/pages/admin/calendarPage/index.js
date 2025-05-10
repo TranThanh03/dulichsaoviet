@@ -88,7 +88,7 @@ const CalendarPage = () => {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="card-box table-responsive">
-                                        <table id="datatable-listTours" className="table table-striped table-bordered" >
+                                        <table className="table table-striped table-bordered" >
                                             <thead>
                                                 <tr>
                                                     <th>STT</th>
@@ -103,7 +103,7 @@ const CalendarPage = () => {
                                                     <th>Thao tác</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbody-listTours">
+                                            <tbody>
                                                 {calendars.length > 0 && calendars.map((item, index) => (
                                                     <tr key={index}>
                                                         <td> {index + 1} </td>
@@ -111,7 +111,7 @@ const CalendarPage = () => {
                                                         <td> {item.customerCode} </td>
                                                         <td> {item.tourCode} </td>
                                                         <td> {item.scheduleCode} </td>
-                                                        <td> {item.totalPrice ? formatCurrency(item.totalPrice) : 0} </td>
+                                                        <td className="color-red"> {item.totalPrice ? formatCurrency(item.totalPrice) : 0} </td>
                                                         <td> {item.bookingTime ? formatDatetime(item.bookingTime) : ''} </td>
                                                         <td className={paymentClassMap[item.paymentStatus] || ""}> 
                                                             {item.paymentStatus}

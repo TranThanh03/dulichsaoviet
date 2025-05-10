@@ -31,7 +31,6 @@ public class ScheduleService {
     ScheduleMapper scheduleMapper;
     SequenceService sequenceService;
     TourService tourService;
-    AuthenticationService authenticationService;
 
     public ScheduleResponse createSchedule(ScheduleCreationRequest request) {
         LocalDate today = LocalDate.now();

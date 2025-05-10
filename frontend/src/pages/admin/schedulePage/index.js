@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
 import { ScheduleApi } from "services";
-import AddScheduleForm from "./insert";
 import formatDatetime from "utils/formatDatetime";
 import "./index.scss";
 import formatCurrency from "utils/formatCurrency";
@@ -127,7 +126,7 @@ const SchedulePage = () => {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="card-box table-responsive">
-                                        <table id="datatable-listTours" className="table table-striped table-bordered" >
+                                        <table className="table table-striped table-bordered" >
                                             <thead>
                                                 <tr>
                                                     <th>STT</th>
@@ -143,7 +142,7 @@ const SchedulePage = () => {
                                                     <th colSpan={2}>Thao tác</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbody-listTours">
+                                            <tbody>
                                                 {schedules.length > 0 && schedules.map((item, index) => (
                                                     <tr key={index}>
                                                         <td> {index + 1} </td>
@@ -160,7 +159,7 @@ const SchedulePage = () => {
                                                         </td>
                                                         <td>
                                                             {item.status === "Chưa diễn ra" && (
-                                                                <Link to={`/manage/tours/edit/${item.id}`}>
+                                                                <Link to={`/manage/schedules/edit/${item.id}`}>
                                                                     <FaEdit style={{ color: '#26B99A', fontSize: '20px' }} />
                                                                 </Link>
                                                             )}
