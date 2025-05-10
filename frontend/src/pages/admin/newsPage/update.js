@@ -5,7 +5,7 @@ import { TourApi } from "services";
 import "./update.scss";
 import { noImage } from "assets";
 
-const TourUpdatePage = () => {
+const NewsUpdatePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -207,4 +207,4 @@ const TourUpdatePage = () => {
   );
 };
 
-export default TourUpdatePage;
+export default NewsUpdatePage;

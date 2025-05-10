@@ -1,12 +1,11 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatisticResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatusCountsResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingsLatestResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.*;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Booking;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -114,4 +113,16 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             "ORDER BY MONTH(b.bookingTime)")
     List<BookingStatisticResponse> findBookingStatisticByYear(@Param("year") Integer year);
 
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingListResponse(" +
+            "b.id, b.code, b.customerCode, b.tourCode, b.scheduleCode, b.totalPrice, b.bookingTime, c.status, b.status) " +
+            "FROM Booking b " +
+            "LEFT JOIN Checkout c ON b.id = c.bookingId " +
+            "WHERE " +
+            "(:keyword IS NULL OR " +
+            "  UPPER(b.code) LIKE CONCAT('%', UPPER(:keyword), '%') OR " +
+            "  UPPER(b.customerCode) LIKE CONCAT('%', UPPER(:keyword), '%') OR " +
+            "  UPPER(b.tourCode) LIKE CONCAT('%', UPPER(:keyword), '%') OR " +
+            "  UPPER(b.scheduleCode) LIKE CONCAT('%', UPPER(:keyword), '%')) " +
+            "ORDER BY CASE WHEN b.status = 'Đang xử lý' THEN 0 ELSE 1 END, b.bookingTime DESC")
+    Page<BookingListResponse> findAllBookings(@Param("keyword") String keyword, Pageable pageable);
 }

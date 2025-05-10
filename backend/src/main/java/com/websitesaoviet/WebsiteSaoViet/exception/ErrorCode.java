@@ -31,7 +31,7 @@ public enum ErrorCode {
     ADMIN_NOT_EXITED(1016, "Quản trị viên không tồn tại!", HttpStatus.OK),
     USER_NOT_EXITED(1017, "Khách hàng không tồn tại!", HttpStatus.OK),
     INACTIVATE(1018, "Tài khoản chưa kích hoạt!", HttpStatus.OK),
-    BLOCKED(1019, "Tài khoản đã bị chặn!", HttpStatus.OK),
+    BLOCKED(1019, "Tài khoản đã bị khóa!", HttpStatus.OK),
     EMAIL_SEND_FAILED(1020, "Lỗi gửi mail!", HttpStatus.OK),
 
     DAY_INVALID(1021, "Số ngày phải lớn hơn không!", HttpStatus.OK),
@@ -88,7 +88,9 @@ public enum ErrorCode {
     REVIEW_INVALID(1053, "Đánh giá không hợp lệ!", HttpStatus.OK),
     NEWS_NOT_EXITED(1054, "Tin tức không tồn tại!", HttpStatus.OK),
     QUANTITY_PEOPLE_INVALID(1055, "Số lượng hành khách phải lớn hơn 0!", HttpStatus.OK),
-    METHOD_PAYMENT_INVALID(1056, "Vui lòng thay đổi phương thức thanh toán khác!", HttpStatus.OK)
+    METHOD_PAYMENT_INVALID(1056, "Vui lòng thay đổi phương thức thanh toán khác!", HttpStatus.OK),
+    DATETIME_INVALID(1057, "Thời gian sai định dạng!", HttpStatus.OK),
+    SCHEDULE_EXITED(1058, "Lịch trình đã tồn tại!", HttpStatus.OK)
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

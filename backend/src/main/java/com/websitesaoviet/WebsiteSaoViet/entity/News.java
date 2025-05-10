@@ -19,6 +19,9 @@ public class News {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
+    @Column(name = "code")
+    String code;
+
     @Column(name = "title")
     String title;
 

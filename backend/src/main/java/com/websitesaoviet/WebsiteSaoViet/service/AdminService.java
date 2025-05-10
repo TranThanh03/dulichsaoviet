@@ -66,4 +66,8 @@ public class AdminService {
         return adminRepository.findAdminByEmail(email).
                 orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXITED));
     }
+
+    public boolean existsAdminById(String id) {
+        return adminRepository.existsById(id);
+    }
 }

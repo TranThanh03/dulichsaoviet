@@ -124,6 +124,10 @@ const RenderRouter = () => {
             component: <adminPage.SchedulePage />
         },
         {
+            path: ROUTERS.ADMIN.SCHEDULEINSERTPAGE,
+            component: <adminPage.ScheduleInsertPage />
+        },
+        {
             path: ROUTERS.ADMIN.CALENDARPAGE,
             component: <adminPage.CalendarPage />
         },
@@ -142,6 +146,26 @@ const RenderRouter = () => {
         {
             path: ROUTERS.ADMIN.DASHBOARDPAGE,
             component: <adminPage.DashboardPage />
+        },
+        {
+            path: ROUTERS.ADMIN.PROMOTIONPAGE,
+            component: <adminPage.PromotionPage />
+        },
+        {
+            path: ROUTERS.ADMIN.PROMOTIONINSERTPAGE,
+            component: <adminPage.PromotionInsertPage />
+        },
+        {
+            path: ROUTERS.ADMIN.NEWSPAGE,
+            component: <adminPage.NewsPage />
+        },
+        {
+            path: ROUTERS.ADMIN.NEWSINSERTPAGE,
+            component: <adminPage.NewsInsertPage />
+        },
+        {
+            path: ROUTERS.ADMIN.NEWSUPDATEPAGE,
+            component: <adminPage.NewsUpdatePage />
         },
         {
             path: ROUTERS.ERROR.ERROR500,

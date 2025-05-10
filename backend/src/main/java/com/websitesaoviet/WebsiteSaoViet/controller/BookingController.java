@@ -12,6 +12,7 @@ import com.websitesaoviet.WebsiteSaoViet.service.TourService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -92,23 +93,23 @@ public class BookingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/all")
-//    ResponseEntity<ApiResponse<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>>> getAllBookings(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "6") int size) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse> bookingsPage = bookingService.getAllBookings(pageable);
-//
-//        ApiResponse<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>> apiResponse = ApiResponse.<Page<com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingResponse>>builder()
-//                .code(1806)
-//                .result(bookingsPage)
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("")
+    ResponseEntity<ApiResponse<Page<BookingListResponse>>> getAllBookings(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        ApiResponse<Page<BookingListResponse>> apiResponse = ApiResponse.<Page<BookingListResponse>>builder()
+                .code(1806)
+                .result(bookingService.getBookings(keyword.trim(), pageable))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 //
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @GetMapping("/detail/{id}")

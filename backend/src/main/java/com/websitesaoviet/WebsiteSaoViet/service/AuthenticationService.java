@@ -183,6 +183,7 @@ public class AuthenticationService {
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
+        String id = signedJWT.getJWTClaimsSet().getClaim("id").toString();
         Date expityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified= signedJWT.verify(verifier);
@@ -192,6 +193,10 @@ public class AuthenticationService {
         }
 
         if(invalidatedTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID())) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        } else if (customerService.existsCustomerInvalid(id)) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        } else if (!customerService.existsCustomerById(id) && !adminService.existsAdminById(id)) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 

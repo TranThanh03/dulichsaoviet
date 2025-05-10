@@ -4,7 +4,12 @@ import getToken from "utils/getToken";
 
 const TourApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/v1/tours", { params });
+        return axiosInstance.get("/api/v1/tours", { 
+            params,
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
     },
     getById: (id) => {
         return axiosInstance.get(`/api/v1/tours/${id}`);

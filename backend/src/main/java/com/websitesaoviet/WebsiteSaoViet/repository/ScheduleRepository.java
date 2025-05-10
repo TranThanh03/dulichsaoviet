@@ -1,8 +1,11 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Schedule;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -49,6 +53,19 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
     @Query("UPDATE Schedule s SET s.quantityPeople = s.quantityPeople - :people WHERE s.id = :id")
     void minusQuantityPeople(@Param("id") String id, @Param("people") int people);
 
-//    @Query("SELECT COUNT(s) FROM")
-//    boolean existsScheduleByIdAndPeople(String tourId, int people);
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleListResponse(" +
+            "s.id, s.code, t.code, s.startDate, s.endDate, s.quantityPeople, s.totalPeople, s.adultPrice, s.childrenPrice, s.status) " +
+            "FROM Schedule s " +
+            "LEFT JOIN Tour t ON s.tourId = t.id " +
+            "WHERE " +
+            "(:keywordText IS NULL OR " +
+            "  UPPER(s.code) LIKE CONCAT('%', UPPER(:keywordText), '%') OR " +
+            "  UPPER(t.code) LIKE CONCAT('%', UPPER(:keywordText), '%')) " +
+            "AND (:keywordDate IS NULL OR s.startDate = :keywordDate) " +
+            "ORDER BY s.createdTime DESC")
+    Page<ScheduleListResponse> findAllSchedules(@Param("keywordText") String keywordText,
+                                                @Param("keywordDate") LocalDate keywordDate,
+                                                Pageable pageable);
+
+    boolean existsScheduleByTourIdAndStartDate(String tourId, LocalDate startDate);
 }

@@ -1,5 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import org.springframework.data.domain.Page;

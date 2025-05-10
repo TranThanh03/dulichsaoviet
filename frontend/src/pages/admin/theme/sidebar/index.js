@@ -7,7 +7,7 @@ import { FaAngleDown } from 'react-icons/fa';
 const Navbar = () => {
     const location = useLocation();
     const [activeIndex, setActiveIndex] = useState(null);
-    const [openIndex, setOpenIndex] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
     const prevIndexRef = useRef(0);
 
     const menuItems = useMemo(() => [
@@ -73,12 +73,7 @@ const Navbar = () => {
         const index = findActiveIndex();
         setActiveIndex(index);
         prevIndexRef.current = index;
-        setOpenIndex(index);
     }, [location.pathname, menuItems]);
-
-    const handleToggle = (index) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
 
     return (
         <ul className="nav side-menu">
@@ -86,21 +81,21 @@ const Navbar = () => {
                 <li key={index} className={activeIndex === index ? 'active' : ''}>
                     {item.children ? (
                         <>
-                            <a onClick={() => handleToggle(index)} style={{ cursor: 'pointer' }}>
+                            <a onClick={() => setIsOpen(!isOpen)} >
                                 <i className={`fa ${item.icon}`}></i> {item.label}
                                 <FaAngleDown className="float-right"/>
                             </a>
 
-                            <ul className="nav child_menu" style={{ display: openIndex === index ? 'block' : 'none' }}>
+                            <ul className="nav child_menu" style={{ display: isOpen ? 'block' : 'none' }}>
                                 {item.children.map((child, idx) => (
                                     <li key={idx}>
-                                        <Link to={child.path}>{child.label}</Link>
+                                        <Link to={child.path} onClick={() => setIsOpen(false)}>{child.label}</Link>
                                     </li>
                                 ))}
                             </ul>
                         </>
                     ) : (
-                        <Link to={item.path}>
+                        <Link to={item.path} onClick={() => setIsOpen(false)}>
                             <i className={`fa ${item.icon}`}></i> {item.label}
                         </Link>
                     )}

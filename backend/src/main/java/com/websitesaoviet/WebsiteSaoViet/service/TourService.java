@@ -6,6 +6,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursAreaRequest
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursDestinationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
@@ -50,8 +51,37 @@ public class TourService {
         return tourMapper.toTourResponse(tourRepository.save(tour));
     }
 
-    public Page<TourResponse> getTours(Pageable pageable) {
-        return tourRepository.findAll(pageable).map(tourMapper::toTourResponse);
+    public Page<ToursSummaryResponse> getTours(String keyword, Pageable pageable) {
+        String normalizedKeyword = normalize(keyword == null ? "" : keyword);
+
+        List<Tour> tours = tourRepository.findAll();
+
+        List<ToursSummaryResponse> filtered = tours.stream()
+                .filter(tour -> {
+                    String code = normalize(tour.getCode());
+                    String name = normalize(tour.getName());
+                    String destination= normalize(tour.getDestination());
+
+                    return code.contains(normalizedKeyword) || name.contains(normalizedKeyword) || destination.contains(normalizedKeyword);
+                })
+                .map(tour -> new ToursSummaryResponse(
+                        tour.getId(),
+                        tour.getCode(),
+                        tour.getName(),
+                        tour.getDestination(),
+                        tour.getArea(),
+                        tour.getQuantityDay(),
+                        tour.getQuantityOrder(),
+                        tour.getTimeStamp()
+                ))
+                .sorted((t1, t2) -> t2.getTimeStamp().compareTo(t1.getTimeStamp()))
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filtered.size());
+        List<ToursSummaryResponse> pageContent = filtered.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, filtered.size());
     }
 
     public TourResponse getTourById(String id) {

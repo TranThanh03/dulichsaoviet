@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum CustomerStatus {
     ACTIVATE("Đang hoạt động"),
     INACTIVATE("Chưa kích hoạt"),
-    BLOCKED("Bị chặn");
+    BLOCKED("Bị khóa");
 
     private final String value;
 

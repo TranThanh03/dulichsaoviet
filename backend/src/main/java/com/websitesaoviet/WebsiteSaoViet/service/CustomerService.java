@@ -3,9 +3,11 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.common.PasswordChangeRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.CustomerCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.CustomerUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.CustomerResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.CustomerCreateResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Customer;
+import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import com.websitesaoviet.WebsiteSaoViet.enums.CustomerStatus;
 import com.websitesaoviet.WebsiteSaoViet.enums.Role;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
@@ -18,15 +20,20 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.HashSet;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -84,8 +91,37 @@ public class CustomerService {
         return customerMapper.toCustomerCreateResponse(savedCustomer);
     }
 
-    public Page<CustomerResponse> getCustomers(Pageable pageable) {
-        return customerRepository.findAll(pageable).map(customerMapper::toCustomerResponse);
+    public Page<CustomerResponse> getCustomers(String keyword, Pageable pageable) {
+        String normalizedKeyword = normalize(keyword == null ? "" : keyword);
+
+        List<Customer> customers = customerRepository.findAll();
+
+        List<CustomerResponse> filtered = customers.stream()
+                .filter(customer -> {
+                    String code = normalize(customer.getCode());
+                    String name = normalize(customer.getFullName());
+                    String phone = normalize(customer.getPhone());
+                    String email = normalize(customer.getEmail());
+
+                    return code.contains(normalizedKeyword) || name.contains(normalizedKeyword) || phone.contains(normalizedKeyword) || email.contains(normalizedKeyword);
+                })
+                .map(customer -> new CustomerResponse(
+                        customer.getId(),
+                        customer.getCode(),
+                        customer.getFullName(),
+                        customer.getPhone(),
+                        customer.getEmail(),
+                        customer.getRegisteredTime(),
+                        customer.getStatus()
+                ))
+                .sorted((c1, c2) -> c2.getRegisteredTime().compareTo(c1.getRegisteredTime()))
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filtered.size());
+        List<CustomerResponse> pageContent = filtered.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, filtered.size());
     }
 
     public CustomerResponse getCustomerById(String id) {
@@ -176,5 +212,26 @@ public class CustomerService {
 
     public long getCount() {
         return customerRepository.count();
+    }
+
+    public static String normalize(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String noDiacritics = pattern.matcher(normalized).replaceAll("")
+                .replaceAll("đ", "d")
+                .replaceAll("Đ", "D")
+                .toLowerCase();
+
+        noDiacritics = noDiacritics.trim().replaceAll("\\s+", " ");
+
+        return noDiacritics;
+    }
+
+    public boolean existsCustomerInvalid(String id) {
+        return customerRepository.existsCustomerByIdAndAndStatus(id, "Bị khóa");
+    }
+
+    public boolean existsCustomerById(String id) {
+        return customerRepository.existsById(id);
     }
 }

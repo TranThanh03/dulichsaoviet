@@ -19,4 +19,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     Optional<Customer> findByIdAndStatus(String id, String status);
 
     long count();
+
+    boolean existsCustomerByIdAndAndStatus(String id, String status);
 }

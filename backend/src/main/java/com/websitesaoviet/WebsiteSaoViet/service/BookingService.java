@@ -1,9 +1,6 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatisticResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingStatusCountsResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingsLatestResponse;
-import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.*;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.BookingResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingDetailResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.BookingSummaryResponse;
@@ -16,6 +13,8 @@ import com.websitesaoviet.WebsiteSaoViet.repository.BookingRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -74,10 +73,10 @@ public class BookingService {
         return bookingMapper.toBookingResponse(bookingRepository.save(booking));
     }
 
-//    public Page<BookingResponse> getBookings(Pageable pageable) {
-//        return bookingRepository.findBookings(pageable);
-//    }
-//
+    public Page<BookingListResponse> getBookings(String keyword, Pageable pageable) {
+        return bookingRepository.findAllBookings(keyword, pageable);
+    }
+
     public List<BookingSummaryResponse> getBookingsByCustomerId(String customerId) {
         List<Object[]> rawResult = bookingRepository.findBookingsByCustomerId(customerId);
 

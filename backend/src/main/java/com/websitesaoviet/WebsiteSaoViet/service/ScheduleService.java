@@ -1,6 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.ScheduleCreationRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ScheduleResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -34,6 +36,10 @@ public class ScheduleService {
     public ScheduleResponse createSchedule(ScheduleCreationRequest request) {
         LocalDate today = LocalDate.now();
         LocalDate minStartDate = today.plusDays(3);
+
+        if (scheduleRepository.existsScheduleByTourIdAndStartDate(request.getTourId(), request.getStartDate())) {
+            throw new AppException(ErrorCode.SCHEDULE_EXITED);
+        }
 
         if (request.getStartDate().isBefore(minStartDate)) {
             throw new AppException(ErrorCode.STARTDATE_INVALID);
@@ -53,9 +59,23 @@ public class ScheduleService {
         return scheduleMapper.toScheduleResponse(scheduleRepository.save(schedule));
     }
 
-    public Page<ScheduleResponse> getSchedules(Pageable pageable) {
-        return scheduleRepository.findAll(pageable).map(scheduleMapper::toScheduleResponse);
+    public Page<ScheduleListResponse> getSchedules(String keyword, Pageable pageable) {
+        String keywordText = keyword.trim();
+        LocalDate keywordDate = null;
+
+        if (!keywordText.equals("") && !keywordText.matches("^[a-zA-Z0-9]+$")) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                keywordDate = LocalDate.parse(keyword, formatter);
+                keywordText = null;
+            } catch (Exception ignored) {
+                throw new AppException(ErrorCode.DATETIME_INVALID);
+            }
+        }
+
+        return scheduleRepository.findAllSchedules(keywordText, keywordDate, pageable);
     }
+
 
     public ScheduleResponse getScheduleById(String id) {
         return scheduleMapper.toScheduleResponse(scheduleRepository.findById(id)

@@ -3,64 +3,56 @@ import Swal from "sweetalert2";
 import "./index.scss";
 import { TourApi } from "services";
 import { Link } from "react-router-dom";
-import formatCurrency from "utils/formatCurrency";
-import { noImage } from "assets";
+import { FaTrash, FaEdit, FaPlus, FaSearch } from "react-icons/fa";
+import { ErrorToast, SuccessToast } from "component/notifi";
+import { ToastContainer } from "react-toastify";
+import Pagination from "component/pagination";
 
 const TourPage = () => {
     const [tours, setTours] = useState([]);
-    const [categories, setCategories] = useState({});
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
-    const pageSize = 6;
-    const [isLoading, setLoading] = useState(false);
-
-    useEffect(() => {
-        const fetchCategory = async () => {
-            try {
-                const response = await TourApi.getCategory();
-
-                if (response?.code === 1986) {
-                    const categoryMap = response.result.reduce((acc, cat) => {
-                        acc[cat.id] = cat.name;
-                        return acc;
-                    }, {});
-
-                    setCategories(categoryMap);
-                }
-            } catch (error) {
-                console.error("Failed to fetch category: ", error);
-            }
-        }
-
-        fetchCategory();
-    }, []);
+    const pageSize = 9;
+    const [isLoading, setIsLoading] = useState(true);
+    const areasClassMap = {
+        "b": "Miền Bắc",
+        "t": "Miền Trung",
+        "n": "Miền Nam"
+    };
 
     const fetchTours = useCallback(async () => {
         try {
-            const response = await TourApi.getAll({ page: currentPage, size: pageSize });
-
-            if (response?.code === 1988) {
+            const response = await TourApi.getAll({
+                keyword: search.trim(),
+                page: currentPage,
+                size: pageSize,
+            });
+    
+            if (response?.code === 1501) {
                 setTours(response.result.content);
                 setTotalPages(response.result.totalPages);
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Failed to fetch tours: ", error);
+        } finally {
+            setIsLoading(false);
         }
-        finally {
-            setLoading(true);
-        }
-    }, [currentPage, pageSize]);
+    }, [search, currentPage, pageSize]);
 
     useEffect(() => {
         fetchTours();
-    }, [fetchTours]);
+    }, [currentPage, pageSize])
 
-    const handleDelete = async (id, tourCode) => {
+    const handleSearch = () => {
+        setCurrentPage(0);
+        fetchTours();
+    };
+
+    const handleDelete = async (id, code) => {
         const confirm = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn xóa tour <b>${tourCode}</b> không?`,
+            html: `Bạn có chắc chắn xóa tour <b>${code}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -71,103 +63,117 @@ const TourPage = () => {
             try {
                 const response = await TourApi.delete(id);
 
-                if (response?.code === 1982) {
-                    fetchTours();
-                    Swal.fire("Thành công", "Xóa tour thành công", "success");
+                if (response?.code === 1504) {
+                    SuccessToast(`Xóa tour ${code} thành công.`)
+                    setTours(prevTours => prevTours.filter(tour => tour.id !== id));
                 }
-                else if (response?.code === 1026) {
-                    Swal.fire("Lỗi", "Tour này đang có lịch đặt!", "error");
+                else if (response?.code === 1049) {
+                    ErrorToast(`Tour ${code} đang có lịch đặt đang xử lý.`);
                 }
                 else {
-                    Swal.fire("Lỗi", "Không thể xóa tour", "error");
+                    ErrorToast(`Xóa tour ${code} không thành công.`)
                 }
             } catch (error) {
-                Swal.fire("Lỗi", "Không thể xóa tour", "error");
+                console.error("Failed to delete tour: ", error);
+                ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.")
             }
         }
     };
 
-    const filteredTours = tours.filter(tour =>
-        tour.name?.toLowerCase().includes(search.toLowerCase()) ||
-        tour.id?.toLowerCase().includes(search.toLowerCase())
-    );
-
-    if (!isLoading) {
+    if (isLoading) {
         return (
-            <div style={{height: 500}}></div>
+            <div style={{height: 1000}}></div>
         );
     }
 
     return (
         <div className="tour-manage-page">
-            <h2 id="title">Danh sách tour</h2>
-            <div className="control">
-                <Link to="/manage/tours/create"><button>Thêm</button></Link>
-                <form onSubmit={(e) => e.preventDefault()}>
-                    <input
-                        type="search"
-                        placeholder="Nhập mã, tên tour"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                    <button type="submit">Tìm</button>
-                </form>
-            </div>
-            <div className="main">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Mã tour</th>
-                            <th>Tour</th>
-                            <th>Hình ảnh</th>
-                            <th>Chủ đề</th>
-                            <th>Giá</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredTours.length > 0 ? (
-                            filteredTours.map((tour, index) => (
-                                <tr key={tour.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{tour.tourCode}</td>
-                                    <td>{tour.name}</td>
-                                    <td>
-                                        <img className="image" src={tour.image ? tour.image : noImage} alt="ảnh tour" />
-                                    </td>
-                                    <td>{categories[tour.categoryId] || "Không xác định"}</td>
-                                    <td className="bold-red">{formatCurrency(tour.price)}</td>
-                                    <td>
-                                        <Link to={`/manage/tours/edit/${tour.id}`}><button>Sửa</button></Link>
-                                        <button 
-                                            id="btn-delete" 
-                                            onClick={() => handleDelete(tour.id, tour.tourCode)}
-                                        >
-                                            Xóa
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="7">Không có dữ liệu</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+            <div className="row">
+                <div className="col-md-12 col-sm-12 ">
+                    <div className="x_panel">
+                        <div className="x_title">
+                            <h2>Danh sách Tours</h2>
+                            <Link to={"/manage/tours/insert"}>
+                                <span>
+                                    <FaPlus className="me-1 mb-1" style={{ color: '#2A3F54', fontSize: '18px' }} />
+                                    Thêm
+                                </span>
+                            </Link>
+
+                            <div className="clearfix"></div>
+                        </div>
+                        <div className="x_content">
+                            <div className="form-search">
+                                <input
+                                    type="search"
+                                    placeholder="Nhập mã, tên, điểm đến"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                                <button type="button" onClick={handleSearch}>
+                                    <FaSearch style={{ color: '#333', fontSize: '16px' }} />
+                                </button>
+                            </div>
+                            <div className="clearfix"></div>
+
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="card-box table-responsive">
+                                        <table id="datatable-listTours" className="table table-striped table-bordered" >
+                                            <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Mã</th>
+                                                    <th>Tên</th>
+                                                    <th>Thời gian</th>
+                                                    <th>Điểm đến</th>
+                                                    <th>Khu vực</th>
+                                                    <th>Lượt đặt</th>
+                                                    <th colSpan={2}>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody-listTours">
+                                                {tours.length > 0 && tours.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td> {index + 1} </td>
+                                                        <td> {item.code} </td>
+                                                        <td> {item.name} </td>
+                                                        <td> {item.quantityDay ? `${item.quantityDay} ngày ${item.quantityDay-1} đêm`: ''} </td>
+                                                        <td> {item.destination} </td>
+                                                        <td> 
+                                                            {areasClassMap[item.area] || ''}
+                                                        </td>
+                                                        <td> {item.quantityOrder} </td>
+                                                        <td>
+                                                            <Link to={`/manage/tours/edit/${item.id}`}>
+                                                                <FaEdit style={{ color: '#26B99A', fontSize: '20px' }} />
+                                                            </Link>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" onClick={() => handleDelete(item.id, item.code)}>
+                                                                <FaTrash style={{ color: 'red', fontSize: '18px' }} />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={setCurrentPage}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="pagination">
-                <button disabled={currentPage === 0} onClick={() => setCurrentPage(currentPage - 1)}>
-                    &lt;
-                </button>
-                <span>Trang {currentPage + 1} / {totalPages}</span>
-                <button disabled={currentPage >= totalPages - 1} onClick={() => setCurrentPage(currentPage + 1)}>
-                    &gt;
-                </button>
-            </div>
-        </div>
+            <ToastContainer />
+        </div>   
     );
 };
 

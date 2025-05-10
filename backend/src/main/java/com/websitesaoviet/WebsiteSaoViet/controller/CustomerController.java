@@ -47,15 +47,15 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     ResponseEntity<ApiResponse<Page<CustomerResponse>>> getCustomers(
+            @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "9") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("registeredTime")));
-        Page<CustomerResponse> usersPage = customerService.getCustomers(pageable);
+        Pageable pageable = PageRequest.of(page, size);
 
         ApiResponse<Page<CustomerResponse>> apiResponse = ApiResponse.<Page<CustomerResponse>>builder()
                 .code(1301)
-                .result(usersPage)
+                .result(customerService.getCustomers(keyword, pageable))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
@@ -143,39 +143,28 @@ public class CustomerController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/block/{id}")
+    @PatchMapping("/lock/{id}")
     ResponseEntity<ApiResponse<String>> blockCustomer(@PathVariable String id) {
         customerService.blockCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(1308)
-                .message("Chặn tài khoản thành công.")
+                .message("Khóa tài khoản thành công.")
                 .build();
 
         return ResponseEntity.ok(apiResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/unblock/{id}")
+    @PatchMapping("/unlock/{id}")
     ResponseEntity<ApiResponse<String>> unblockCustomer(@PathVariable String id) {
         customerService.unblockCustomer(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(1309)
-                .message("Bỏ chặn tài khoản thành công.")
+                .message("Mở khóa tài khoản thành công.")
                 .build();
 
         return ResponseEntity.ok(apiResponse);
     }
-
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/latest")
-//    ResponseEntity<ApiResponse<List<LatestUsersResponse>>> getLatestUsers() {
-//        ApiResponse<List<LatestUsersResponse>> apiResponse = ApiResponse.<List<LatestUsersResponse>>builder()
-//                .code(1993)
-//                .result(userService.getLatestUsers())
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
 }

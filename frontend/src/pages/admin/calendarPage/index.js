@@ -1,17 +1,20 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, useCallback } from "react";
 import "./style.scss";
 import { BookingApi } from "services";
 import formatCurrency from "utils/formatCurrency";
 import formatDatetime from "utils/formatDatetime";
 import { Link } from "react-router-dom";
+import { FaEye, FaSearch } from "react-icons/fa";
+import { ToastContainer } from "react-toastify";
+import Pagination from "component/pagination";
 
 const CalendarPage = () => {
     const [calendars, setCalendars] = useState([]);
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
-    const pageSize = 6;
-    const [isLoading, setLoading] = useState(false);
+    const pageSize = 9;
+    const [isLoading, setIsLoading] = useState(true);
 
     const paymentClassMap = {
         "Đã thanh toán": "paid",
@@ -23,113 +26,123 @@ const CalendarPage = () => {
         "Đang xử lý": "processing",
     };
 
+    const fetchCalendars = useCallback(async () => {
+        try {
+            const response = await BookingApi.getAll({
+                keyword: search.trim(),
+                page: currentPage,
+                size: pageSize,
+            });
+
+            if (response?.code === 1806) {
+                setCalendars(response.result.content);
+                setTotalPages(response.result.totalPages);
+            }
+        }
+        catch (error) {
+            console.error("Failed to fetch calendars: ", error);
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }, [search, currentPage, pageSize]);
+
     useEffect(() => {
-        const fetchCalendars = async () => {
-            try {
-                const response = await BookingApi.getAll({ page: currentPage, size: pageSize });
-
-                if (response?.code === 1953) {
-                    setCalendars(response.result.content);
-                    setTotalPages(response.result.totalPages);
-                }
-            }
-            catch (error) {
-                console.error("Failed to fetch calendars: ", error);
-            }
-            finally {
-                setLoading(true);
-            }
-        };
-
         fetchCalendars();
     }, [currentPage, pageSize]);
 
-    const filteredCalendars = calendars.filter((item) =>
-        item.orderCode?.toLowerCase().includes(search.toLowerCase()) ||
-        item.customerCode?.toLowerCase().includes(search.toLowerCase()) ||
-        item.tourCode?.toLowerCase().includes(search.toLowerCase()) ||
-        item.guideCode?.toLowerCase().includes(search.toLowerCase()) ||
-        item.assignmentCode?.toLowerCase().includes(search.toLowerCase())
-    );
+    const handleSearch = () => {
+        setCurrentPage(0);
+        fetchCalendars();
+    };
 
-    if (!isLoading) {
+    if (isLoading) {
         return (
-            <div style={{height: 500}}></div>
+            <div style={{height: 1000}}></div>
         );
     }
 
     return (
         <div className="calendar-manage-page">
-            <h2 id="title">Danh sách đơn đặt</h2>
-            <div className="control">
-                <form onSubmit={(e) => e.preventDefault()}>
-                    <input 
-                        type="search" 
-                        placeholder="Nhập mã đơn đặt, mã khách hàng, mã tour, mã hdv, mã phân công" 
-                        value={search} 
-                        onChange={(e) => setSearch(e.target.value)}
-                        autoComplete="off" 
-                        required 
-                    />
-                    <button type="submit">Tìm</button>
-                </form>
-            </div>
-            <div className="main">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Mã đơn đặt</th>
-                            <th>Mã khách hàng</th>
-                            <th>Mã tour</th>
-                            <th>Mã HDV</th>
-                            <th>Mã phân công</th>
-                            <th>Tổng tiền</th>
-                            <th>Trạng thái thanh toán</th>
-                            <th>Thời gian đặt</th>
-                            <th>Trạng thái</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredCalendars.length > 0 ? (
-                            filteredCalendars.map((item, index) => (
-                                <tr key={item.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.orderCode}</td>
-                                    <td>{item.customerCode}</td>
-                                    <td>{item.tourCode}</td>
-                                    <td>{item.guideCode}</td>
-                                    <td>{item.assignmentCode}</td>
-                                    <td style={{ color: 'red' }}>{formatCurrency(item.totalPrice || 0)}</td>
-                                    <td className={paymentClassMap[item.paymentStatus] || ""}>{item.paymentStatus}</td>
-                                    <td>{formatDatetime(item.orderDatetime || new Date())}</td>
-                                    <td className={statusClassMap[item.status] || ""}>{item.status}</td>
-                                    <td>
-                                        <Link to={`/manage/calendars/detail/${item.id}`}>
-                                            <button type="button">Chi tiết</button>
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="11">Không có dữ liệu</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+            <div className="row">
+                <div className="col-md-12 col-sm-12 ">
+                    <div className="x_panel">
+                        <div className="x_title">
+                            <h2>Danh sách lịch đặt</h2>
+                            <div className="clearfix"></div>
+                        </div>
+                        <div className="x_content">
+                            <div className="form-search">
+                                <input
+                                    type="search"
+                                    placeholder="Nhập mã đơn, khách hàng, tour, lịch trình"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                                <button type="button" onClick={handleSearch}>
+                                    <FaSearch style={{ color: '#333', fontSize: '16px' }} />
+                                </button>
+                            </div>
+                            <div className="clearfix"></div>
+
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="card-box table-responsive">
+                                        <table id="datatable-listTours" className="table table-striped table-bordered" >
+                                            <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Mã đơn</th>
+                                                    <th>Mã khách hàng</th>
+                                                    <th>Mã tour</th>
+                                                    <th>Mã lịch trình</th>
+                                                    <th>Tổng tiền</th>
+                                                    <th>Thời gian đặt</th>
+                                                    <th>Thanh toán</th>
+                                                    <th>Trạng thái đơn</th>
+                                                    <th>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody-listTours">
+                                                {calendars.length > 0 && calendars.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td> {index + 1} </td>
+                                                        <td> {item.code} </td>
+                                                        <td> {item.customerCode} </td>
+                                                        <td> {item.tourCode} </td>
+                                                        <td> {item.scheduleCode} </td>
+                                                        <td> {item.totalPrice ? formatCurrency(item.totalPrice) : 0} </td>
+                                                        <td> {item.bookingTime ? formatDatetime(item.bookingTime) : ''} </td>
+                                                        <td className={paymentClassMap[item.paymentStatus] || ""}> 
+                                                            {item.paymentStatus}
+                                                        </td>
+                                                        <td className={statusClassMap[item.status] || ""}>
+                                                            {item.status}
+                                                        </td>
+                                                        <td>
+                                                            <Link to={`/manage/calendars/detail/${item.id}`}>
+                                                                <FaEye style={{ color: '#ffc107', fontSize: '20px' }} />
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={setCurrentPage}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="pagination">
-                <button disabled={currentPage === 0} onClick={() => setCurrentPage(currentPage - 1)}>
-                    &lt;
-                </button>
-                <span>Trang {currentPage + 1} / {totalPages}</span>
-                <button disabled={currentPage >= totalPages - 1} onClick={() => setCurrentPage(currentPage + 1)}>
-                    &gt;
-                </button>
-            </div>
+            <ToastContainer />
         </div>
     );
 };

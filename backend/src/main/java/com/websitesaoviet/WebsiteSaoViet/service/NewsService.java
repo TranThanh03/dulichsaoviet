@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 public class NewsService {
     NewsRepository newsRepository;
     NewsMapper newsMapper;
+    SequenceService sequenceService;
 
     public NewsResponse createNews(NewsCreationRequest request) {
         News news = newsMapper.createNews(request);
@@ -30,9 +32,10 @@ public class NewsService {
         if (request.getType().equals("featured")) {
             news.setType("Nổi bật");
         } else {
-            news.setType("Thường");
+            news.setType("Mới");
         }
 
+        news.setCode(String.valueOf(getNextCode("news")));
         news.setViewCount(0);
         news.setTimeStamp(LocalDateTime.now());
 
@@ -78,5 +81,11 @@ public class NewsService {
         }
 
         newsRepository.deleteById(id);
+    }
+
+    public String getNextCode(String type) {
+        int nextCode = sequenceService.getNextNumber(type.toLowerCase());
+
+        return "N" + Year.now().getValue() + String.format("%04d", nextCode);
     }
 }

@@ -6,6 +6,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursAreaRequest
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursDestinationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
@@ -21,7 +22,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -50,17 +50,18 @@ public class TourController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
-    ResponseEntity<ApiResponse<Page<TourResponse>>> getTours(
+    ResponseEntity<ApiResponse<Page<ToursSummaryResponse>>> getTours(
+            @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("startDate")));
-        Page<TourResponse> toursPage = tourService.getTours(pageable);
+        Pageable pageable = PageRequest.of(page, size);
 
-        ApiResponse<Page<TourResponse>> apiResponse = ApiResponse.<Page<TourResponse>>builder()
+        ApiResponse<Page<ToursSummaryResponse>> apiResponse = ApiResponse.<Page<ToursSummaryResponse>>builder()
                 .code(1501)
-                .result(toursPage)
+                .result(tourService.getTours(keyword, pageable))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

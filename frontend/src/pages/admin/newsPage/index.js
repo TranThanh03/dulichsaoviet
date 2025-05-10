@@ -1,66 +1,58 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
-import { ScheduleApi } from "services";
-import AddScheduleForm from "./insert";
-import formatDatetime from "utils/formatDatetime";
 import "./index.scss";
-import formatCurrency from "utils/formatCurrency";
+import { TourApi } from "services";
+import { Link } from "react-router-dom";
 import { FaTrash, FaEdit, FaPlus, FaSearch } from "react-icons/fa";
 import { ErrorToast, SuccessToast } from "component/notifi";
 import { ToastContainer } from "react-toastify";
 import Pagination from "component/pagination";
-import { Link } from "react-router-dom";
 
-const SchedulePage = () => {
-    const [schedules, setSchedules] = useState([]);
+const NewsPage = () => {
+    const [tours, setTours] = useState([]);
     const [search, setSearch] = useState("");
-    const [showForm, setShowForm] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 9;
     const [isLoading, setIsLoading] = useState(true);
-    const statusClassMap = {
-        "Chưa diễn ra": "not-started",
-        "Đang diễn ra": "ongoing",
-        "Đã kết thúc": "ended"
+    const areasClassMap = {
+        "b": "Miền Bắc",
+        "t": "Miền Trung",
+        "n": "Miền Nam"
     };
-    
-    const fetchSchedules = useCallback(async () => {
+
+    const fetchTours = useCallback(async () => {
         try {
-            const response = await ScheduleApi.getAll({ 
+            const response = await TourApi.getAll({
                 keyword: search.trim(),
                 page: currentPage,
                 size: pageSize,
             });
-
-            if (response?.code === 1601) {
-                setSchedules(response.result.content);
+    
+            if (response?.code === 1501) {
+                setTours(response.result.content);
                 setTotalPages(response.result.totalPages);
-            } else if (response?.code === 1057) {
-                ErrorToast('Thời gian phải có định dạng kiểu "dd-mm-yyyy".');
             }
-        }
-        catch (error) {
-            console.error("Failed to fetch schedules: ", error);
-        }
-        finally {
+        } catch (error) {
+            console.error("Failed to fetch tours: ", error);
+        } finally {
             setIsLoading(false);
         }
     }, [search, currentPage, pageSize]);
 
     useEffect(() => {
-        fetchSchedules();
-    }, [currentPage, pageSize]);
+        fetchTours();
+    }, [currentPage, pageSize])
 
     const handleSearch = () => {
         setCurrentPage(0);
-        fetchSchedules();
+        fetchTours();
     };
 
     const handleDelete = async (id, code) => {
         const confirm = await Swal.fire({
             title: "Xác nhận",
-            html: `Bạn có chắc chắn xóa lịch <b>${code}</b> không?`,
+            html: `Bạn có chắc chắn xóa tour <b>${code}</b> không?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Có",
@@ -69,20 +61,20 @@ const SchedulePage = () => {
 
         if (confirm.isConfirmed) {
             try {
-                const response = await ScheduleApi.delete(id);
+                const response = await TourApi.delete(id);
 
                 if (response?.code === 1504) {
-                    SuccessToast(`Xóa lịch ${code} thành công.`)
-                    setSchedules(prevSchedules => prevSchedules.filter(schedule => schedule.id !== id));
+                    SuccessToast(`Xóa tour ${code} thành công.`)
+                    setTours(prevTours => prevTours.filter(tour => tour.id !== id));
                 }
                 else if (response?.code === 1049) {
-                    ErrorToast(`Lịch ${code} đang có lịch đặt đang xử lý.`);
+                    ErrorToast(`Tour ${code} đang có lịch đặt đang xử lý.`);
                 }
                 else {
-                    ErrorToast(`Xóa lịch ${code} không thành công.`)
+                    ErrorToast(`Xóa tour ${code} không thành công.`)
                 }
             } catch (error) {
-                console.log("Failed to delete schedule: ", error);
+                console.error("Failed to delete tour: ", error);
                 ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.")
             }
         }
@@ -95,13 +87,13 @@ const SchedulePage = () => {
     }
 
     return (
-        <div className="schedule-manage-page">
+        <div className="tour-manage-page">
             <div className="row">
                 <div className="col-md-12 col-sm-12 ">
                     <div className="x_panel">
                         <div className="x_title">
-                            <h2>Danh sách lịch trình</h2>
-                            <Link to={"/manage/schedules/insert"}>
+                            <h2>Danh sách Tours</h2>
+                            <Link to={"/manage/tours/insert"}>
                                 <span>
                                     <FaPlus className="me-1 mb-1" style={{ color: '#2A3F54', fontSize: '18px' }} />
                                     Thêm
@@ -114,7 +106,7 @@ const SchedulePage = () => {
                             <div className="form-search">
                                 <input
                                     type="search"
-                                    placeholder="Nhập mã lịch, mã tour, ngày khởi hành"
+                                    placeholder="Nhập mã, tên, điểm đến"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
@@ -131,46 +123,36 @@ const SchedulePage = () => {
                                             <thead>
                                                 <tr>
                                                     <th>STT</th>
-                                                    <th>Mã lịch</th>
-                                                    <th>Mã tour</th>
-                                                    <th>Ngày khởi hành</th>
-                                                    <th>Ngày kết thúc</th>
-                                                    <th>Số người</th>
-                                                    <th>Tổng người</th>
-                                                    <th>Giá người lớn</th>
-                                                    <th>Giá trẻ em</th>
-                                                    <th>Trạng thái</th>
+                                                    <th>Mã</th>
+                                                    <th>Tên</th>
+                                                    <th>Thời gian</th>
+                                                    <th>Điểm đến</th>
+                                                    <th>Khu vực</th>
+                                                    <th>Lượt đặt</th>
                                                     <th colSpan={2}>Thao tác</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody-listTours">
-                                                {schedules.length > 0 && schedules.map((item, index) => (
+                                                {tours.length > 0 && tours.map((item, index) => (
                                                     <tr key={index}>
                                                         <td> {index + 1} </td>
                                                         <td> {item.code} </td>
-                                                        <td> {item.tourCode} </td>
-                                                        <td> {item.startDate ? formatDatetime(item.startDate) : ''} </td>
-                                                        <td> {item.endDate ? formatDatetime(item.endDate) : ''} </td>
-                                                        <td> {item.quantityPeople} </td>
-                                                        <td> {item.totalPeople} </td>
-                                                        <td className="color-red"> {item.adultPrice ? formatCurrency(item.adultPrice) : 0} </td>
-                                                        <td className="color-red"> {item.childrenPrice ? formatCurrency(item.childrenPrice) : 0} </td>
-                                                        <td className={statusClassMap[item.status] || ''}> 
-                                                            {item.status}
+                                                        <td> {item.name} </td>
+                                                        <td> {item.quantityDay ? `${item.quantityDay} ngày ${item.quantityDay-1} đêm`: ''} </td>
+                                                        <td> {item.destination} </td>
+                                                        <td> 
+                                                            {areasClassMap[item.area] || ''}
+                                                        </td>
+                                                        <td> {item.quantityOrder} </td>
+                                                        <td>
+                                                            <Link to={`/manage/tours/edit/${item.id}`}>
+                                                                <FaEdit style={{ color: '#26B99A', fontSize: '20px' }} />
+                                                            </Link>
                                                         </td>
                                                         <td>
-                                                            {item.status === "Chưa diễn ra" && (
-                                                                <Link to={`/manage/tours/edit/${item.id}`}>
-                                                                    <FaEdit style={{ color: '#26B99A', fontSize: '20px' }} />
-                                                                </Link>
-                                                            )}
-                                                        </td>
-                                                        <td>
-                                                            {item.status !== "Đang diễn ra" && (
-                                                                <button type="button" onClick={() => handleDelete(item.id, item.code)}>
-                                                                    <FaTrash style={{ color: 'red', fontSize: '18px' }} />
-                                                                </button>
-                                                            )}
+                                                            <button type="button" onClick={() => handleDelete(item.id, item.code)}>
+                                                                <FaTrash style={{ color: 'red', fontSize: '18px' }} />
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -191,8 +173,8 @@ const SchedulePage = () => {
             </div>
 
             <ToastContainer />
-        </div>
+        </div>   
     );
 };
 
-export default SchedulePage;
+export default NewsPage;

@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { ScheduleApi, TourApi } from "services";
 import "./insert.scss";
 
-const AddScheduleForm = ({ onClose, onAdded }) => {
+const ScheduleInsertPage = ({ onClose, onAdded }) => {
     const [tours, setTours] = useState([]);
     const [guides, setGuides] = useState([]);
     const getCurrentDate = () => {
@@ -112,4 +112,4 @@ const AddScheduleForm = ({ onClose, onAdded }) => {
     );
 };
 
-export default AddScheduleForm;
+export default ScheduleInsertPage;

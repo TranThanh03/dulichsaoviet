@@ -45,15 +45,28 @@ const CustomerApi = {
             }
         });
     },
-    latest: () => {
-        return axiosInstanceAdmin.get(`/api/v1/customers/latest`, {
-            headers: {
-                Authorization: `Bearer ${getToken(true)}`
-            }
-        });
-    },
     activate: (id) => {
         return axiosInstance.patch(`/api/v1/customers/activate/${id}`);
+    },
+    lock: (id) => {
+        return axiosInstanceAdmin.patch(`/api/v1/customers/lock/${id}`, 
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken(true)}`
+                }
+            }
+        );
+    },
+    unlock: (id) => {
+        return axiosInstanceAdmin.patch(`/api/v1/customers/unlock/${id}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken(true)}`
+                }
+            }
+        );
     },
 };
 

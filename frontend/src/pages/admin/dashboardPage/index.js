@@ -342,7 +342,7 @@ const DashboardPage = () => {
                                                 <Link className="ellipsis" to={`/manage/bookings/detail/${item.id}`}>{item.code}</Link>
                                             </td>
                                             <td>{item.username ?? ''}</td>
-                                            <td className="coler-red">{item.totalPrice ? formatCurrency(item.totalPrice) : 0}</td>
+                                            <td className="color-red">{item.totalPrice ? formatCurrency(item.totalPrice) : 0}</td>
                                             <td style={{maxWidth: '108px'}}>{item.bookingTime ? formatDatetime(item.bookingTime) : ''}</td>
                                         </tr>
                                     ))}
