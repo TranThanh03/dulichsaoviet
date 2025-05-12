@@ -51,9 +51,6 @@ const TourApi = {
     popular: () => {
         return axiosInstance.get("/api/v1/tours/popular");
     },
-    threePopular: () => {
-        return axiosInstance.get("/api/v1/tours/three-popular");
-    },
     searchTours: (data, params) => {
         return axiosInstance.post("/api/v1/tours/search", data, {
             params: params,
@@ -63,7 +60,10 @@ const TourApi = {
         return axiosInstance.post("/api/v1/tours/search-destination", data, {
             params: params,
         });
-    }
+    },
+    getSimilar: (params) => {
+        return axiosInstance.get("/api/v1/tours/similar", { params });
+    },
 };
 
 export default TourApi;

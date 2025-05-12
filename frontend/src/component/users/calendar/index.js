@@ -20,7 +20,6 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
         }
     ]);
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,14 +41,9 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
         const fetchAuth = async () => {
             try {
                 const token = getToken();
-                setIsLoading(true);
 
                 if (token) {
                     const response = await AuthApi.introspect();
-
-                    if (response?.code === 9998 && response?.result === true) {
-                        setIsLoading(false);
-                    }
                 } else {
                     ErrorToast("Vui lòng đăng nhập để đặt tour.");
                     setTimeout(() => {
@@ -57,10 +51,17 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
                     }, 1500);
                 }
             } catch (error) {
-                ErrorToast("Vui lòng đăng nhập để đặt tour.");
-                setTimeout(() => {
-                    navigate("/auth/login");
-                }, 2000);
+                console.error("Failed to fetch schedule: ", error);
+
+                if (error.response?.status === 401) {
+                    ErrorToast("Vui lòng đăng nhập để đặt tour.");
+
+                    setTimeout(() => {
+                        navigate("/auth/login");
+                    }, 1500);
+                } else {
+                    ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.");
+                }
             }
         };
 
@@ -104,6 +105,7 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
 
     const handleDateClick = (data) => {
         setSelectedId(data.id);
+
         if (onDateSelect) {
             onDateSelect(data);
         }
@@ -146,7 +148,12 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
                 <div
                     key={day}
                     className={`day ${priceEntry ? 'has-price' : ''} ${isActive ? 'active' : ''}`}
-                    onClick={() => priceEntry && handleDateClick(priceEntry)}
+                    onClick={() => {
+                        if (priceEntry) {
+                            handleDateClick(priceEntry);
+                            handleClose();
+                        }
+                    }}
                 >
                     {day}
                     {priceEntry && (
@@ -161,12 +168,8 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
         return days;
     };
 
-    if (isLoading) {
-        return null;
-    }
-
-    return isShow ? (
-        <div className="calendar-container">
+    return (
+        <div className={`calendar-container ${isShow ? 'show-custom' : ''}`}>
             <div className="calendar-header">
                 <button onClick={handlePrevMonth} disabled={currentMonthIndex === 0}>←</button>
                 <h2>Tháng {currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h2>
@@ -187,7 +190,7 @@ const CalendarCustom = ({ tourId, onDateSelect, isShow, onClose }) => {
             </div>
             <button className="close-btn" onClick={handleClose}>Đóng</button>
         </div>
-    ) : null;
+    );
 };
 
 export default memo(CalendarCustom);

@@ -1,17 +1,20 @@
 package com.websitesaoviet.WebsiteSaoViet.controller;
 
+import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.EmailInvoiceRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.EmailRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingCheckoutDetailResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
+import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
 import com.websitesaoviet.WebsiteSaoViet.service.MailService;
 import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/mail")
@@ -20,26 +23,36 @@ import java.util.List;
 
 public class MailController {
      MailService mailService;
+     BookingService bookingService;
 
-     @PreAuthorize("hasRole('ADMIN')")
      @PostMapping("/send")
-     public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String htmlContent) {
+     ResponseEntity<ApiResponse<String>> sendEmail(@RequestBody EmailRequest request) {
          try {
-             mailService.sendMail(to, subject, htmlContent);
-            //1400
-             return "Email đã gửi thành công";
+             mailService.sendMail(request.getTo(), request.getSubject(), request.getText());
+
+             ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                     .code(1400)
+                     .message("Email đã gửi thành công.")
+                     .build();
+
+             return ResponseEntity.ok(apiResponse);
          } catch (MessagingException e) {
              throw new AppException(ErrorCode.EMAIL_SEND_FAILED);
          }
      }
 
-     @PreAuthorize("hasRole('ADMIN')")
-     @PostMapping("/queue")
-     public String queueEmail(@RequestBody List<EmailRequest> emailRequests) {
-         for (EmailRequest email : emailRequests) {
-             mailService.sendToQueue(email.getTo(), email.getSubject(), email.getText());
-         }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/send-invoice")
+    ResponseEntity<ApiResponse<String>> sendInvoice(@RequestBody EmailInvoiceRequest request) {
+        BookingCheckoutDetailResponse invoice = bookingService.getBookingCheckoutDetail(request.getId());
 
-         return "Emails added to queue!";
-     }
+         mailService.sendInvoice(request, invoice);
+
+         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
+                .code(1401)
+                .message("Email đã gửi thành công.")
+                .build();
+
+         return ResponseEntity.ok(apiResponse);
+    }
 }

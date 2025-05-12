@@ -15,5 +15,5 @@ public class PopularToursResponse {
     String name;
     List<String> image;
     int quantityDay;
-    int quantityOrder;
+    Long bookingCount;
 }

@@ -44,7 +44,7 @@ const HomePage = () => {
                             <div className="section-title text-white text-center counter-text-wrap mb-70" data-aos="fade-up"
                                 data-aos-duration="1500" data-aos-offset="50">
                                 <h2>Khám phá kho báu việt nam cùng Sao Việt</h2>
-                                <p>Website<AnimatedCounter end={345} duration={2} className="plus mx-2" />phổ biến nhất mà bạn sẽ nhớ</p>
+                                <p>Website<AnimatedCounter end={345} duration={2} className="plus mx-2" />tours xu hướng được yêu thích</p>
                             </div>
                         </div>
                     </div>
@@ -150,8 +150,8 @@ const HomePage = () => {
                             <div className="col-lg-12">
                                 <div className="section-title text-center counter-text-wrap mb-70" data-aos="fade-up"
                                     data-aos-duration="1500" data-aos-offset="50">
-                                    <h2>Khám phá các điểm đến phổ biến</h2>
-                                    <p>Website<AnimatedCounter end={567} duration={2} className="plus mx-2" />nghiệm phổ biến nhất</p>
+                                    <h2>Khám phá các tours phổ biến</h2>
+                                    <p>Website<AnimatedCounter end={567} duration={2} className="plus mx-2" />tours phổ biến nhất</p>
                                 </div>
                             </div>
                         </div>
@@ -166,8 +166,8 @@ const HomePage = () => {
                                                         <div className="image img-custom">
                                                             <span className="badge">Popular</span>
                                                             <span className="order">
-                                                                <span id="quantity">{formatNumberShort(item.quantityOrder)}</span>
-                                                                <i className="fas fa-ticket-alt ms-1"></i>
+                                                                <i className="fas fa-ticket-alt me-1"></i>
+                                                                <span>{formatNumberShort(item.bookingCount)}</span>
                                                             </span>
                                                             <img src={item.image[0] ?? noImage} alt="tour-image" />
                                                         </div>

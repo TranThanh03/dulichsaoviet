@@ -110,18 +110,18 @@ public class BookingController {
 
         return ResponseEntity.ok(apiResponse);
     }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/detail/{id}")
-//    ResponseEntity<ApiResponse<BookingDetailResponse>> getBookingDetail(@PathVariable String id) {
-//        ApiResponse<BookingDetailResponse> apiResponse = ApiResponse.<BookingDetailResponse>builder()
-//                .code(1807)
-//                .result(bookingService.getBookingDetail(id))
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
-//
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/detail/{id}")
+    ResponseEntity<ApiResponse<BookingCheckoutDetailResponse>> getBookingCheckoutDetail(@PathVariable String id) {
+        ApiResponse<BookingCheckoutDetailResponse> apiResponse = ApiResponse.<BookingCheckoutDetailResponse>builder()
+                .code(1807)
+                .result(bookingService.getBookingCheckoutDetail(id))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/info-count")
     ResponseEntity<ApiResponse<InfoCountsResponse>> getAllInfo() {

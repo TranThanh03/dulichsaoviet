@@ -18,7 +18,8 @@ const TourDetailPage = () => {
     const [searchParams] = useSearchParams();
     const bookingId = searchParams.get('bookingId');
     const [iShow, setIsShow] = useState(false);
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [similarTours, setSimilarTours] = useState([])
     const [data, setData] = useState({
         id: "",
         startDate: "",
@@ -39,7 +40,7 @@ const TourDetailPage = () => {
     
     useEffect(() => {
         const fetchTour = async () => {
-            setLoading(true);
+            setIsLoading(true);
             
             try {
                 const response = await TourApi.getById(id);
@@ -53,12 +54,30 @@ const TourDetailPage = () => {
                 console.error("Failed to fetch tour: ", error);
                 navigate("/error/404");
             } finally {
-                setLoading(false);
+                setIsLoading(false);
             }
         }
 
         fetchTour();
     }, [id])
+
+    useEffect(() => {
+        const fetchSimilarTours = async () => {
+            try {
+                const response = await TourApi.getSimilar({ id: id , destination: tour.destination, day: tour.quantityDay });
+
+                if (response?.code === 1512) {
+                    setSimilarTours(response?.result);
+                }
+            } catch (error) {
+                console.error("Failed to fetch similar tours: ", error);
+            }
+        }
+
+        if (id && tour.destination && tour.quantityDay) {
+            fetchSimilarTours();
+        }
+    }, [id, tour.destination, tour.quantityDay])
 
     const handleBooking = () => {
         if (data.startDate !== '' && data.id !== '') {
@@ -103,8 +122,11 @@ const TourDetailPage = () => {
                     <div className="row justify-content-between">
                         <div className="col-xl-6 col-lg-7">
                             <div className="tour-header-content mb-15" data-aos="fade-left" data-aos-duration="1500" data-aos-offset="50">
-                                <span className="location d-inline-block mb-10"><i className="fal fa-map-marker-alt me-1"></i>{tour.destination}</span>
-                                <div className="section-title pb-5">
+                                <span className="location">
+                                    <span><i className="fal fa-map-marker-alt me-1"></i>{tour.destination}</span>
+                                    <span className="quantity-order"><i className="far fa-ticket-alt me-1"></i>{tour.quantityOrder}</span>
+                                </span>
+                                <div className="section-title pb-5 mt-1">
                                     <h2>{tour.name}</h2>
                                 </div>
                             </div>
@@ -179,7 +201,7 @@ const TourDetailPage = () => {
                             <ReviewList tourId={id} bookingId={bookingId}/>
                         </div>    
 
-                        <div className="col-lg-5 col-md-8 col-sm-10 rmt-75">
+                        <div className="col-lg-5 col-md-8 col-sm-10">
                             <div className="blog-sidebar tour-sidebar" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                 <CalendarCustom
                                     tourId={id}
@@ -233,35 +255,33 @@ const TourDetailPage = () => {
                                     </div>
                                 </div>
 
-                                {/* @if (!empty($tourRecommendations))
-                                    <div className="widget widget-tour" data-aos="fade-up" data-aos-duration="1500"
-                                        data-aos-offset="50">
+                                {similarTours.length > 0 && (
+                                    <div className="widget widget-tour" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                         <h6 className="widget-title">Tours tương tự</h6>
-                                        @foreach ($tourRecommendations as $tour)
-                                            <div className="destination-item tour-grid style-three bgc-lighter">
-                                                <div className="image">
-                                                    {{-- <span className="badge">10% Off</span> --}}
-                                                    <img src="{{ asset('admin/assets/images/gallery-tours/' . $tour->images[0]) }}"
-                                                        alt="Tour" style="max-height: 137px">
+                                        {similarTours.map((item, index) => (
+                                            <div key={index} className="destination-item tour-grid style-three bgc-lighter">
+                                                <div>
+                                                    <img className="image-similar" src={item.image[0] || noImage} alt="Tour" />
                                                 </div>
                                                 <div className="content">
                                                     <div className="destination-header">
-                                                        <span className="location"><i className="fal fa-map-marker-alt"></i>
-                                                            {{ $tour->destination }}</span>
-                                                        <div className="ratting">
-                                                            <i className="fas fa-star"></i>
-                                                            <span>({{ $tour->rating }})</span>
-                                                        </div>
+                                                        <span className="location">
+                                                            <i className="fal fa-map-marker-alt"></i>
+                                                            {item.destination}
+                                                        </span>
+                                                        <span className="location">
+                                                            <i className="far fa-clock me-1"></i>
+                                                            <span>{item.quantityDay ? `${item.quantityDay} ngày ${item.quantityDay-1} đêm` : ''}</span>
+                                                        </span>
                                                     </div>
-                                                    <h6><a
-                                                            href="{{ route('tour-detail', ['id' => $tour->tourId]) }}">{{ $tour->title }}</a>
+                                                    <h6 className="fw-bold">
+                                                        <Link to={`/tour/detail/${item.id}`}>{item.name}</Link>
                                                     </h6>
                                                 </div>
                                             </div>
-                                        @endforeach
+                                        ))}
                                     </div>
-                                @endif */}
-
+                                )}
                             </div>
                         </div>
                     </div>

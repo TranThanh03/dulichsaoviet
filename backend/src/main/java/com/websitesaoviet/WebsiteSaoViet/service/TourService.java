@@ -10,6 +10,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
+import com.websitesaoviet.WebsiteSaoViet.entity.TourWithMatch;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.mapper.TourMapper;
@@ -26,8 +27,7 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -184,24 +184,18 @@ public class TourService {
     }
 
     public List<PopularToursResponse> getPopularTours() {
-        return tourRepository.findPopularTours()
-                .stream()
-                .map(tourMapper::toPopularToursResponse)
-                .collect(Collectors.toList());
-    }
+        List<PopularToursResponse> listTours = tourRepository.findPopularTours()
+                                                        .stream()
+                                                        .map(tourMapper::toPopularToursResponse)
+                                                        .collect(Collectors.toList());
 
-    public List<ThreePopularToursResponse> getThreePopularTours() {
-        List<Object[]> rawResult = tourRepository.findThreePopularTours();
+        if (listTours.isEmpty()) {
+            listTours = tourRepository.find5PopularTours()
+                    .stream().map(tourMapper::to5PopularToursResponse)
+                    .collect(Collectors.toList());
+        }
 
-        return rawResult.stream()
-                .map(obj -> new ThreePopularToursResponse(
-                        (String) obj[0],
-                        (String) obj[1],
-                        (String) obj[2],
-                        (String) obj[3],
-                        ((Number) obj[4]).intValue()
-                ))
-                .collect(Collectors.toList());
+        return listTours;
     }
 
     public Page<SearchToursResponse> getSearchTours(SearchToursRequest request, int page, int size) {
@@ -375,5 +369,42 @@ public class TourService {
 
     public long getCount() {
         return tourRepository.count();
+    }
+
+    public List<SimilarToursResponse> getSimilarTours(String id, String selectedDestinations, Integer quantityDay) {
+        if (selectedDestinations == null || selectedDestinations.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Set<String> selectedLower = Arrays.stream(selectedDestinations.split(" - "))
+                .map(d -> d.trim().toLowerCase())
+                .collect(Collectors.toSet());
+
+        List<Tour> listTour = tourRepository.findAllBySimilar(id).stream()
+                .map(t -> new TourWithMatch(t, computeMatchCount(t.getDestination(), selectedLower)))
+                .filter(t -> t.matchCount > 0)
+                .sorted((a, b) -> {
+                    int cmp = Integer.compare(b.matchCount, a.matchCount);
+                    if (cmp != 0) return cmp;
+
+                    if (quantityDay != null) {
+                        boolean aMatch = a.tour.getQuantityDay() == quantityDay;
+                        boolean bMatch = b.tour.getQuantityDay() == quantityDay;
+                        return Boolean.compare(bMatch, aMatch);
+                    }
+                    return 0;
+                })
+                .limit(2)
+                .map(twm -> twm.tour)
+                .collect(Collectors.toList());
+
+        return tourMapper.toSimilarToursResponse(listTour);
+    }
+
+    private int computeMatchCount(String destString, Set<String> selectedLower) {
+        return (int) Arrays.stream(destString.split(" - "))
+                .map(s -> s.trim().toLowerCase())
+                .filter(selectedLower::contains)
+                .count();
     }
 }

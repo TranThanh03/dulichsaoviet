@@ -1,6 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.AreaTourCountResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.TourBookingStatsResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Tour;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -90,30 +91,25 @@ public interface TourRepository extends JpaRepository<Tour, String> {
             "FROM Tour t")
     AreaTourCountResponse countToursByArea();
 
+    @Query("SELECT t AS tour, COUNT(b.id) AS bookingCount " +
+            "FROM Tour t " +
+            "INNER JOIN Booking b ON t.id = b.tourId " +
+            "INNER JOIN Schedule s ON t.id = s.tourId " +
+            "WHERE s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople " +
+            "AND MONTH(b.bookingTime) = MONTH(CURRENT_DATE) " +
+            "AND YEAR(b.bookingTime) = YEAR(CURRENT_DATE) " +
+            "GROUP BY t " +
+            "ORDER BY bookingCount DESC " +
+            "LIMIT 5")
+    List<TourBookingStatsResponse> findPopularTours();
+
     @Query("SELECT t " +
             "FROM Tour t " +
             "INNER JOIN Schedule s ON t.id = s.tourId " +
             "WHERE s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople " +
             "ORDER BY t.quantityOrder DESC " +
             "LIMIT 5")
-    List<Tour> findPopularTours();
-
-    @Query(value = """
-    SELECT t.id, t.name, t.destination,
-        (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
-        (
-            SELECT IFNULL(FLOOR(AVG(r2.rating)), 0)
-            FROM review r2
-            WHERE r2.tour_id = t.id
-        ) AS rating
-    FROM tour t
-    INNER JOIN schedule s ON t.id = s.tour_id
-    WHERE s.status = 'Chưa diễn ra' AND s.quantity_people < s.total_people
-    GROUP BY t.id
-    ORDER BY t.quantity_order DESC
-    LIMIT 3
-    """, nativeQuery = true)
-    List<Object[]> findThreePopularTours();
+    List<Tour> find5PopularTours();
 
     @Query(value = """
     SELECT t.id, t.name, t.destination,
@@ -231,4 +227,11 @@ public interface TourRepository extends JpaRepository<Tour, String> {
     );
 
     long count();
+
+    @Query("SELECT t " +
+            "FROM Tour t " +
+            "INNER JOIN Schedule s ON t.id = s.tourId " +
+            "WHERE t.id != :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople " +
+            "ORDER BY t.quantityOrder DESC")
+    List<Tour> findAllBySimilar(@Param("id") String id);
 }

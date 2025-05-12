@@ -11,7 +11,7 @@ const SearchPage = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 6;
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState({
         keyword: '',
         sort: 'default'
@@ -46,7 +46,7 @@ const SearchPage = () => {
             } catch (error) {
                 console.error("Failed to fetch tours:", error);
             } finally {
-                setLoading(false);
+                setIsLoading(false);
             }
         };
 

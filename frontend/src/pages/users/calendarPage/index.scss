@@ -1,4 +1,8 @@
 .calendar-page {
+    .container {
+        justify-items: center;
+    }
+
     .calendar {
         max-height: 1400px;
         overflow-y: scroll;
@@ -65,6 +69,12 @@
     @media only screen and (max-width: 992px) {
         .tour-list-custom {
             display: none;
+        }
+    }
+
+    @media only screen and (min-width: 767px) {
+        .destination-item .image {
+            width: 400px;
         }
     }
 }

@@ -15,14 +15,17 @@ const Header = ({ isSidebar, setIsSidebar }) => {
 
             if (response.code === 9994) {
                 window.location.href = "/manage/auth/login";
+            } else {
+                window.location.href = "/manage/auth/login";
             }
         } catch (error) {
             console.error("Failed logout:", error);
+            window.location.href = "/manage/auth/login";
         }
     };
 
     return (
-        <div className="top_nav header-manage">
+        <div className="top_nav header-manage no-print">
             <div className="nav_menu">
                 <FaBars size={28} className="cursor-pointer" onClick={() => setIsSidebar(!isSidebar)}/>
 

@@ -54,7 +54,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     LEFT JOIN review r ON b.tour_id = r.tour_id
     WHERE b.customer_id = :customerId
     GROUP BY b.id, c.id
-    ORDER BY b.booking_time DESC
+    ORDER BY CASE WHEN b.status = 'Đang xử lý' THEN 0 ELSE 1 END, b.booking_time DESC
     """, nativeQuery = true)
     List<Object[]> findBookingsByCustomerId(@Param("customerId") String customerId);
 
@@ -124,4 +124,15 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
             "  UPPER(b.scheduleCode) LIKE CONCAT('%', UPPER(:keyword), '%')) " +
             "ORDER BY CASE WHEN b.status = 'Đang xử lý' THEN 0 ELSE 1 END, b.bookingTime DESC")
     Page<BookingListResponse> findAllBookings(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.BookingCheckoutDetailResponse(" +
+            "b.id, b.code, u.fullName, u.phone, u.email, b.tourName, b.startDate, b.endDate, " +
+            "b.quantityAdult, b.quantityChildren, b.adultPrice, b.childrenPrice, " +
+            "b.discount, b.totalPrice, b.bookingTime, b.status, b.isReserved, " +
+            "c.id, c.code, c.method, c.checkoutTime, c.status) " +
+            "FROM Booking b " +
+            "INNER JOIN Checkout c ON b.id = c.bookingId " +
+            "LEFT JOIN Customer u ON b.customerId = u.id " +
+            "WHERE b.id = :id")
+    BookingCheckoutDetailResponse findBookingCheckoutDetail(@Param("id") String id);
 }

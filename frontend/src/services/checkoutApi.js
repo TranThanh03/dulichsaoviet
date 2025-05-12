@@ -1,4 +1,5 @@
 import axiosInstance from "utils/axiosInstance";
+import axiosInstanceAdmin from "utils/axiosInstanceAdmin";
 import getToken from "utils/getToken";
 
 const CheckoutApi = {
@@ -28,7 +29,14 @@ const CheckoutApi = {
                 }
             }
         );
-    }
+    },
+    confirm: (id) => {
+        return axiosInstanceAdmin.patch(`/api/v1/checkouts/confirm/${id}`, {}, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
 };
 
 export default CheckoutApi;

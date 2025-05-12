@@ -23,7 +23,7 @@ import java.util.List;
 public class SecurityConfig {
     private final String[] GET_PUBLIC_ENDPOINTS = {
             "/tours", "/tours/area-count", "/tours/popular", "/tours/three-popular",
-            "/tours/{id:[0-9a-f\\-]{36}}",
+            "/tours/{id:[0-9a-f\\-]{36}}", "/tours/similar",
             "/reviews/{id:[0-9a-f\\-]{36}}",
             "/promotions/list",
     };

@@ -71,9 +71,12 @@ const Header = () => {
 
             if (response.code === 9997) {
                 window.location.href = "/";
+            } else {
+                window.location.href = "/";
             }
         } catch (error) {
             console.error("Logout error:", error);
+            window.location.href = "/";
         }
     };
 

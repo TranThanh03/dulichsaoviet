@@ -9,6 +9,12 @@
         #p-custom {
             margin-bottom: 0px !important;
         }
+
+        
+    }
+
+    .location .quantity-order {
+        margin-left: 135px;
     }
 
     .form-custom {
@@ -36,6 +42,7 @@
             display: flex;
             gap: 5px;
             align-items: center;
+            max-width: 210px;
 
             i {
                 font-size: 25px;
@@ -47,6 +54,14 @@
         }
     }
 
+    .image-similar {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 2px;
+    }
+
     @media only screen and (max-width: 767px) {
         .img-custom {
             max-height: 500px !important;
@@ -55,6 +70,13 @@
             img {
                 height: auto !important;
             }
+        }
+    }
+
+    @media only screen and (max-width: 991px) {
+        .location .quantity-order {
+            float: right;
+            margin-left: 0 !important;
         }
     }
 }

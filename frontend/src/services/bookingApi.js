@@ -11,8 +11,15 @@ const BookingApi = {
             }
         });
     },
+    getByIdAndAdmin: (id) => {
+        return axiosInstanceAdmin.get(`/api/v1/bookings/detail/${id}`, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
     getById: (id) => {
-        return axiosInstanceAdmin.get(`/api/v1/bookings/${id}`, {
+        return axiosInstance.get(`/api/v1/bookings/${id}`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`
             }
@@ -41,6 +48,13 @@ const BookingApi = {
     },
     confirm: (id) => {
         return axiosInstanceAdmin.patch(`/api/v1/bookings/confirm/${id}`, {}, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
+    confirmReserve: (id) => {
+        return axiosInstanceAdmin.patch(`/api/v1/bookings/reserve/${id}`, {}, {
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
             }
@@ -80,7 +94,14 @@ const BookingApi = {
                 Authorization: `Bearer ${getToken(true)}`
             }
         });
-    }
+    },
+    sendInvoiceToCustomer: (data) => {
+        return axiosInstanceAdmin.post("/api/v1/mail/send-invoice", data, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
 };
 
 export default BookingApi;

@@ -16,7 +16,7 @@ const Footer = () => {
                     </div>
                     <div className="d-flex align-items-start gap-2 my-2 icon">
                         <img src={phoneIcon} alt="Số điện thoại" />
-                        <p className="mb-0">0399999999</p>
+                        <p className="mb-0">0399.999.999</p>
                     </div>
                     <div className="d-flex align-items-start gap-2 my-2 icon">
                         <img src={envelopeIcon} alt="Email" />

@@ -116,29 +116,22 @@ public class BookingService {
 
         bookingRepository.save(booking);
     }
-//
-//    public BookingDetailResponse getBookingDetail(String id) {
-//        return bookingRepository.getBookingDetail(id);
-//    }
-//
-//    public BookingCheckoutResponse getCheckoutByBookingId(String id) {
-//        return bookingRepository.getCheckoutByBookingId(id);
-//    }
-//
+
     public void cancelBooking(String id) {
         try {
             var booking = bookingRepository.findBookingByIdAndStatus(id, BookingStatus.PROCESSING.getValue());
 
+            if (booking.isReserved()) {
+                int people = booking.getQuantityAdult() + booking.getQuantityChildren();
+                scheduleService.minusQuantityPeople(booking.getScheduleId(), people);
+            }
+
             booking.setStatus(BookingStatus.CANCEL.getValue());
+            booking.setReserved(true);
             bookingRepository.save(booking);
 
             if (!booking.getPromotionId().equals("")) {
                 promotionService.addQuantity(booking.getPromotionId(), 1);
-            }
-
-            if (booking.isReserved()) {
-                int people = booking.getQuantityAdult() + booking.getQuantityChildren();
-                scheduleService.minusQuantityPeople(booking.getScheduleId(), people);
             }
         } catch (Exception e) {
             throw new AppException(ErrorCode.BOOKING_NOT_EXITED);
@@ -224,5 +217,13 @@ public class BookingService {
         }
 
         return bookingRepository.findBookingStatisticByYear(year);
+    }
+
+    public BookingCheckoutDetailResponse getBookingCheckoutDetail(String id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new AppException(ErrorCode.BOOKING_NOT_EXITED);
+        }
+
+        return bookingRepository.findBookingCheckoutDetail(id);
     }
 }

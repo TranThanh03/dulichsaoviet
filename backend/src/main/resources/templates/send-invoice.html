@@ -1,0 +1,103 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<p>Chào <b th:text="${invoice.fullName}"></b>,</p>
+<p>Cảm ơn bạn đã đặt tour tại Sao Việt.</p>
+
+<p th:if="${isConfirm}">
+    Lịch đặt #<b th:text="${invoice.code}"></b> của bạn đã được <b>xác nhận</b>.<br /><br />
+    Chúc bạn một chuyến đi vui vẻ!
+</p>
+<p th:unless="${isConfirm}">
+    Lịch đặt #<b th:text="${invoice.code}"></b> của bạn đã <b>bị hủy</b>.
+</p>
+
+<h3>Hóa đơn chi tiết</h3>
+<h4 th:text="${invoice.tourName + ' (' + #dates.format(startDate, 'dd-MM-yyyy') + ' - ' + #dates.format(endDate, 'dd-MM-yyyy') + ')'}"></h4>
+
+<p>Mã hóa đơn: <span th:text="${invoice.code}"></span></p>
+<p>Trạng thái: <span th:text="${invoice.status}"></span></p>
+<p>Thời gian đặt:
+    <span th:text="${#dates.format(bookingDate, 'HH:mm:ss dd-MM-yyyy')}"></span>
+</p>
+
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Đối tượng</th>
+        <th>Số lượng</th>
+        <th>Đơn giá</th>
+        <th>Tổng</th>
+    </tr>
+    <tr>
+        <td>Người lớn</td>
+        <td th:text="${invoice.quantityAdult}"></td>
+        <td>
+            <span th:text="${adultPrice}"></span> đ
+        </td>
+        <td>
+            <span th:text="${totalAdultPrice}"></span> đ
+        </td>
+    </tr>
+    <tr>
+        <td>Trẻ em</td>
+        <td th:text="${invoice.quantityChildren}"></td>
+        <td>
+            <span th:text="${childrenPrice}"></span> đ
+        </td>
+        <td>
+            <span th:text="${totalChildrenPrice}"></span> đ
+        </td>
+    </tr>
+</table>
+
+<div>
+    <p><b>Phương thức thanh toán:</b></p>
+    <p th:if="${invoice.method != 'Tiền mặt'}">
+        <b>Mã giao dịch: </b>
+        <b th:text="${invoice.checkoutCode}"></b>
+    </p>
+    <p>
+        <span>Phương thức: </span>
+        <span th:text="${invoice.method}"></span>
+    </p>
+    <p>
+        <span>Thời gian: </span>
+        <span th:text="${checkoutDate != null ? #dates.format(checkoutDate, 'HH:mm:ss dd-MM-yyyy') : ''}"></span>
+    </p>
+    <p>
+        <span>Trạng thái: </span>
+        <span th:text="${invoice.checkoutStatus}"></span>
+    </p>
+</div>
+
+<div>
+    <p><b>Tính tiền:</b></p>
+    <div>
+        <table>
+            <tbody>
+            <tr>
+                <td>Tổng tiền:</td>
+                <td>
+                    <span th:text="${totalCost}"></span> đ
+                </td>
+            </tr>
+            <tr>
+                <td>Giảm giá:</td>
+                <td>
+                    <span th:text="${discount}"></span> đ
+                </td>
+            </tr>
+            <tr>
+                <th>Thành tiền:</th>
+                <th>
+                    <span th:text="${totalPrice}"></span> đ
+                </th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

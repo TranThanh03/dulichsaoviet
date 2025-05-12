@@ -141,16 +141,6 @@ public class TourController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/three-popular")
-    ResponseEntity<ApiResponse<List<ThreePopularToursResponse>>> getThreePopularTours() {
-        ApiResponse<List<ThreePopularToursResponse>> apiResponse = ApiResponse.<List<ThreePopularToursResponse>>builder()
-                .code(1508)
-                .result(tourService.getThreePopularTours())
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
-    }
-
     @PostMapping("/search")
     ResponseEntity<ApiResponse<Page<SearchToursResponse>>> getSearchTours(
             @RequestBody SearchToursRequest request,
@@ -186,6 +176,20 @@ public class TourController {
         ApiResponse<Page<FilterToursAreaResponse>> apiResponse = ApiResponse.<Page<FilterToursAreaResponse>>builder()
                 .code(1511)
                 .result(tourService.getFilteredToursByArea(request, page, size))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/similar")
+    ResponseEntity<ApiResponse<List<SimilarToursResponse>>> getFilterToursByArea(
+            @RequestParam String id,
+            @RequestParam String destination,
+            @RequestParam Integer day) {
+
+        ApiResponse<List<SimilarToursResponse>> apiResponse = ApiResponse.<List<SimilarToursResponse>>builder()
+                .code(1512)
+                .result(tourService.getSimilarTours(id, destination, day))
                 .build();
 
         return ResponseEntity.ok(apiResponse);
