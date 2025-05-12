@@ -35,6 +35,7 @@ export const ROUTERS = {
         PASSWORDPAGE: "/manage/password",
         DASHBOARDPAGE: "/manage/dashboard",
         PROMOTIONPAGE: "/manage/promotions",
+        PROMOTIONUPDATEPAGE: "/manage/promotions/edit/:id",
         PROMOTIONINSERTPAGE: "/manage/promotions/insert",
         NEWSPAGE: "/manage/news",
         NEWSINSERTPAGE: "/manage/news/insert",

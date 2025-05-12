@@ -72,7 +72,7 @@ public class PromotionController {
     ResponseEntity<ApiResponse<PromotionResponse>> getPromotionById(@PathVariable String id) {
         ApiResponse<PromotionResponse> apiResponse = ApiResponse.<PromotionResponse>builder()
                 .code(1703)
-                .result(promotionService.getPromotionById(id))
+                .result(promotionService.getPromotionByIdAndAdmin(id))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

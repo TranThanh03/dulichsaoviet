@@ -12,6 +12,7 @@ export { default as ProfilePage } from './profilePage/index';
 export { default as PasswordPage } from './profilePage/password';
 export { default as DashboardPage } from './dashboardPage/index';
 export { default as PromotionPage } from './promotionPage/index';
+export { default as PromotionUpdatePage } from './promotionPage/update';
 export { default as PromotionInsertPage } from './promotionPage/insert';
 export { default as NewsPage } from './newsPage/index';
 export { default as NewsInsertPage } from './newsPage/insert';

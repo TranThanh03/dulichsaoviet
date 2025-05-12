@@ -152,6 +152,10 @@ const RenderRouter = () => {
             component: <adminPage.PromotionPage />
         },
         {
+            path: ROUTERS.ADMIN.PROMOTIONUPDATEPAGE,
+            component: <adminPage.PromotionUpdatePage />
+        },
+        {
             path: ROUTERS.ADMIN.PROMOTIONINSERTPAGE,
             component: <adminPage.PromotionInsertPage />
         },

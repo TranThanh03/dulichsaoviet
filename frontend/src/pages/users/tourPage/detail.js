@@ -257,7 +257,7 @@ const TourDetailPage = () => {
 
                                 {similarTours.length > 0 && (
                                     <div className="widget widget-tour" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
-                                        <h6 className="widget-title">Tours tương tự</h6>
+                                        <h6 className="widget-title  fw-bold">Tours tương tự</h6>
                                         {similarTours.map((item, index) => (
                                             <div key={index} className="destination-item tour-grid style-three bgc-lighter">
                                                 <div>

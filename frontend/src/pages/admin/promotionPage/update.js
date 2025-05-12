@@ -1,210 +1,167 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { PromotionApi } from "services";
 import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { TourApi } from "services";
+import { FaArrowLeft } from "react-icons/fa";
 import "./update.scss";
-import { noImage } from "assets";
+import DatePicker from "react-datepicker";
+import { ToastContainer } from "react-toastify";
+import { ErrorToast, SuccessToast } from "component/notifi";
+import { pick } from "lodash";
 
-const TourUpdatePage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const PromotionUpdatePage = () => {
+    const { id } = useParams();
+    const [formData, setFormData] = useState({
+        code: null,
+        title: null,
+        description: null,
+        discount: null,
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date().toISOString().split('T')[0],
+        quantity: null,
+        status: null
+    });
+    const navigate = useNavigate();
 
-  const introduceEditorRef = useRef(null);
-  const descriptionEditorRef = useRef(null);
+    useEffect(() => {
+        const fetchPromotion = async () => {
+            try {
+                const response = await PromotionApi.getById(id);
 
-  const [tourCode, setTourCode] = useState("");
-  const [preview, setPreview] = useState(noImage);
-  const [isLoading, setLoading] = useState(false);
-
-  const [categories, setCategories] = useState([]);
-  const [formData, setFormData] = useState({
-    name: "",
-    categoryId: 1,
-    image: "",
-    price: 0
-  });
-
-  // 👉 Cleanup CKEditor
-  const destroyEditors = () => {
-    if (introduceEditorRef.current) {
-      introduceEditorRef.current.destroy();
-      introduceEditorRef.current = null;
-    }
-    if (descriptionEditorRef.current) {
-      descriptionEditorRef.current.destroy();
-      descriptionEditorRef.current = null;
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [tourRes, catRes] = await Promise.all([
-          TourApi.getById(id),
-          TourApi.getCategory()
-        ]);
-
-        if (tourRes?.code === 1985) {
-          setTourCode(tourRes.result.tourCode);
-          setFormData(tourRes.result);
-          setPreview(tourRes.result.image || noImage);
+                if (response?.code === 1703) {
+                    setFormData(
+                        pick(
+                            response?.result,
+                            ["code", "title", "description", "discount", "startDate", "endDate", "quantity", "status"]
+                        )
+                    );
+                } else {
+                    navigate("/manage/error/404");
+                }
+            } catch (error) {
+                console.error("Failed to fetch promotion: ", error);
+                navigate("/manage/error/404");
+            }
         }
 
-        if (catRes?.code === 1986) {
-          setCategories(catRes.result);
+        fetchPromotion();
+    }, [id])
+
+    const handleChange = (e) => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleDateChange = (date, name) => {
+        const formattedDate = date ? date.toISOString().split('T')[0] : null;
+        setFormData(prev => ({ ...prev, [name]: formattedDate }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        let updatedFormData = { ...formData };
+
+        if (formData.status === 'Đang diễn ra') {
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+
+            const formatDate = (date) => date.toISOString().split('T')[0];
+
+            updatedFormData.startDate = formatDate(tomorrow);
         }
-      } catch {
-        Swal.fire("Lỗi", "Không thể tải dữ liệu!", "error");
-      } finally {
-        setLoading(true);
-      }
+
+        try {
+            const response = await PromotionApi.update(id, updatedFormData);
+
+            if (response?.code === 1704) {
+                SuccessToast("Cập nhật khuyến mãi thành công.");
+            } else {
+                ErrorToast(response?.message || "Cập nhật khuyến mãi thất bại.");
+            }
+        } catch (error) {
+            console.error("Failed to create promotion: ", error);
+            ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.");
+        }
     };
 
-    fetchData();
-  }, [id]);
+    return (
+        <>
+            <div className="promotion-update-page px-4">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="card shadow col-sm-8 col-lg-6">
+                            <div className="card-body">
+                                <h3 className="text-center mb-4 fw-bold">Thêm khuyến mãi</h3>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-3">
+                                        <label className="form-label ">Mã:</label>
+                                        <input name="code" type="text" required value={formData.code || ""} onChange={handleChange} className="form-control" disabled/>
+                                    </div>
 
-  useEffect(() => {
-    const initEditor = (id, ref) => {
-      if (window.CKEDITOR && document.getElementById(id) && !ref.current) {
-        ref.current = window.CKEDITOR.replace(id);
-      }
-    };
+                                    <div className="mb-3">
+                                        <label className="form-label">Tiêu đề:</label>
+                                        <input name="title" type="text" required value={formData.title || ""} onChange={handleChange} className="form-control" />
+                                    </div>
 
-    const timer = setTimeout(() => {
-      initEditor("introduce", introduceEditorRef);
-      initEditor("description", descriptionEditorRef);
-    }, 100);
+                                    <div className="mb-3">
+                                        <label className="form-label">Mô tả:</label>
+                                        <textarea name="description" rows={5} required value={formData.description || ""} onChange={handleChange} className="form-control" />
+                                    </div>
 
-    return () => {
-      clearTimeout(timer);
-      destroyEditors();
-    };
-  }, []);
+                                    <div className="mb-3">
+                                        <label className="form-label">Giảm giá:</label>
+                                        <input name="discount" type="number" min="1" required value={formData.discount || ""} onChange={handleChange} className="form-control" />
+                                    </div>
 
-  useEffect(() => {
-    if (introduceEditorRef.current)
-      introduceEditorRef.current.setData(formData.introduce || "");
-    if (descriptionEditorRef.current)
-      descriptionEditorRef.current.setData(formData.description || "");
-  }, [formData]);
+                                    <div className="mb-3">
+                                        <label className="form-label">Ngày bắt đầu:</label>
+                                        <DatePicker
+                                            selected={formData.startDate || ""}
+                                            onChange={(date) => handleDateChange(date, 'startDate')}
+                                            className="form-control"
+                                            dateFormat="dd-MM-yyyy"
+                                            required
+                                            disabled={formData.status !== 'Chưa diễn ra'}
+                                        />
+                                    </div>
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+                                    <div className="mb-3">
+                                        <label className="form-label">Ngày kết thúc:</label>
+                                        <DatePicker
+                                            selected={formData.endDate || ""}
+                                            onChange={(date) => handleDateChange(date, 'endDate')}
+                                            className="form-control"
+                                            dateFormat="dd-MM-yyyy"
+                                            required
+                                        />
+                                    </div>
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+                                    <div className="mb-3">
+                                        <label className="form-label">Số lượng:</label>
+                                        <input name="quantity" type="number" min="1" required value={formData.quantity || ""} onChange={handleChange} className="form-control" />
+                                    </div>
 
-    if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
-      return Swal.fire("Lỗi", "Chỉ chấp nhận JPG, PNG, GIF, WEBP!", "error");
-    }
+                                    <div className="d-flex justify-content-center gap-3">
+                                        <button type="button" className="btn btn-back"
+                                            onClick={() => {
+                                                navigate("/manage/promotions");
+                                            }}
+                                        >
+                                            <FaArrowLeft size={18} color="black" />
+                                        </button>
 
-    setPreview(URL.createObjectURL(file));
-
-    const cloudForm = new FormData();
-    cloudForm.append("file", file);
-    cloudForm.append("upload_preset", "website-saoviet");
-    cloudForm.append("folder", "saoviet");
-
-    try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/doie0qiiq/image/upload", {
-        method: "POST",
-        body: cloudForm
-      });
-      const data = await res.json();
-      if (data.secure_url) {
-        setFormData({ ...formData, image: data.secure_url });
-      }
-    } catch {
-      Swal.fire("Lỗi", "Không thể tải ảnh lên Cloudinary!", "error");
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const updated = {
-      ...formData,
-      introduce: introduceEditorRef.current?.getData() || "",
-      description: descriptionEditorRef.current?.getData() || ""
-    };
-
-    try {
-      const res = await TourApi.update(id, updated);
-      if (res?.code === 1983) {
-        Swal.fire("Thành công", "Tour đã được cập nhật", "success");
-      } else {
-        Swal.fire("Lỗi", res.message || "Có lỗi xảy ra!", "error");
-      }
-    } catch {
-      Swal.fire("Lỗi", "Đã xảy ra lỗi không xác định", "error");
-    }
-  };
-
-  if (!isLoading) return <div style={{ height: 500 }} />;
-
-  return (
-    <div className="tour-update-page">
-      <div className="form-container">
-        <div className="form-content">
-          <h2>Cập nhật Tour {tourCode}</h2>
-          <form onSubmit={handleSubmit} className="tour-update-form">
-            <div className="form-group">
-              <label>Tên Tour:</label>
-              <input name="name" required value={formData.name} onChange={handleChange} />
+                                        <button type="submit" className="btn btn-submit fw-bold">Cập nhật</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="form-group">
-              <label>Giới thiệu:</label>
-              <textarea id="introduce" name="introduce" required />
-            </div>
-
-            <div className="form-group">
-              <label>Chủ đề:</label>
-              <select name="categoryId" required value={formData.categoryId} onChange={handleChange}>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Ảnh Tour:</label>
-              <div className="image-upload">
-                <img src={preview} alt="ảnh tour" className="image" />
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Mô tả:</label>
-              <textarea id="description" name="description" required />
-            </div>
-
-            <div className="form-group">
-              <label>Giá:</label>
-              <input name="price" type="number" min="0" required value={formData.price} onChange={handleChange} />
-            </div>
-
-            <div className="button-group">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => {
-                  destroyEditors();
-                  navigate("/manage/tours/index");
-                }}
-              >
-                Quay về
-              </button>
-              <button type="submit" className="btn btn-primary">Cập nhật</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+            <ToastContainer />
+        </>
+    );
 };
 
-export default TourUpdatePage;
+export default PromotionUpdatePage;

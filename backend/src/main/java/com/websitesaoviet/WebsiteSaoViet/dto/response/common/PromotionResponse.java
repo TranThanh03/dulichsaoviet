@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +20,4 @@ public class PromotionResponse {
     LocalDate endDate;
     int quantity;
     String status;
-    LocalDateTime createdTime;
 }

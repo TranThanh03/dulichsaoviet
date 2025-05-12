@@ -75,7 +75,6 @@ public class ScheduleService {
         return scheduleRepository.findAllSchedules(keywordText, keywordDate, pageable);
     }
 
-
     public ScheduleResponse getScheduleById(String id) {
         return scheduleMapper.toScheduleResponse(scheduleRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_EXITED)));

@@ -57,7 +57,7 @@ const CalendarDetailPage = () => {
     useEffect(() => {
         setIsLoading(true);
         fetchCalendar();
-    }, []);
+    }, [id]);
 
     const sendMailInvoice = async (isConfirm) => {
         try {

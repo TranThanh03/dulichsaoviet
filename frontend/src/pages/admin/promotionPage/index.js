@@ -67,7 +67,7 @@ const PromotionPage = () => {
             try {
                 const response = await PromotionApi.delete(id);
 
-                if (response?.code === 1504) {
+                if (response?.code === 1705) {
                     SuccessToast(`Xóa khuyến mãi ${code} thành công.`)
                     setPromotions(prevPromotions => prevPromotions.filter(promotion => promotion.id !== id));
                 }

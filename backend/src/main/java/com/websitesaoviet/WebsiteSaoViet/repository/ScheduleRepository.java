@@ -62,7 +62,13 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
             "  UPPER(s.code) LIKE CONCAT('%', UPPER(:keywordText), '%') OR " +
             "  UPPER(t.code) LIKE CONCAT('%', UPPER(:keywordText), '%')) " +
             "AND (:keywordDate IS NULL OR s.startDate = :keywordDate) " +
-            "ORDER BY s.createdTime DESC")
+            "ORDER BY " +
+            "CASE " +
+            "   WHEN s.status = 'Chưa diễn ra' THEN 0 " +
+            "   WHEN s.status = 'Đang diễn ra' THEN 1 " +
+            "   WHEN s.status = 'Đã kết thúc' THEN 2 " +
+            "   ELSE 3 " +
+            "END, s.createdTime DESC")
     Page<ScheduleListResponse> findAllSchedules(@Param("keywordText") String keywordText,
                                                 @Param("keywordDate") LocalDate keywordDate,
                                                 Pageable pageable);

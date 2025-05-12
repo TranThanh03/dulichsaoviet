@@ -1,6 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PromotionListResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.common.PromotionResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PromotionSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Promotion;
 import org.springframework.data.domain.Page;
@@ -48,8 +49,16 @@ public interface PromotionRepository extends JpaRepository<Promotion, String> {
             "(:keywordText IS NULL OR " +
             "  UPPER(p.code) LIKE CONCAT('%', UPPER(:keywordText), '%')) " +
             "AND (:keywordDate IS NULL OR p.startDate = :keywordDate) " +
-            "ORDER BY p.createdTime DESC")
+            "ORDER BY " +
+            "CASE " +
+            "   WHEN p.status = 'Chưa diễn ra' THEN 0 " +
+            "   WHEN p.status = 'Đang diễn ra' THEN 1 " +
+            "   WHEN p.status = 'Đã kết thúc' THEN 2 " +
+            "   ELSE 3 " +
+            "END, p.createdTime DESC")
     Page<PromotionListResponse> findAllPromotions(@Param("keywordText") String keywordText,
                                                  @Param("keywordDate") LocalDate keywordDate,
                                                  Pageable pageable);
+
+    boolean existsPromotionByIdAndStatusNot(String id, String status);
 }

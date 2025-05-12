@@ -35,7 +35,7 @@ public class PromotionService {
         LocalDate today = LocalDate.now();
         LocalDate minStartDate = today.plusDays(1);
 
-        if (promotionRepository.existsByCode(request.getCode().toUpperCase())) {
+        if (promotionRepository.existsByCode(request.getCode().trim().toUpperCase())) {
             throw new AppException(ErrorCode.PROMOTION_CODE_AVAILABLE);
         }
 
@@ -48,7 +48,7 @@ public class PromotionService {
 
         Promotion promotion = promotionMapper.createPromotion(request);
 
-        promotion.setCode(request.getCode().toUpperCase());
+        promotion.setCode(request.getCode().trim().toUpperCase());
         promotion.setStatus(CommonStatus.NOT_STARTED.getValue());
         promotion.setCreatedTime(currentTime);
 
@@ -81,33 +81,53 @@ public class PromotionService {
                 .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_EXITED)));
     }
 
+    public PromotionResponse getPromotionByIdAndAdmin(String id) {
+        boolean checkPromotion = promotionRepository.existsPromotionByIdAndStatusNot(id, CommonStatus.COMPLETED.getValue());
+
+        if (checkPromotion) {
+            return promotionMapper.toPromotionResponse(promotionRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_EXITED)));
+        } else {
+            throw new AppException(ErrorCode.PROMOTION_NOT_EXITED);
+        }
+    }
+    
     public Promotion getAvailablePromotionById(String id) {
         return promotionRepository.findAvailablePromotionById(id);
     }
 
     public PromotionResponse updatePromotion(String id, PromotionUpdateRequest request) {
-        Promotion promotion = promotionRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_EXITED));
+        boolean checkPromotion = promotionRepository.existsPromotionByIdAndStatusNot(id, CommonStatus.COMPLETED.getValue());
 
-        LocalDate today = LocalDate.now();
-        LocalDate minStartDate = today.plusDays(1);
+        if (checkPromotion) {
+            var promotion = promotionRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.PROMOTION_NOT_EXITED));
 
-        if (promotionRepository.existsByCode(request.getCode().toUpperCase())) {
-            throw new AppException(ErrorCode.PROMOTION_CODE_AVAILABLE);
+            LocalDate today = LocalDate.now();
+            LocalDate minStartDate = today.plusDays(1);
+
+            if (request.getStartDate().isBefore(minStartDate)) {
+                throw new AppException(ErrorCode.PROMOTION_STARTDATE_INVALID);
+            }
+            else if (request.getEndDate().isBefore(request.getStartDate())) {
+                throw new AppException(ErrorCode.PROMOTION_ENDDATE_INVALID);
+            }
+
+            promotion.setTitle(request.getTitle());
+            promotion.setDescription(request.getDescription());
+            promotion.setDiscount(request.getDiscount());
+
+            if (promotion.getStatus().equals(CommonStatus.NOT_STARTED.getValue())) {
+                promotion.setStartDate(request.getStartDate());
+            }
+
+            promotion.setEndDate(request.getEndDate());
+            promotion.setQuantity(request.getQuantity());
+
+            return promotionMapper.toPromotionResponse(promotionRepository.save(promotion));
+        } else {
+            throw new AppException(ErrorCode.PROMOTION_NOT_EXITED);
         }
-
-        if (request.getStartDate().isBefore(minStartDate)) {
-            throw new AppException(ErrorCode.PROMOTION_STARTDATE_INVALID);
-        }
-        else if (request.getEndDate().isBefore(request.getStartDate())) {
-            throw new AppException(ErrorCode.PROMOTION_ENDDATE_INVALID);
-        }
-
-        promotion.setCode(request.getCode().toUpperCase());
-
-        promotionMapper.updatePromotion(promotion, request);
-
-        return promotionMapper.toPromotionResponse(promotionRepository.save(promotion));
     }
 
     public void deletePromotion(String id) {

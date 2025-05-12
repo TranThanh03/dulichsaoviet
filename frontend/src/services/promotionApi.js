@@ -4,7 +4,7 @@ import getToken from "utils/getToken";
 
 const PromotionApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/v1/promotions",  {
+        return axiosInstanceAdmin.get("/api/v1/promotions",  {
             params,
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
@@ -12,7 +12,11 @@ const PromotionApi = {
         });
     },
     getById: (id) => {
-        return axiosInstance.get(`/api/v1/promotions/${id}`);
+        return axiosInstanceAdmin.get(`/api/v1/promotions/${id}`, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
     },
     getList: () => {
         return axiosInstance.get("/api/v1/promotions/list");

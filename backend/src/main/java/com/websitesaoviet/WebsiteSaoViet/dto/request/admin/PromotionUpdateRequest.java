@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PromotionUpdateRequest {
-    String code;
     String title;
     String description;
 
