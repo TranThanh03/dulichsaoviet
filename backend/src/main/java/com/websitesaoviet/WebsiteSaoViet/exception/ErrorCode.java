@@ -90,7 +90,10 @@ public enum ErrorCode {
     QUANTITY_PEOPLE_INVALID(1055, "Số lượng hành khách phải lớn hơn 0!", HttpStatus.OK),
     METHOD_PAYMENT_INVALID(1056, "Vui lòng thay đổi phương thức thanh toán khác!", HttpStatus.OK),
     DATETIME_INVALID(1057, "Thời gian sai định dạng!", HttpStatus.OK),
-    SCHEDULE_EXITED(1058, "Lịch trình đã tồn tại!", HttpStatus.OK)
+    SCHEDULE_EXITED(1058, "Lịch trình đã tồn tại!", HttpStatus.OK),
+    SCHEDULE_INVALID(1059, "Số người tối đa không hợp lệ!", HttpStatus.OK),
+    TOTAL_PEOPLE_INVALID(1060, "Số người tối đa nằm trong khoảng từ 1-99!", HttpStatus.OK),
+    BOOKING_SUCCESSFULLY(1061, "Lịch trình đang có lịch đặt!", HttpStatus.OK)
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

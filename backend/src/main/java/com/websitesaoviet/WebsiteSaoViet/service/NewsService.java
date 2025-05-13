@@ -30,7 +30,7 @@ public class NewsService {
     public NewsResponse createNews(NewsCreationRequest request) {
         News news = newsMapper.createNews(request);
 
-        if (request.getType().equals("featured")) {
+        if (request.getType().equals("Nổi bật")) {
             news.setType("Nổi bật");
         } else {
             news.setType("Thường");
@@ -59,13 +59,20 @@ public class NewsService {
         return newsMapper.toNewsResponse(news);
     }
 
+    public NewsResponse getNewsByIdAndAdmin(String id) {
+        var news = newsRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NEWS_NOT_EXITED));
+
+        return newsMapper.toNewsResponse(news);
+    }
+
     public NewsResponse updateNews(String id, NewsUpdateRequest request) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NEWS_NOT_EXITED));
 
         newsMapper.updateNews(news, request);
 
-        if (request.getType().equals("featured")) {
+        if (request.getType().equals("Nổi bật")) {
             news.setType("Nổi bật");
         } else {
             news.setType("Thường");

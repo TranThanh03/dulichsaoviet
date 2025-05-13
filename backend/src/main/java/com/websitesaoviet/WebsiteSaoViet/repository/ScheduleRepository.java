@@ -1,6 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleListResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleStartDateResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.Schedule;
@@ -74,4 +75,21 @@ public interface ScheduleRepository extends JpaRepository<Schedule, String> {
                                                 Pageable pageable);
 
     boolean existsScheduleByTourIdAndStartDate(String tourId, LocalDate startDate);
+
+    @Query("SELECT s " +
+            "FROM Schedule s " +
+            "WHERE s.id = :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople <= :totalPeople")
+    Schedule findScheduleValidById(@Param("id") String id, @Param("totalPeople") int totalPeople);
+
+    @Query("SELECT COUNT(s) > 0 " +
+            "FROM Schedule s " +
+            "LEFT JOIN Booking b ON s.id = b.scheduleId " +
+            "WHERE s.id = :id AND s.status = 'Chưa diễn ra' AND b.status = 'Đã xác nhận'")
+    boolean existsScheduleByScheduleId(@Param("id") String id);
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleStartDateResponse(" +
+            "s.startDate) " +
+            "FROM Schedule s " +
+            "WHERE s.tourId = :tourId AND s.status = 'Chưa diễn ra'")
+    List<ScheduleStartDateResponse> findStartDateByTourId(@Param("tourId") String tourId);
 }

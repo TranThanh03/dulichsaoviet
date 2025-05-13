@@ -85,82 +85,80 @@ const PromotionUpdatePage = () => {
     };
 
     return (
-        <>
-            <div className="promotion-update-page px-4">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="card shadow col-sm-8 col-lg-6">
-                            <div className="card-body">
-                                <h3 className="text-center mb-4 fw-bold">Thêm khuyến mãi</h3>
-                                <form onSubmit={handleSubmit}>
-                                    <div className="mb-3">
-                                        <label className="form-label ">Mã:</label>
-                                        <input name="code" type="text" required value={formData.code || ""} onChange={handleChange} className="form-control" disabled/>
-                                    </div>
+        <div className="promotion-update-page px-4">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="card shadow col-sm-8 col-lg-6">
+                        <div className="card-body">
+                            <h3 className="text-center mb-4 fw-bold">Cập nhật khuyến mãi</h3>
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label className="form-label ">Mã:</label>
+                                    <input name="code" type="text" required value={formData.code || ""} onChange={handleChange} className="form-control" disabled/>
+                                </div>
 
-                                    <div className="mb-3">
-                                        <label className="form-label">Tiêu đề:</label>
-                                        <input name="title" type="text" required value={formData.title || ""} onChange={handleChange} className="form-control" />
-                                    </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Tiêu đề:</label>
+                                    <input name="title" type="text" required value={formData.title || ""} onChange={handleChange} className="form-control" />
+                                </div>
 
-                                    <div className="mb-3">
-                                        <label className="form-label">Mô tả:</label>
-                                        <textarea name="description" rows={5} required value={formData.description || ""} onChange={handleChange} className="form-control" />
-                                    </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Mô tả:</label>
+                                    <textarea name="description" rows={5} required value={formData.description || ""} onChange={handleChange} className="form-control" />
+                                </div>
 
-                                    <div className="mb-3">
-                                        <label className="form-label">Giảm giá:</label>
-                                        <input name="discount" type="number" min="1" required value={formData.discount || ""} onChange={handleChange} className="form-control" />
-                                    </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Giảm giá:</label>
+                                    <input name="discount" type="number" min="1" required value={formData.discount || ""} onChange={handleChange} className="form-control" />
+                                </div>
 
-                                    <div className="mb-3">
-                                        <label className="form-label">Ngày bắt đầu:</label>
-                                        <DatePicker
-                                            selected={formData.startDate || ""}
-                                            onChange={(date) => handleDateChange(date, 'startDate')}
-                                            className="form-control"
-                                            dateFormat="dd-MM-yyyy"
-                                            required
-                                            disabled={formData.status !== 'Chưa diễn ra'}
-                                        />
-                                    </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Ngày bắt đầu:</label>
+                                    <DatePicker
+                                        selected={formData.startDate || ""}
+                                        onChange={(date) => handleDateChange(date, 'startDate')}
+                                        className="form-control"
+                                        dateFormat="dd-MM-yyyy"
+                                        required
+                                        disabled={formData.status !== 'Chưa diễn ra'}
+                                    />
+                                </div>
 
-                                    <div className="mb-3">
-                                        <label className="form-label">Ngày kết thúc:</label>
-                                        <DatePicker
-                                            selected={formData.endDate || ""}
-                                            onChange={(date) => handleDateChange(date, 'endDate')}
-                                            className="form-control"
-                                            dateFormat="dd-MM-yyyy"
-                                            required
-                                        />
-                                    </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Ngày kết thúc:</label>
+                                    <DatePicker
+                                        selected={formData.endDate || ""}
+                                        onChange={(date) => handleDateChange(date, 'endDate')}
+                                        className="form-control"
+                                        dateFormat="dd-MM-yyyy"
+                                        required
+                                    />
+                                </div>
 
-                                    <div className="mb-3">
-                                        <label className="form-label">Số lượng:</label>
-                                        <input name="quantity" type="number" min="1" required value={formData.quantity || ""} onChange={handleChange} className="form-control" />
-                                    </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Số lượng:</label>
+                                    <input name="quantity" type="number" min="1" required value={formData.quantity || ""} onChange={handleChange} className="form-control" />
+                                </div>
 
-                                    <div className="d-flex justify-content-center gap-3">
-                                        <button type="button" className="btn btn-back"
-                                            onClick={() => {
-                                                navigate("/manage/promotions");
-                                            }}
-                                        >
-                                            <FaArrowLeft size={18} color="black" />
-                                        </button>
+                                <div className="d-flex justify-content-center gap-3">
+                                    <button type="button" className="btn btn-back"
+                                        onClick={() => {
+                                            navigate("/manage/promotions");
+                                        }}
+                                    >
+                                        <FaArrowLeft size={18} color="black" />
+                                    </button>
 
-                                        <button type="submit" className="btn btn-submit fw-bold">Cập nhật</button>
-                                    </div>
-                                </form>
-                            </div>
+                                    <button type="submit" className="btn btn-submit fw-bold">Cập nhật</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
 
             <ToastContainer />
-        </>
+        </div>
     );
 };
 

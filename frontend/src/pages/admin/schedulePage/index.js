@@ -13,7 +13,9 @@ import { Link } from "react-router-dom";
 const SchedulePage = () => {
     const [schedules, setSchedules] = useState([]);
     const [search, setSearch] = useState("");
-    const [showForm, setShowForm] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [editSchedule, setEditSchedule] = useState({});
+    const [totalPeopleEdit, setTotalPeopleEdit] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const pageSize = 9;
@@ -70,21 +72,58 @@ const SchedulePage = () => {
             try {
                 const response = await ScheduleApi.delete(id);
 
-                if (response?.code === 1504) {
+                if (response?.code === 1606) {
                     SuccessToast(`Xóa lịch ${code} thành công.`)
                     setSchedules(prevSchedules => prevSchedules.filter(schedule => schedule.id !== id));
                 }
                 else if (response?.code === 1049) {
                     ErrorToast(`Lịch ${code} đang có lịch đặt đang xử lý.`);
                 }
+                else if (response?.code === 1061) {
+                    ErrorToast(`Lịch ${code} đang có lịch đặt.`);
+                }
                 else {
-                    ErrorToast(`Xóa lịch ${code} không thành công.`)
+                    ErrorToast(response?.message || `Xóa lịch ${code} không thành công.`)
                 }
             } catch (error) {
                 console.log("Failed to delete schedule: ", error);
                 ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.")
             }
         }
+    };
+
+    const handleEdit = async (e) => {
+        e.preventDefault();
+        
+        if (totalPeopleEdit === 0) {
+            ErrorToast("Vui lòng thay đổi số lượng người.")
+            return;
+        }
+        
+        try {
+            const response = await ScheduleApi.update(editSchedule.id, { totalPeople: totalPeopleEdit});
+           
+            if (response?.code === 1605) {
+                setSchedules(
+                    schedules.map(schedule =>
+                        schedule.id === editSchedule.id ? { ...schedule, totalPeople: totalPeopleEdit } : schedule
+                    )
+                );
+                setTotalPeopleEdit(0);
+
+                SuccessToast(`Cập nhật lịch trình thành công.`);
+            } else {
+                ErrorToast(response?.message || "Cập nhật lịch trình không thành công.");
+            }
+        } catch (error) {
+            console.error("Failed to update schedule: ", error);
+            ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.");
+        }
+    };
+
+    const handleShowEdit = (schedule) => {
+        setEditSchedule(schedule);
+        setShowEdit(true);
     };
 
     if (isLoading) {
@@ -94,103 +133,149 @@ const SchedulePage = () => {
     }
 
     return (
-        <div className="schedule-manage-page">
-            <div className="row">
-                <div className="col-md-12 col-sm-12 ">
-                    <div className="x_panel">
-                        <div className="x_title">
-                            <h2>Danh sách lịch trình</h2>
-                            <Link to={"/manage/schedules/insert"}>
-                                <span>
-                                    <FaPlus className="me-1 mb-1" style={{ color: '#2A3F54', fontSize: '18px' }} />
-                                    Thêm
-                                </span>
-                            </Link>
+        <>
+            <div className="schedule-manage-page">
+                <div className="row">
+                    <div className="col-md-12 col-sm-12 ">
+                        <div className="x_panel">
+                            <div className="x_title">
+                                <h2>Danh sách lịch trình</h2>
+                                <Link to={"/manage/schedules/insert"}>
+                                    <span>
+                                        <FaPlus className="me-1 mb-1" style={{ color: '#2A3F54', fontSize: '18px' }} />
+                                        Thêm
+                                    </span>
+                                </Link>
 
-                            <div className="clearfix"></div>
-                        </div>
-                        <div className="x_content">
-                            <div className="form-search">
-                                <input
-                                    type="search"
-                                    placeholder="Nhập mã lịch, mã tour, ngày khởi hành"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <button type="button" onClick={handleSearch}>
-                                    <FaSearch style={{ color: '#333', fontSize: '16px' }} />
-                                </button>
+                                <div className="clearfix"></div>
                             </div>
-                            <div className="clearfix"></div>
+                            <div className="x_content">
+                                <div className="form-search">
+                                    <input
+                                        type="search"
+                                        placeholder="Nhập mã lịch, mã tour, ngày khởi hành"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                    />
+                                    <button type="button" onClick={handleSearch}>
+                                        <FaSearch style={{ color: '#333', fontSize: '16px' }} />
+                                    </button>
+                                </div>
+                                <div className="clearfix"></div>
 
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <div className="card-box table-responsive">
-                                        <table className="table table-striped table-bordered" >
-                                            <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Mã lịch</th>
-                                                    <th>Mã tour</th>
-                                                    <th>Ngày khởi hành</th>
-                                                    <th>Ngày kết thúc</th>
-                                                    <th>Số người</th>
-                                                    <th>Tổng người</th>
-                                                    <th>Giá người lớn</th>
-                                                    <th>Giá trẻ em</th>
-                                                    <th>Trạng thái</th>
-                                                    <th colSpan={2}>Thao tác</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {schedules.length > 0 && schedules.map((item, index) => (
-                                                    <tr key={index}>
-                                                        <td> {index + 1} </td>
-                                                        <td> {item.code} </td>
-                                                        <td> {item.tourCode} </td>
-                                                        <td> {item.startDate ? formatDatetime(item.startDate) : ''} </td>
-                                                        <td> {item.endDate ? formatDatetime(item.endDate) : ''} </td>
-                                                        <td> {item.quantityPeople} </td>
-                                                        <td> {item.totalPeople} </td>
-                                                        <td className="color-red"> {item.adultPrice ? formatCurrency(item.adultPrice) : 0} </td>
-                                                        <td className="color-red"> {item.childrenPrice ? formatCurrency(item.childrenPrice) : 0} </td>
-                                                        <td className={statusClassMap[item.status] || ''}> 
-                                                            {item.status}
-                                                        </td>
-                                                        <td>
-                                                            {item.status === "Chưa diễn ra" && (
-                                                                <Link to={`/manage/schedules/edit/${item.id}`}>
-                                                                    <FaEdit style={{ color: '#26B99A', fontSize: '20px' }} />
-                                                                </Link>
-                                                            )}
-                                                        </td>
-                                                        <td>
-                                                            {item.status !== "Đang diễn ra" && (
-                                                                <button type="button" onClick={() => handleDelete(item.id, item.code)}>
-                                                                    <FaTrash style={{ color: 'red', fontSize: '18px' }} />
-                                                                </button>
-                                                            )}
-                                                        </td>
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div className="card-box table-responsive">
+                                            <table className="table table-striped table-bordered" >
+                                                <thead>
+                                                    <tr>
+                                                        <th>STT</th>
+                                                        <th>Mã lịch</th>
+                                                        <th>Mã tour</th>
+                                                        <th>Ngày khởi hành</th>
+                                                        <th>Ngày kết thúc</th>
+                                                        <th>Số người</th>
+                                                        <th>Tổng người</th>
+                                                        <th>Giá người lớn</th>
+                                                        <th>Giá trẻ em</th>
+                                                        <th>Trạng thái</th>
+                                                        <th colSpan={2}>Thao tác</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {schedules.length > 0 && schedules.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td> {index + 1} </td>
+                                                            <td> {item.code} </td>
+                                                            <td> {item.tourCode} </td>
+                                                            <td> {item.startDate ? formatDatetime(item.startDate) : ''} </td>
+                                                            <td> {item.endDate ? formatDatetime(item.endDate) : ''} </td>
+                                                            <td> {item.quantityPeople} </td>
+                                                            <td> {item.totalPeople} </td>
+                                                            <td className="color-red"> {item.adultPrice ? formatCurrency(item.adultPrice) : 0} </td>
+                                                            <td className="color-red"> {item.childrenPrice ? formatCurrency(item.childrenPrice) : 0} </td>
+                                                            <td className={statusClassMap[item.status] || ''}> 
+                                                                {item.status}
+                                                            </td>
+                                                            <td>
+                                                                {item.status === "Chưa diễn ra" && (
+                                                                    <button type="button" onClick={() => handleShowEdit(item)}>
+                                                                        <FaEdit style={{ color: '#26B99A', fontSize: '20px' }} />
+                                                                    </button>
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {item.status !== "Đang diễn ra" && (
+                                                                    <button type="button" onClick={() => handleDelete(item.id, item.code)}>
+                                                                        <FaTrash style={{ color: 'red', fontSize: '18px' }} />
+                                                                    </button>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={setCurrentPage}
-                            />
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={setCurrentPage}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {showEdit && (
+                    <div className="form-input-custom">
+                        <div className="container">
+                            <div className="row col-7 col-lg-5">
+                                <div className="content bg-white p-4 rounded shadow">
+                                    <h2 className="text-center mb-4">Cập nhật lịch trình</h2>
+                                    <button type="button" className="btn-close position-absolute top-0 end-0 m-3" aria-label="Close"
+                                        onClick={() => {
+                                            setShowEdit(false);
+                                        }}
+                                    ></button>
+                            
+                                    <form onSubmit={handleEdit}>
+                                        <div className="mb-3">
+                                            <label className="form-label">Mã lịch trình:</label>
+                                            <input type="text" name="code" className="form-control" disabled
+                                                defaultValue={editSchedule.code || ''}
+                                            />
+                                        </div>
+                            
+                                        <div className="mb-3">
+                                            <label className="form-label">Số người đã đặt:</label>
+                                            <input type="text" name="quantityPeople" className="form-control" disabled
+                                                defaultValue={editSchedule.quantityPeople || 0}
+                                            />
+                                        </div>
+                            
+                                        <div className="mb-3">
+                                            <label className="form-label">Số người tối đa:</label>
+                                            <input type="number" name="totalPeople" min={1} className="form-control" required
+                                                defaultValue={editSchedule.totalPeople || ''}  onChange={(e) => setTotalPeopleEdit(Number(e.target.value))}
+                                            />
+                                        </div>
+                            
+                                        <button type="submit" className="btn btn-submit w-100 mt-4 text-white">
+                                            Cập nhật
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <ToastContainer />
-        </div>
+        </>
     );
 };
 

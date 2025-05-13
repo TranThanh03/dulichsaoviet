@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.service;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.ScheduleCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleListResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleStartDateResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ScheduleResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleTourResponse;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -45,15 +47,14 @@ public class ScheduleService {
         }
 
         var tour = tourService.getTourById(request.getTourId());
-        LocalDate endDate = LocalDate.now();
 
         Schedule schedule = scheduleMapper.createSchedule(request);
 
         schedule.setCode(getNextCode("schedule"));
         schedule.setEndDate(request.getStartDate().plusDays(tour.getQuantityDay()));
-        schedule.setEndDate(endDate);
         schedule.setQuantityPeople(0);
         schedule.setStatus(CommonStatus.NOT_STARTED.getValue());
+        schedule.setCreatedTime(LocalDateTime.now());
 
         return scheduleMapper.toScheduleResponse(scheduleRepository.save(schedule));
     }
@@ -88,8 +89,14 @@ public class ScheduleService {
         return scheduleRepository.findScheduleTourById(id);
     }
 
+    public List<ScheduleStartDateResponse> getStartDateByTourId(String tourId) {
+        return scheduleRepository.findStartDateByTourId(tourId);
+    }
+
     public void deleteSchedule(String id) {
-        if (scheduleRepository.existsByIdAndStatus(id, CommonStatus.IN_PROGRESS.getValue())) {
+        if (scheduleRepository.existsScheduleByScheduleId(id)) {
+            throw new AppException(ErrorCode.BOOKING_SUCCESSFULLY);
+        } else if (scheduleRepository.existsByIdAndStatus(id, CommonStatus.IN_PROGRESS.getValue())) {
             throw new AppException(ErrorCode.SCHEDULE_IN_PROGRESS);
         }
 
@@ -102,6 +109,22 @@ public class ScheduleService {
         }
 
         scheduleRepository.deleteAllByTourId(tourId);
+    }
+
+    public ScheduleResponse updateSchedule(String id, int totalPeople) {
+        if (totalPeople < 1 || totalPeople > 100) {
+            throw new AppException(ErrorCode.TOTAL_PEOPLE_INVALID);
+        }
+
+        var schedule = scheduleRepository.findScheduleValidById(id, totalPeople);
+
+        if (schedule != null) {
+            schedule.setTotalPeople(totalPeople);
+
+            return scheduleMapper.toScheduleResponse(scheduleRepository.save(schedule));
+        } else {
+            throw new AppException(ErrorCode.SCHEDULE_INVALID);
+        }
     }
 
     public boolean existsScheduleByQuantityPeople(String id, int people) {

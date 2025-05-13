@@ -19,7 +19,8 @@ public class ScheduleCreationRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate startDate;
 
-    @Min(value = 1, message = "PEOPLE_INVALID")
+    @Min(value = 1, message = "TOTAL_PEOPLE_INVALID")
+    @Max(value = 99, message = "TOTAL_PEOPLE_INVALID")
     int totalPeople;
 
     @Min(value = 1, message = "PRICE_INVALID")

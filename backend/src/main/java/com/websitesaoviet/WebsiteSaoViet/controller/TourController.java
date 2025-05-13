@@ -6,6 +6,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursAreaRequest
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursDestinationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ListToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
@@ -190,6 +191,17 @@ public class TourController {
         ApiResponse<List<SimilarToursResponse>> apiResponse = ApiResponse.<List<SimilarToursResponse>>builder()
                 .code(1512)
                 .result(tourService.getSimilarTours(id, destination, day))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/list")
+    ResponseEntity<ApiResponse<List<ListToursResponse>>> getListTours() {
+        ApiResponse<List<ListToursResponse>> apiResponse = ApiResponse.<List<ListToursResponse>>builder()
+                .code(1513)
+                .result(tourService.getListTours())
                 .build();
 
         return ResponseEntity.ok(apiResponse);

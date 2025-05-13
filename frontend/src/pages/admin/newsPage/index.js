@@ -65,7 +65,7 @@ const NewsPage = () => {
                     setNews(prevNews => prevNews.filter(news => news.id !== id));
                 }
                 else {
-                    ErrorToast(`Xóa tin tức ${code} không thành công.`)
+                    ErrorToast(response?.message || `Xóa tin tức ${code} không thành công.`)
                 }
             } catch (error) {
                 console.error("Failed to delete news: ", error);

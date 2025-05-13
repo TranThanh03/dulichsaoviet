@@ -6,6 +6,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursAreaRequest
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.FilterToursRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursDestinationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.user.SearchToursRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ListToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
@@ -406,5 +407,9 @@ public class TourService {
                 .map(s -> s.trim().toLowerCase())
                 .filter(selectedLower::contains)
                 .count();
+    }
+
+    public List<ListToursResponse> getListTours() {
+        return tourMapper.toListTours(tourRepository.findAll());
     }
 }

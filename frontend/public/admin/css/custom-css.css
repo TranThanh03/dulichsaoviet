@@ -56,3 +56,11 @@
 table th {
     vertical-align: middle;
 }
+
+.btn-back {
+    background-color: #d3d3d3;
+}
+
+.btn-back:hover {
+    background-color: #aaaaaa;
+}

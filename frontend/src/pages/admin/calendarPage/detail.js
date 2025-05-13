@@ -297,8 +297,8 @@ const CalendarDetailPage = () => {
                                                 )}
                                                 <p>
                                                     Phương thức:
-                                                    <img src={methodClassMap[calendar.method] || noImage} className="ms-1 image" alt={methodClassMap[calendar.method] || 'no-image'} />
-                                                    {calendar.method}
+                                                    <img src={methodClassMap[calendar.method] || noImage} className="ms-1 image no-print" alt={methodClassMap[calendar.method] || 'no-image'} />
+                                                    <span className="ms-1">{calendar.method}</span>
                                                 </p>
                                                 <p>
                                                     Thời gian:

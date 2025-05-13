@@ -51,19 +51,19 @@ axiosInstanceAdmin.interceptors.response.use(
             setLoading(false);
         }
 
-        if (error.response?.data?.code === 4445) {
-            if (error.config.url.includes("/api/v1/auth/admin/introspect")) {
-                return Promise.reject(error.response || error.message);
-            }
+        // if (error.response?.data?.code === 4445) {
+        //     if (error.config.url.includes("/api/v1/auth/admin/introspect")) {
+        //         return Promise.reject(error.response || error.message);
+        //     }
 
-            window.location.href = "/manage/error/404";
-        } 
-        else if (error.response?.status === 401) {
-            window.location.href = "/manage/auth/login";
-        }
-        else if (error.code === "ERR_NETWORK") {
-            window.location.href = "/manage/error/500";
-        }
+        //     window.location.href = "/manage/error/404";
+        // } 
+        // else if (error.response?.status === 401) {
+        //     window.location.href = "/manage/auth/login";
+        // }
+        // else if (error.code === "ERR_NETWORK") {
+        //     window.location.href = "/manage/error/500";
+        // }
 
         return Promise.reject(error.response || error.message);
     }

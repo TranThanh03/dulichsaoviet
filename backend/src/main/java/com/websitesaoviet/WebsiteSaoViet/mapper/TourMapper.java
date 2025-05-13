@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.mapper;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.TourUpdateRequest;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ListToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.PopularToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.SimilarToursResponse;
@@ -28,6 +29,8 @@ public interface TourMapper {
 
     @Mapping(source = "tour.quantityOrder", target = "bookingCount")
     PopularToursResponse to5PopularToursResponse(Tour tour);
+
+    List<ListToursResponse> toListTours(List<Tour> tour);
 
     List<SimilarToursResponse> toSimilarToursResponse(List<Tour> tour);
 

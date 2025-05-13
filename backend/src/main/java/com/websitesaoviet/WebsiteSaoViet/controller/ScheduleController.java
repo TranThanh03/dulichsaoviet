@@ -2,6 +2,7 @@ package com.websitesaoviet.WebsiteSaoViet.controller;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.ScheduleCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleListResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ScheduleStartDateResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ScheduleResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ScheduleSummaryResponse;
@@ -83,12 +84,25 @@ public class ScheduleController {
 
     @GetMapping("/schedule-tour/{id}")
     public ResponseEntity<ApiResponse<ScheduleTourResponse>> getScheduleTourById(@PathVariable String id) {
-        ApiResponse<ScheduleTourResponse> successResponse = ApiResponse.<ScheduleTourResponse>builder()
+        ApiResponse<ScheduleTourResponse> apiResponse = ApiResponse.<ScheduleTourResponse>builder()
                 .code(1604)
                 .result(scheduleService.getScheduleTourById(id))
                 .build();
 
-        return ResponseEntity.ok(successResponse);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<ApiResponse<ScheduleResponse>> updateSchedule(
+            @PathVariable String id,
+            @RequestParam int totalPeople) {
+
+        ApiResponse<ScheduleResponse> apiResponse = ApiResponse.<ScheduleResponse>builder()
+                .code(1605)
+                .result(scheduleService.updateSchedule(id, totalPeople))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -101,8 +115,18 @@ public class ScheduleController {
         scheduleService.deleteSchedule(id);
 
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
-                .code(1605)
+                .code(1606)
                 .message("Xóa lịch trình thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/start-date/{tourId}")
+    public ResponseEntity<ApiResponse<List<ScheduleStartDateResponse>>> getStartDateByTourId(@PathVariable String tourId) {
+        ApiResponse<List<ScheduleStartDateResponse>> apiResponse = ApiResponse.<List<ScheduleStartDateResponse>>builder()
+                .code(1607)
+                .result(scheduleService.getStartDateByTourId(tourId))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

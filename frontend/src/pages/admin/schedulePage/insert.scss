@@ -1,72 +1,35 @@
-.assignment-manage-page {
-    .modal {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 5;
+.schedule-insert-page {
+    padding: 80px 0 50px;
+
+    input {
+        height: 40px;
+        border-radius: 5px;
     }
 
-    .modal .modal-content {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        width: 400px;
+    textarea {
+        border-radius: 5px;
     }
 
-    .modal h2 {
-        text-align: center;
-        color: #34b7c6;
-        margin-bottom: 20px;
-    }
+    .card-body {
+        .form-label {
+            font-weight: bold;
+        }
 
-    .modal #btn-close {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 20px;
-    }
+        .react-datepicker-wrapper {
+            width: 100%;
+        }
 
-    .modal label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #333;
-    }
+        .btn {
+            padding: 5px 15px;
+        }
 
-    .modal input,
-    .modal select {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+        .btn-submit {
+            background-color: #34b7c6;
+            color: white;
+        }
 
-    .modal #btn-submit {
-        width: 100%;
-        padding: 10px;
-        background-color: #34b7c6;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-        margin-top: 25px;
-    }
-
-    .modal #btn-submit:hover {
-        background-color: #0052a3;
-    }
-
-    #error-msg {
-        color: red;
-        font-size: 14px;
+        .btn-submit:hover {
+            background-color: #2a98a1;
+        }
     }
 }

@@ -66,11 +66,15 @@ const BookingPage = () => {
                 const resSchedule = await ScheduleApi.getScheduleTourById(id);
 
                 if (resUser?.code === 1303) {
-                    setUser(resUser.result);
+                    setUser(resUser?.result);
                 }
 
                 if (resSchedule?.code === 1604) {
-                    setSchedule(resSchedule.result);
+                    if (resSchedule?.result) {
+                        setSchedule(resSchedule.result);
+                    } else {
+                        navigate("/error/404");    
+                    }
                 }
                 else if (resSchedule?.code === 1028) {
                     navigate("/error/404");
@@ -105,15 +109,17 @@ const BookingPage = () => {
     }, []);
 
     useEffect(() => {
-        const currentDate = dayjs();
-        const startDate = dayjs(schedule.startDate);
+        if (schedule.startDate) {
+            const currentDate = dayjs();
+            const startDate = dayjs(schedule.startDate);
 
-        if (currentDate.isBefore(startDate.subtract(2, 'day'))) {
-            setIsHidden(false);
-        } else {
-            setIsHidden(true);
+            if (currentDate.isBefore(startDate.subtract(2, 'day'))) {
+                setIsHidden(false);
+            } else {
+                setIsHidden(true);
+            }
         }
-    }, [schedule.startDate]);
+    }, [schedule?.startDate]);
 
     useEffect(() => {
         if (formData.method === 'cash') {

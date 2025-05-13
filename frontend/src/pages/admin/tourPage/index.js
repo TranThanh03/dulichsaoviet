@@ -73,7 +73,7 @@ const TourPage = () => {
                     ErrorToast(`Tour ${code} đang có lịch trình.`);
                 }
                 else {
-                    ErrorToast(`Xóa tour ${code} không thành công.`)
+                    ErrorToast(response?.message || `Xóa tour ${code} không thành công.`)
                 }
             } catch (error) {
                 console.error("Failed to delete tour: ", error);

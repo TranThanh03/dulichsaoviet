@@ -37,6 +37,7 @@ public class NewsController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     ResponseEntity<ApiResponse<Page<NewsListResponse>>> getNews(
             @RequestParam String keyword,
@@ -83,6 +84,17 @@ public class NewsController {
         ApiResponse<String> apiResponse = ApiResponse.<String>builder()
                 .code(2104)
                 .message("Xóa tin tức thành công.")
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/detail/{id}")
+    ResponseEntity<ApiResponse<NewsResponse>> getNewsByIdAndAdmin(@PathVariable String id) {
+        ApiResponse<NewsResponse> apiResponse = ApiResponse.<NewsResponse>builder()
+                .code(2105)
+                .result(newsService.getNewsByIdAndAdmin(id))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

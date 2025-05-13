@@ -1,210 +1,229 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { TourApi } from "services";
+import { useEffect, useState, useRef } from "react";
 import "./update.scss";
+import { NewsApi } from "services";
+import { useNavigate, useParams } from "react-router-dom";
 import { noImage } from "assets";
+import { FaArrowLeft } from "react-icons/fa";
+import { ToastContainer } from "react-toastify";
+import { ErrorToast, SuccessToast } from "component/notifi";
+import { pick } from "lodash";
 
 const NewsUpdatePage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+    const { id } = useParams();
+    const textEditorRef = useRef(null);
+    const fileInputRef = useRef(null);
+    const navigate = useNavigate();
 
-  const introduceEditorRef = useRef(null);
-  const descriptionEditorRef = useRef(null);
+    const [formData, setFormData] = useState({
+        title: "",
+        summary: "",
+        image: "",
+        content: "",
+        type: "Nổi bật"
+    });
 
-  const [tourCode, setTourCode] = useState("");
-  const [preview, setPreview] = useState(noImage);
-  const [isLoading, setLoading] = useState(false);
+    const [preview, setPreview] = useState(noImage);
+    const [selectedFile, setSelectedFile] = useState(null);
 
-  const [categories, setCategories] = useState([]);
-  const [formData, setFormData] = useState({
-    name: "",
-    categoryId: 1,
-    image: "",
-    price: 0
-  });
+    const destroyEditors = () => {
+        if (textEditorRef.current) {
+            textEditorRef.current.destroy();
+            textEditorRef.current = null;
+        }
+    };
 
-  // 👉 Cleanup CKEditor
-  const destroyEditors = () => {
-    if (introduceEditorRef.current) {
-      introduceEditorRef.current.destroy();
-      introduceEditorRef.current = null;
+    useEffect(() => {
+        const initEditor = () => {
+            if (window.CKEDITOR && document.getElementById("content") && !textEditorRef.current) {
+                textEditorRef.current = window.CKEDITOR.replace("content");
+    
+                textEditorRef.current.on('instanceReady', function () {
+                    textEditorRef.current.setData(formData.content);
+                });
+            }
+        };
+    
+        initEditor();
+    
+        return () => {
+            destroyEditors();
+        };
+    }, []);
+    
+
+    const sendCloudinary = async (file) => {
+        const formDataCloudinary = new FormData();
+        formDataCloudinary.append("file", file);
+        formDataCloudinary.append("upload_preset", "website-saoviet");
+        formDataCloudinary.append("folder", "saoviet");
+
+        try {
+            const response = await fetch("https://api.cloudinary.com/v1_1/doie0qiiq/image/upload", {
+                method: "POST",
+                body: formDataCloudinary
+            });
+            const data = await response.json();
+
+            if (data.secure_url) {
+                SuccessToast("Tải ảnh lên Cloudinary thành công.");
+                return data.secure_url;
+            } else {
+                ErrorToast("Tải ảnh lên Cloudinary thất bại.");
+                return null;
+            }
+        } catch (error) {
+            console.error("Failed to upload image: ", error);
+            ErrorToast("Không thể tải ảnh lên Cloudinary.");
+            return null;
+        }
     }
-    if (descriptionEditorRef.current) {
-      descriptionEditorRef.current.destroy();
-      descriptionEditorRef.current = null;
-    }
-  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [tourRes, catRes] = await Promise.all([
-          TourApi.getById(id),
-          TourApi.getCategory()
-        ]);
+    const handleChange = (e) => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
-        if (tourRes?.code === 1985) {
-          setTourCode(tourRes.result.tourCode);
-          setFormData(tourRes.result);
-          setPreview(tourRes.result.image || noImage);
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
+            ErrorToast("Chỉ chấp nhận file JPG, PNG, GIF, WEBP.");
+
+            fileInputRef.current.value = "";
+            setPreview(noImage);
+            setSelectedFile(null);
+
+            return;
         }
 
-        if (catRes?.code === 1986) {
-          setCategories(catRes.result);
+        const previewURL = URL.createObjectURL(file);
+        setPreview(previewURL);
+        setSelectedFile(file);
+    };
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const response = await NewsApi.getByIdAndAdmin(id);
+
+                if (response?.code === 2105) {
+                    setFormData(
+                        pick(
+                            response?.result,
+                            ["title", "summary", "image", "content", "type"]
+                        )
+                    );
+
+                    setPreview(response?.result?.image);
+                    
+                    setTimeout(() => {
+                        if (textEditorRef.current) {
+                            textEditorRef.current.setData(response?.result?.content);
+                        }
+                    }, 200)
+                } else {
+                    navigate("/manage/error/404");
+                }
+            } catch (error) {
+                console.error("Failed to fetch news: ", error);
+                navigate("/manage/error/404");
+            }
         }
-      } catch {
-        Swal.fire("Lỗi", "Không thể tải dữ liệu!", "error");
-      } finally {
-        setLoading(true);
-      }
+
+        fetchNews();
+    }, [id])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const content = textEditorRef.current.getData();
+        const updatedFormData = { ...formData, content };
+
+        if (content === "") {
+            ErrorToast("Nội dung không được bỏ trống.")
+            return;
+        }
+
+        if (selectedFile) {
+            const uploadedUrl = await sendCloudinary(selectedFile);
+            if (uploadedUrl) {
+                updatedFormData.image = uploadedUrl;
+            }
+        }
+
+        try {
+            const response = await NewsApi.update(id, updatedFormData);
+
+            if (response?.code === 2103) {
+                SuccessToast("Cập nhật tin tức thành công.");
+            } else {
+                ErrorToast(response.message || "Cập nhật tin tức không thành công.");
+            }
+        } catch (error) {
+            console.error("Failed to update news: ", error);
+            ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.");
+        }
     };
 
-    fetchData();
-  }, [id]);
+    return (
+        <div className="news-update-page px-4">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="card shadow col-md-7 col-xl-6">
+                        <div className="card-body">
+                            <h3 className="text-center mb-4 fw-bold">Cập nhật tin tức</h3>
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label className="form-label">Tiêu đề:</label>
+                                    <input name="title" type="text" required value={formData.title} onChange={handleChange} className="form-control" />
+                                </div>
 
-  useEffect(() => {
-    const initEditor = (id, ref) => {
-      if (window.CKEDITOR && document.getElementById(id) && !ref.current) {
-        ref.current = window.CKEDITOR.replace(id);
-      }
-    };
+                                <div className="mb-3">
+                                    <label className="form-label">Tóm tắt:</label>
+                                    <textarea name="summary" rows={5} required value={formData.summary} onChange={handleChange} className="form-control" />
+                                </div>
 
-    const timer = setTimeout(() => {
-      initEditor("introduce", introduceEditorRef);
-      initEditor("description", descriptionEditorRef);
-    }, 100);
+                                <div className="mb-3">
+                                    <label className="form-label">Ảnh:</label>
+                                    <div className="image-upload">
+                                        <img src={preview} alt="ảnh tin tức" className="mb-2" />
+                                        <input type="file" ref={fileInputRef} accept="image/*" onChange={handleFileChange} className="form-control" />
+                                    </div>
+                                </div>
 
-    return () => {
-      clearTimeout(timer);
-      destroyEditors();
-    };
-  }, []);
+                                <div className="mb-3">
+                                    <label className="form-label">Nội dung:</label>
+                                    <textarea id="content" name="content" rows={5} required className="form-control" />
+                                </div>
 
-  useEffect(() => {
-    if (introduceEditorRef.current)
-      introduceEditorRef.current.setData(formData.introduce || "");
-    if (descriptionEditorRef.current)
-      descriptionEditorRef.current.setData(formData.description || "");
-  }, [formData]);
+                                <div className="mb-3">
+                                    <label className="form-label">Loại:</label>
+                                    <select name="type" value={formData.type} onChange={handleChange} className="form-control">
+                                        <option value="Nổi bật">Nổi bật</option>
+                                        <option value="Thường">Thường</option>
+                                    </select>
+                                </div>
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
-      return Swal.fire("Lỗi", "Chỉ chấp nhận JPG, PNG, GIF, WEBP!", "error");
-    }
-
-    setPreview(URL.createObjectURL(file));
-
-    const cloudForm = new FormData();
-    cloudForm.append("file", file);
-    cloudForm.append("upload_preset", "website-saoviet");
-    cloudForm.append("folder", "saoviet");
-
-    try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/doie0qiiq/image/upload", {
-        method: "POST",
-        body: cloudForm
-      });
-      const data = await res.json();
-      if (data.secure_url) {
-        setFormData({ ...formData, image: data.secure_url });
-      }
-    } catch {
-      Swal.fire("Lỗi", "Không thể tải ảnh lên Cloudinary!", "error");
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const updated = {
-      ...formData,
-      introduce: introduceEditorRef.current?.getData() || "",
-      description: descriptionEditorRef.current?.getData() || ""
-    };
-
-    try {
-      const res = await TourApi.update(id, updated);
-      if (res?.code === 1983) {
-        Swal.fire("Thành công", "Tour đã được cập nhật", "success");
-      } else {
-        Swal.fire("Lỗi", res.message || "Có lỗi xảy ra!", "error");
-      }
-    } catch {
-      Swal.fire("Lỗi", "Đã xảy ra lỗi không xác định", "error");
-    }
-  };
-
-  if (!isLoading) return <div style={{ height: 500 }} />;
-
-  return (
-    <div className="tour-update-page">
-      <div className="form-container">
-        <div className="form-content">
-          <h2>Cập nhật Tour {tourCode}</h2>
-          <form onSubmit={handleSubmit} className="tour-update-form">
-            <div className="form-group">
-              <label>Tên Tour:</label>
-              <input name="name" required value={formData.name} onChange={handleChange} />
+                                <div className="d-flex justify-content-center gap-3">
+                                    <button type="button" className="btn btn-back"
+                                        onClick={() => {
+                                            destroyEditors();
+                                            navigate("/manage/news");
+                                        }}>
+                                        <FaArrowLeft size={18} color="black" />
+                                    </button>
+                                    <button type="submit" className="btn btn-submit fw-bold">Cập nhật</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="form-group">
-              <label>Giới thiệu:</label>
-              <textarea id="introduce" name="introduce" required />
-            </div>
-
-            <div className="form-group">
-              <label>Chủ đề:</label>
-              <select name="categoryId" required value={formData.categoryId} onChange={handleChange}>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Ảnh Tour:</label>
-              <div className="image-upload">
-                <img src={preview} alt="ảnh tour" className="image" />
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Mô tả:</label>
-              <textarea id="description" name="description" required />
-            </div>
-
-            <div className="form-group">
-              <label>Giá:</label>
-              <input name="price" type="number" min="0" required value={formData.price} onChange={handleChange} />
-            </div>
-
-            <div className="button-group">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => {
-                  destroyEditors();
-                  navigate("/manage/tours/index");
-                }}
-              >
-                Quay về
-              </button>
-              <button type="submit" className="btn btn-primary">Cập nhật</button>
-            </div>
-          </form>
+            <ToastContainer />
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default NewsUpdatePage;

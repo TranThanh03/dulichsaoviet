@@ -70,4 +70,41 @@
     .ended {
         color: red;
     }
+
+    .form-input-custom {
+        .row {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 99;
+        }
+
+        .content h2 {
+            font-weight: bold;
+            color: black;
+        }
+
+        .form-label {
+            color: black;
+        }
+
+        input {
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        .btn-close {
+            margin-right: 24px !important;
+        }
+
+        .btn-submit {
+            font-weight: bold;
+            background-color: #34b7c6;
+        }
+
+        .btn-submit:hover {
+            background-color: #137681;
+        }
+    }
 }

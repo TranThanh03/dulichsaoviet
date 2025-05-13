@@ -71,7 +71,7 @@ const CustomerPage = () => {
                     ErrorToast(`Khách hàng ${code} đang có lịch đặt đang xử lý.`);
                 }
                 else {
-                    ErrorToast(`Xóa khách hàng ${code} không thành công.`)
+                    ErrorToast(response?.message || `Xóa khách hàng ${code} không thành công.`)
                 }
             } catch (error) {
                 console.error("Failed to delete customer: ", error)

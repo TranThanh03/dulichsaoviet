@@ -1,31 +1,34 @@
-import React, { useEffect, useState, useRef } from "react";
-import Swal from "sweetalert2";
+import { useEffect, useState, useRef } from "react";
 import "./insert.scss";
-import { TourApi } from "services";
+import { NewsApi } from "services";
 import { useNavigate } from "react-router-dom";
 import { noImage } from "assets";
+import { FaArrowLeft } from "react-icons/fa";
+import { ToastContainer } from "react-toastify";
+import { ErrorToast, SuccessToast } from "component/notifi";
 
 const NewsInsertPage = () => {
-    const introduceEditorRef = useRef(null);
-    const descriptionEditorRef = useRef(null);
+    const textEditorRef = useRef(null);
+    const fileInputRef = useRef(null);
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        name: "",
-        categoryId: 1,
+        title: "",
+        summary: "",
         image: "",
-        price: 0
+        content: "",
+        type: "Nổi bật"
     });
-    const [preview, setPreview] = useState(noImage);
-    const [categories, setCategories] = useState([]);
 
-    useEffect(() => {
-        TourApi.getCategory()
-            .then(response => {
-                if (response?.code === 1986) setCategories(response.result);
-            })
-            .catch(error => console.error("Failed to fetch categories: ", error));
-    }, []);
+    const [preview, setPreview] = useState(noImage);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const destroyEditors = () => {
+        if (textEditorRef.current) {
+            textEditorRef.current.destroy();
+            textEditorRef.current = null;
+        }
+    };
 
     useEffect(() => {
         const initEditor = (id, ref) => {
@@ -34,37 +37,14 @@ const NewsInsertPage = () => {
             }
         };
 
-        initEditor("introduce", introduceEditorRef);
-        initEditor("description", descriptionEditorRef);
+        initEditor("content", textEditorRef);
 
         return () => {
-            if (introduceEditorRef.current) {
-                introduceEditorRef.current.destroy();
-                introduceEditorRef.current = null;
-            }
-            if (descriptionEditorRef.current) {
-                descriptionEditorRef.current.destroy();
-                descriptionEditorRef.current = null;
-            }
+            destroyEditors();
         };
     }, []);
 
-    const handleChange = (e) => {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
-    const handleFileChange = async (e) => {
-        const file = e.target.files[0];
-
-        if (!file) return;
-
-        if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
-            return Swal.fire("Lỗi", "Chỉ chấp nhận JPG, PNG, GIF, WEBP!", "error");
-        }
-
-        const previewURL = URL.createObjectURL(file);
-        setPreview(previewURL);
-
+    const sendCloudinary = async (file) => {
         const formDataCloudinary = new FormData();
         formDataCloudinary.append("file", file);
         formDataCloudinary.append("upload_preset", "website-saoviet");
@@ -78,257 +58,151 @@ const NewsInsertPage = () => {
             const data = await response.json();
 
             if (data.secure_url) {
-                setFormData(prev => ({ ...prev, image: data.secure_url }));
-                setPreview(data.secure_url);
+                SuccessToast("Tải ảnh lên Cloudinary thành công.");
+                return data.secure_url;
             } else {
-                Swal.fire("Lỗi", "Không thể tải ảnh lên Cloudinary!", "error");
+                ErrorToast("Tải ảnh lên Cloudinary thất bại.");
+                return null;
             }
         } catch (error) {
-            Swal.fire("Lỗi", "Đã xảy ra lỗi khi tải ảnh lên Cloudinary!", "error");
+            console.error("Failed to upload image: ", error);
+            ErrorToast("Không thể tải ảnh lên Cloudinary.");
+            return null;
         }
+    }
+
+    const handleChange = (e) => {
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
+            ErrorToast("Chỉ chấp nhận file JPG, PNG, GIF, WEBP.");
+
+            fileInputRef.current.value = "";
+            setPreview(noImage);
+            setSelectedFile(null);
+
+            return;
+        }
+
+        const previewURL = URL.createObjectURL(file);
+        setPreview(previewURL);
+        setSelectedFile(file);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const updatedData = {
-            ...formData,
-            introduce: introduceEditorRef.current.getData(),
-            description: descriptionEditorRef.current.getData()
-        };
+        const content = textEditorRef.current.getData();
+        const updatedFormData = { ...formData, content };
+
+        if (selectedFile === null) {
+            ErrorToast("Vui lòng chọn ảnh.")
+            return;
+        } else if (content === "") {
+            ErrorToast("Nội dung không được bỏ trống.")
+            return;
+        }
+
+        if (selectedFile) {
+            const uploadedUrl = await sendCloudinary(selectedFile);
+            if (uploadedUrl) {
+                updatedFormData.image = uploadedUrl;
+            }
+        }
 
         try {
-            const response = await TourApi.create(updatedData);
+            const response = await NewsApi.create(updatedFormData);
 
-            if (response?.code === 1989) {
-                Swal.fire("Thành công", "Tour đã được thêm thành công", "success")
-                    .then(() => window.location.href = "/manage/tours/index");
+            if (response?.code === 2100) {
+                SuccessToast("Thêm tin tức thành công.");
+
+                setFormData({
+                    title: "",
+                    summary: "",
+                    image: "",
+                    content: "",
+                    type: "Nổi bật"
+                });
+
+                setPreview(noImage);
+                setSelectedFile(null);
+
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
             } else {
-                Swal.fire("Lỗi", response.message || "Có lỗi xảy ra!", "error");
+                ErrorToast(response.message || "Thêm tin tức không thành công.");
             }
         } catch (error) {
-            Swal.fire("Lỗi", "Đã xảy ra lỗi không xác định", "error");
+            console.error("Failed to create news: ", error);
+            ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.");
         }
     };
 
     return (
-        <div className="tour-insert-page">
-            <div className="form-container">
-                <div className="form-content">
-                    <h2>Thêm Tour</h2>
-                    <form onSubmit={handleSubmit} className="tour-insert-form">
-                        <div className="form-group">
-                            <label>Tên Tour:</label>
-                            <input name="name" type="text" required value={formData.name} onChange={handleChange} />
-                        </div>
+        <div className="news-insert-page px-4">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="card shadow col-md-7 col-xl-6">
+                        <div className="card-body">
+                            <h3 className="text-center mb-4 fw-bold">Thêm tin tức</h3>
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label className="form-label">Tiêu đề:</label>
+                                    <input name="title" type="text" required value={formData.title} onChange={handleChange} className="form-control" />
+                                </div>
 
-                        <div className="form-group">
-                            <label>Giới thiệu:</label>
-                            <textarea id="introduce"></textarea>
-                        </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Tóm tắt:</label>
+                                    <textarea name="summary" rows={5} required value={formData.summary} onChange={handleChange} className="form-control" />
+                                </div>
 
-                        <div className="form-group">
-                            <label>Chủ đề:</label>
-                            <select name="categoryId" required value={formData.categoryId} onChange={handleChange}>
-                                {categories.map(cat => (
-                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                ))}
-                            </select>
-                        </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Ảnh:</label>
+                                    <div className="image-upload">
+                                        <img src={preview} alt="ảnh tin tức" className="mb-2" />
+                                        <input type="file" ref={fileInputRef} accept="image/*" onChange={handleFileChange} className="form-control" />
+                                    </div>
+                                </div>
 
-                        <div className="form-group">
-                            <label>Ảnh Tour:</label>
-                            <div className="image-upload">
-                                <img src={preview} alt="ảnh tour" className="image" />
-                                <input type="file" accept="image/*" onChange={handleFileChange} required/>
-                            </div>
-                        </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Nội dung:</label>
+                                    <textarea id="content" name="content" rows={5} required className="form-control" />
+                                </div>
 
-                        <div className="form-group">
-                            <label>Mô tả:</label>
-                            <textarea id="description"></textarea>
-                        </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Loại:</label>
+                                    <select name="type" value={formData.type} onChange={handleChange} className="form-control">
+                                        <option value="Nổi bật">Nổi bật</option>
+                                        <option value="Thường">Thường</option>
+                                    </select>
+                                </div>
 
-                        <div className="form-group">
-                            <label>Giá:</label>
-                            <input name="price" type="number" min="0" required value={formData.price} onChange={handleChange} />
+                                <div className="d-flex justify-content-center gap-3">
+                                    <button type="button" className="btn btn-back"
+                                        onClick={() => {
+                                            destroyEditors();
+                                            navigate("/manage/news");
+                                        }}>
+                                        <FaArrowLeft size={18} color="black" />
+                                    </button>
+                                    <button type="submit" className="btn btn-submit fw-bold">Thêm</button>
+                                </div>
+                            </form>
                         </div>
-
-                        <div className="button-group">
-                            <button type="button" onClick={() => navigate("/manage/tours/index")} className="btn btn-secondary">Quay về</button>
-                            <button type="submit" className="btn btn-primary">Thêm</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
+
+            <ToastContainer />
         </div>
     );
 };
-
-// const PromotionInsertPage = () => {
-//     const introduceEditorRef = useRef(null);
-//     const descriptionEditorRef = useRef(null);
-//     const [formData, setFormData] = useState({});
-//     const [preview, setPreview] = useState(noImage);
-//     const [categories, setCategories] = useState([]);
-//     const navigate = useNavigate();
-
-//     const destroyEditors = () => {
-//         if (introduceEditorRef.current) {
-//             introduceEditorRef.current.destroy();
-//             introduceEditorRef.current = null;
-//         }
-//         if (descriptionEditorRef.current) {
-//             descriptionEditorRef.current.destroy();
-//             descriptionEditorRef.current = null;
-//         }
-//     };
-
-//     useEffect(() => {
-//         const initEditor = (id, ref) => {
-//             if (window.CKEDITOR && document.getElementById(id) && !ref.current) {
-//                 ref.current = window.CKEDITOR.replace(id);
-//             }
-//         };
-
-//         initEditor("introduce", introduceEditorRef);
-//         initEditor("description", descriptionEditorRef);
-
-//         return () => {
-//             destroyEditors();
-//         };
-//     }, []);
-
-//     useEffect(() => {
-//         // Giả sử bạn có API lấy danh sách chủ đề
-//         const fetchCategories = async () => {
-//             const res = await TourApi.getCategories();
-//             if (res?.data) setCategories(res.data);
-//         };
-//         fetchCategories();
-//     }, []);
-
-//     const handleChange = (e) => {
-//         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-//     };
-
-//     const handleFileChange = async (e) => {
-//         const file = e.target.files[0];
-//         if (!file) return;
-
-//         if (!["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.type)) {
-//             return Swal.fire("Lỗi", "Chỉ chấp nhận JPG, PNG, GIF, WEBP!", "error");
-//         }
-
-//         const previewURL = URL.createObjectURL(file);
-//         setPreview(previewURL);
-
-//         const formDataCloudinary = new FormData();
-//         formDataCloudinary.append("file", file);
-//         formDataCloudinary.append("upload_preset", "website-saoviet");
-//         formDataCloudinary.append("folder", "saoviet");
-
-//         try {
-//             const response = await fetch("https://api.cloudinary.com/v1_1/doie0qiiq/image/upload", {
-//                 method: "POST",
-//                 body: formDataCloudinary
-//             });
-//             const data = await response.json();
-
-//             if (data.secure_url) {
-//                 setFormData(prev => ({ ...prev, image: data.secure_url }));
-//                 setPreview(data.secure_url);
-//             } else {
-//                 Swal.fire("Lỗi", "Không thể tải ảnh lên Cloudinary!", "error");
-//             }
-//         } catch (error) {
-//             Swal.fire("Lỗi", "Đã xảy ra lỗi khi tải ảnh lên Cloudinary!", "error");
-//         }
-//     };
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-
-//         const updatedData = {
-//             ...formData,
-//             introduce: introduceEditorRef.current.getData(),
-//             description: descriptionEditorRef.current.getData()
-//         };
-
-//         try {
-//             const response = await TourApi.create(updatedData);
-
-//             if (response?.code === 1989) {
-//                 Swal.fire("Thành công", "Tour đã được thêm thành công", "success")
-//                     .then(() => navigate("/manage/tours/index"));
-//             } else {
-//                 Swal.fire("Lỗi", response.message || "Có lỗi xảy ra!", "error");
-//             }
-//         } catch (error) {
-//             Swal.fire("Lỗi", "Đã xảy ra lỗi không xác định", "error");
-//         }
-//     };
-
-//     return (
-//         <div className="container my-5">
-//             <div className="card shadow">
-//                 <div className="card-body">
-//                     <h3 className="text-center text-primary mb-4">Thêm Tour</h3>
-//                     <form onSubmit={handleSubmit}>
-//                         <div className="mb-3">
-//                             <label className="form-label">Tên Tour</label>
-//                             <input name="name" type="text" required value={formData.name || ""} onChange={handleChange} className="form-control" />
-//                         </div>
-
-//                         <div className="mb-3">
-//                             <label className="form-label">Giới thiệu</label>
-//                             <textarea id="introduce" className="form-control" rows="5"></textarea>
-//                         </div>
-
-//                         <div className="mb-3">
-//                             <label className="form-label">Chủ đề</label>
-//                             <select name="categoryId" required value={formData.categoryId || ""} onChange={handleChange} className="form-select">
-//                                 <option value="">-- Chọn chủ đề --</option>
-//                                 {categories.map(cat => (
-//                                     <option key={cat.id} value={cat.id}>{cat.name}</option>
-//                                 ))}
-//                             </select>
-//                         </div>
-
-//                         <div className="mb-3">
-//                             <label className="form-label">Ảnh Tour</label>
-//                             <div className="text-center mb-2">
-//                                 <img src={preview} alt="ảnh tour" className="img-thumbnail" style={{ maxHeight: "300px" }} />
-//                             </div>
-//                             <input type="file" accept="image/*" onChange={handleFileChange} required className="form-control" />
-//                         </div>
-
-//                         <div className="mb-3">
-//                             <label className="form-label">Mô tả</label>
-//                             <textarea id="description" className="form-control" rows="5"></textarea>
-//                         </div>
-
-//                         <div className="mb-3">
-//                             <label className="form-label">Giá</label>
-//                             <input name="price" type="number" min="0" required value={formData.price || ""} onChange={handleChange} className="form-control" />
-//                         </div>
-
-//                         <div className="d-flex justify-content-center gap-3">
-//                             <button type="button" className="btn btn-secondary"
-//                                 onClick={() => {
-//                                     destroyEditors();
-//                                     navigate("/manage/tours/index");
-//                                 }}
-//                             >
-//                                 Quay về
-//                             </button>
-//                             <button type="submit" className="btn btn-primary">Thêm</button>
-//                         </div>
-//                     </form>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
 
 export default NewsInsertPage;

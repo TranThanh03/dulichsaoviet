@@ -72,7 +72,7 @@ const PromotionPage = () => {
                     setPromotions(prevPromotions => prevPromotions.filter(promotion => promotion.id !== id));
                 }
                 else {
-                    ErrorToast(`Xóa khuyến mãi ${code} không thành công.`)
+                    ErrorToast(response?.message || `Xóa khuyến mãi ${code} không thành công.`)
                 }
             } catch (error) {
                 console.error("Failed to delete promotion: ", error);

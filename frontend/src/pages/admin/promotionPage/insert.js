@@ -58,7 +58,7 @@ const PromotionInsertPage = () => {
         <div className="promotion-insert-page px-4">
             <div className="container">
                 <div className="row justify-content-center">
-                    <div className="card shadow col-sm-8 col-lg-6">
+                    <div className="card shadow col-md-7 col-xl-6">
                         <div className="card-body">
                             <h3 className="text-center mb-4 fw-bold">Thêm khuyến mãi</h3>
                             <form onSubmit={handleSubmit}>

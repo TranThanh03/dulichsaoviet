@@ -4,7 +4,7 @@ import getToken from "utils/getToken";
 
 const NewsApi = {
     getAll: (params) => {
-        return axiosInstance.get("/api/v1/news",  {
+        return axiosInstanceAdmin.get("/api/v1/news",  {
             params,
             headers: {
                 Authorization: `Bearer ${getToken(true)}`
@@ -13,6 +13,13 @@ const NewsApi = {
     },
     getById: (id) => {
         return axiosInstance.get(`/api/v1/news/${id}`);
+    },
+    getByIdAndAdmin: (id) => {
+        return axiosInstanceAdmin.get(`/api/v1/news/detail/${id}`, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
     },
     create: (data) => {
         return axiosInstanceAdmin.post("/api/v1/news", data, {

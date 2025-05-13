@@ -22,16 +22,16 @@ public class News {
     @Column(name = "code")
     String code;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 1000)
     String title;
 
-    @Column(name = "summary")
+    @Column(name = "summary", columnDefinition = "TEXT")
     String summary;
 
     @Column(name = "image")
     String image;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "LONGTEXT")
     String content;
 
     @Column(name = "type")

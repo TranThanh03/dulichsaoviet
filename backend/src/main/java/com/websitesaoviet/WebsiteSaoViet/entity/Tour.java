@@ -24,10 +24,10 @@ public class Tour {
     @Column(name = "code", unique = true)
     String code;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 500)
     String name;
 
-    @Column(name = "destination")
+    @Column(name = "destination", length = 500)
     String destination;
 
     @Column(name = "area")

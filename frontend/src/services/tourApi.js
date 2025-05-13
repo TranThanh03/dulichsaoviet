@@ -64,6 +64,13 @@ const TourApi = {
     getSimilar: (params) => {
         return axiosInstance.get("/api/v1/tours/similar", { params });
     },
+    getList: () => {
+        return axiosInstance.get("/api/v1/tours/list", { 
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
 };
 
 export default TourApi;
