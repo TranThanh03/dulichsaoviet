@@ -339,7 +339,7 @@ const DashboardPage = () => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>
-                                                <Link className="ellipsis" to={`/manage/bookings/detail/${item.id}`}>{item.code}</Link>
+                                                <Link className="ellipsis" to={`/manage/calendars/detail/${item.id}`}>{item.code}</Link>
                                             </td>
                                             <td>{item.username ?? ''}</td>
                                             <td className="color-red">{item.totalPrice ? formatCurrency(item.totalPrice) : 0}</td>

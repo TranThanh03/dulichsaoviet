@@ -1,6 +1,7 @@
 package com.websitesaoviet.WebsiteSaoViet.repository;
 
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.NewsListResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.News;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, String> {
@@ -24,4 +25,36 @@ public interface NewsRepository extends JpaRepository<News, String> {
             "CASE WHEN n.type = 'Nổi bật' THEN 0 ELSE 1 END, " +
             "n.timeStamp DESC")
     Page<NewsListResponse> findAllNews(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse(" +
+            "n.id, n.title, n.image, n.summary, n.viewCount, n.timeStamp) " +
+            "FROM News n " +
+            "WHERE n.type = 'Nổi bật' " +
+            "ORDER BY n.timeStamp DESC " +
+            "LIMIT 1")
+    NewsSummaryResponse findOutstandingNews();
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse(" +
+            "n.id, n.title, n.image, n.summary, n.viewCount, n.timeStamp) " +
+            "FROM News n " +
+            "WHERE n.type = 'Thường' " +
+            "ORDER BY n.timeStamp DESC " +
+            "LIMIT 5")
+    List<NewsSummaryResponse> findTopNews();
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse(" +
+            "n.id, n.title, n.image, n.summary, n.viewCount, n.timeStamp) " +
+            "FROM News n " +
+            "WHERE n.id != :id AND n.type = 'Nổi bật' " +
+            "ORDER BY n.timeStamp DESC " +
+            "LIMIT 10")
+    List<NewsSummaryResponse> findListOutstandingNews(@Param("id") String id);
+
+    @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse(" +
+            "n.id, n.title, n.image, n.summary, n.viewCount, n.timeStamp) " +
+            "FROM News n " +
+            "WHERE n.id != :id AND n.type = 'Thường' " +
+            "ORDER BY n.timeStamp DESC " +
+            "LIMIT 10")
+    List<NewsSummaryResponse> findListTopNews(@Param("id") String id);
 }

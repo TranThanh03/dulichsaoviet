@@ -51,6 +51,8 @@ const NewsInsertPage = () => {
         formDataCloudinary.append("folder", "saoviet");
 
         try {
+            SuccessToast("Đang tải ảnh lên Cloudinary...");
+
             const response = await fetch("https://api.cloudinary.com/v1_1/doie0qiiq/image/upload", {
                 method: "POST",
                 body: formDataCloudinary
@@ -136,6 +138,10 @@ const NewsInsertPage = () => {
 
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
+                }
+
+                if (textEditorRef.current) {
+                    textEditorRef.current.setData("");
                 }
             } else {
                 ErrorToast(response.message || "Thêm tin tức không thành công.");

@@ -4,6 +4,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsCreationRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.NewsListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.NewsResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.News;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -95,5 +97,21 @@ public class NewsService {
         int nextCode = sequenceService.getNextNumber(type.toLowerCase());
 
         return "N" + Year.now().getValue() + String.format("%04d", nextCode);
+    }
+
+    public NewsSummaryResponse getOutstandingNews() {
+        return newsRepository.findOutstandingNews();
+    }
+
+    public List<NewsSummaryResponse> getTopNews() {
+        return newsRepository.findTopNews();
+    }
+
+    public List<NewsSummaryResponse> getListOutstandingNews(String id) {
+        return newsRepository.findListOutstandingNews(id);
+    }
+
+    public List<NewsSummaryResponse> getListTopNews(String id) {
+        return newsRepository.findListTopNews(id);
     }
 }

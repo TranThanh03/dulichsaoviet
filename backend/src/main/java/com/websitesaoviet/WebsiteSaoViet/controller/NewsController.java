@@ -5,6 +5,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.request.admin.NewsUpdateRequest;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.NewsListResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.NewsResponse;
+import com.websitesaoviet.WebsiteSaoViet.dto.response.user.NewsSummaryResponse;
 import com.websitesaoviet.WebsiteSaoViet.service.NewsService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/news")
@@ -95,6 +98,46 @@ public class NewsController {
         ApiResponse<NewsResponse> apiResponse = ApiResponse.<NewsResponse>builder()
                 .code(2105)
                 .result(newsService.getNewsByIdAndAdmin(id))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/outstanding")
+    ResponseEntity<ApiResponse<NewsSummaryResponse>> getOutstandingNews() {
+        ApiResponse<NewsSummaryResponse> apiResponse = ApiResponse.<NewsSummaryResponse>builder()
+                .code(2106)
+                .result(newsService.getOutstandingNews())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/top-new")
+    ResponseEntity<ApiResponse<List<NewsSummaryResponse>>> getTopNews() {
+        ApiResponse<List<NewsSummaryResponse>> apiResponse = ApiResponse.<List<NewsSummaryResponse>>builder()
+                .code(2107)
+                .result(newsService.getTopNews())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/list-outstanding/{id}")
+    ResponseEntity<ApiResponse<List<NewsSummaryResponse>>> getListOutstandingNews(@PathVariable String id) {
+        ApiResponse<List<NewsSummaryResponse>> apiResponse = ApiResponse.<List<NewsSummaryResponse>>builder()
+                .code(2108)
+                .result(newsService.getListOutstandingNews(id))
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/list-top-new/{id}")
+    ResponseEntity<ApiResponse<List<NewsSummaryResponse>>> getListTopNews(@PathVariable String id) {
+        ApiResponse<List<NewsSummaryResponse>> apiResponse = ApiResponse.<List<NewsSummaryResponse>>builder()
+                .code(2109)
+                .result(newsService.getListTopNews(id))
                 .build();
 
         return ResponseEntity.ok(apiResponse);

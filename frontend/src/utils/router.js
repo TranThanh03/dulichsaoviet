@@ -6,7 +6,7 @@ export const ROUTERS = {
         PROFILE: "customer/infor",
         PASSWORD: "customer/password",
         NEWS: "news/index",
-        NEWSDETAIL: "news/detail",
+        NEWSDETAIL: "news/detail/:id",
         TOUR: "tour/index",
         TOURCATEGORY: "tour/category",
         TOURLIST: "tour/category/:id",

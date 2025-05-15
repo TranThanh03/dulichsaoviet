@@ -42,6 +42,18 @@ const NewsApi = {
             }
         });
     },
+    getOutstanding: (id) => {
+        return axiosInstance.get("/api/v1/news/outstanding");
+    },
+    getTopNew: (id) => {
+        return axiosInstance.get("/api/v1/news/top-new");
+    },
+    getOutstandingList: (id) => {
+        return axiosInstance.get(`/api/v1/news/list-outstanding/${id}`);
+    },
+    getTopNewList: (id) => {
+        return axiosInstance.get(`/api/v1/news/list-top-new/${id}`);
+    }
 };
 
 export default NewsApi;

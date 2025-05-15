@@ -1,54 +1,83 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { featuredTravel, travelNews1, travelNews2, travelNews3 } from 'assets';
-import './detail.scss';
+import { noImage } from 'assets';
+import './style.scss';
+import { NewsApi } from 'services';
 
 const NewsPage = () => {
+    const [outstanding, setOutstanding] = useState({});
+    const [topNew, setTopNew] = useState([]);
+
+    useEffect(() => {
+        const fetchOutstanding = async () => {
+            try {
+                const response = await NewsApi.getOutstanding();
+
+                if (response?.code === 2106) {
+                    setOutstanding(response?.result);
+                }
+            } catch (error) {
+                console.error("Failed to fetch outstanding news: ", error);
+            }
+        }
+
+        fetchOutstanding();
+    }, [])
+
+    useEffect(() => {
+        const fetchTopNew = async () => {
+            try {
+                const response = await NewsApi.getTopNew();
+
+                if (response?.code === 2107) {
+                    setTopNew(response?.result);
+                }
+            } catch (error) {
+                console.error("Failed to fetch top news: ", error);
+            }
+        }
+
+        fetchTopNew();
+    }, [])
+
     return (
         <div className='news-page'>
-            <section className="featured-news">
-                <h2 className="fw-bold">Tin nổi bật</h2>
-                <article className="featured-article">
-                    <img src={featuredTravel} alt="Ảnh tin tức nổi bật" />
-                    <h3>Khám phá 5 bãi biển đẹp nhất Việt Nam năm 2024</h3>
-                    <p>Từ Phú Quốc đến Nha Trang, hãy cùng chúng tôi khám phá những bãi biển tuyệt đẹp và còn nguyên sơ của Việt Nam...</p>
-                    <Link to="/news/detail">Đọc thêm</Link>
-                </article>
-            </section>
+            {outstanding && (
+                <section className="featured-news">
+                    <h2 className="fw-bold">Tin nổi bật</h2>
 
-            <section className="news-list">
-                <h2 className="fw-bold">Tin tức mới nhất</h2>
-                <article className="news-item">
-                    <img src={travelNews1} alt="Ảnh tin tức 1" />
-                    <h3>Hướng dẫn du lịch Sapa mùa lúa chín</h3>
-                    <p>Khám phá vẻ đẹp của những thửa ruộng bậc thang vàng óng ở Sapa vào mùa thu...</p>
-                    <Link to="/news/detail">Đọc thêm</Link>
-                </article>
-                <article className="news-item">
-                    <img src={travelNews2} alt="Ảnh tin tức 2" />
-                    <h3>Top 10 nhà hàng đáng thử ở Hội An</h3>
-                    <p>Khám phá ẩm thực đặc sắc của phố cổ Hội An qua danh sách 10 nhà hàng tuyệt vời nhất...</p>
-                    <Link to="/news/detail">Đọc thêm</Link>
-                </article>
-                <article className="news-item">
-                    <img src={travelNews3} alt="Ảnh tin tức 3" />
-                    <h3>Cập nhật: Quy định mới về visa du lịch Việt Nam</h3>
-                    <p>Những thay đổi quan trọng trong chính sách visa du lịch Việt Nam năm 2024...</p>
-                    <Link to="/news/detail">Đọc thêm</Link>
-                </article>
-                <article className="news-item">
-                    <img src={travelNews1} alt="Ảnh tin tức 1" />
-                    <h3>Hướng dẫn du lịch Sapa mùa lúa chín</h3>
-                    <p>Khám phá vẻ đẹp của những thửa ruộng bậc thang vàng óng ở Sapa vào mùa thu...</p>
-                    <Link to="/news/detail">Đọc thêm</Link>
-                </article>
-                <article className="news-item">
-                    <img src={travelNews2} alt="Ảnh tin tức 2" />
-                    <h3>Top 10 nhà hàng đáng thử ở Hội An</h3>
-                    <p>Khám phá ẩm thực đặc sắc của phố cổ Hội An qua danh sách 10 nhà hàng tuyệt vời nhất...</p>
-                    <Link to="/news/detail">Đọc thêm</Link>
-                </article>
-            </section>
+                    <Link to={`/news/detail/${outstanding.id}`}>
+                        <article className="featured-article">
+                            <img src={outstanding.image || noImage} alt="Ảnh" />
+                            <h4>{outstanding.title || ''}</h4>
+                            <p className="ellipsis">{outstanding.summary || ''}</p>
+                            <span>
+                                <i class="fa-regular fa-eye me-1"></i>
+                                {outstanding.viewCount || 0}
+                            </span>
+                        </article>
+                    </Link>
+                </section>
+            )}
+
+            {topNew.length > 0 && (
+                <section className="news-list">
+                    <h2 className="fw-bold">Tin tức mới nhất</h2>
+                        {topNew.map((item, index) => (
+                            <Link key={index} to={`/news/detail/${item.id || ''}`}>
+                                <article key={index} className="news-item" style={{ height: "100%" }}>
+                                    <img src={item.image || noImage} alt="Ảnh" />
+                                    <h5>{item.title || ''}</h5>
+                                    <p className="ellipsis">{item.summary || ''}</p>
+                                    <span>
+                                        <i class="fa-regular fa-eye me-1"></i>
+                                        {item.viewCount || 0}
+                                    </span>
+                                </article>
+                            </Link>
+                        ))}
+                </section>
+            )}
 
             <section className="news-categories">
                 <h2>Chuyên mục</h2>
