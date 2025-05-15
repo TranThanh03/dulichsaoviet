@@ -14,6 +14,13 @@ const TourApi = {
     getById: (id) => {
         return axiosInstance.get(`/api/v1/tours/${id}`);
     },
+    checkNotStarted: (id) => {
+        return axiosInstanceAdmin.get(`/api/v1/tours/not-started/${id}`, {
+            headers: {
+                Authorization: `Bearer ${getToken(true)}`
+            }
+        });
+    },
     create: (data) => {
         return axiosInstanceAdmin.post("/api/v1/tours", data, {
             headers: {

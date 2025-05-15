@@ -148,7 +148,7 @@ const TourDetailPage = () => {
                         <div className="col-lg-7">
                             <div className="tour-details-content">
                                 <h3>Khám phá Tours</h3>
-                                <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.description) }}></p>
+                                <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.description || '') }}></p>
                                 <div className="row pb-55">
                                     <div className="col-md-6" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                         <div className="tour-include-exclude mt-30">
@@ -185,12 +185,12 @@ const TourDetailPage = () => {
                                         <div key={index} className="accordion-item">
                                             <h5 className="accordion-header">
                                                 <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#collapseTwo${item.dayNumber}`}>
-                                                    Ngày {item.dayNumber} - {item.title}
+                                                    <span className="fw-bold">Ngày {item.dayNumber}: {item.title}</span>
                                                 </button>
                                             </h5>
                                             <div id={`collapseTwo${item.dayNumber}`} className="accordion-collapse collapse" data-bs-parent="#faq-accordion-two">
                                                 <div className="accordion-body">
-                                                    <p>{item.description ?? ''}</p>
+                                                    <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description || '') }}></p>
                                                 </div>
                                             </div>
                                         </div>

@@ -21,9 +21,12 @@ const PromotionUpdatePage = () => {
         status: null
     });
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchPromotion = async () => {
+            setIsLoading(true);
+
             try {
                 const response = await PromotionApi.getById(id);
 
@@ -40,6 +43,8 @@ const PromotionUpdatePage = () => {
             } catch (error) {
                 console.error("Failed to fetch promotion: ", error);
                 navigate("/manage/error/404");
+            }  finally {
+                setIsLoading(false);
             }
         }
 
@@ -83,6 +88,12 @@ const PromotionUpdatePage = () => {
             ErrorToast("Đã xảy ra lỗi không xác định! Vui lòng thử lại sau.");
         }
     };
+
+    if (isLoading) {
+        return (
+            <div style={{ height: 1000 }}></div>
+        );
+    }
 
     return (
         <div className="promotion-update-page px-4">

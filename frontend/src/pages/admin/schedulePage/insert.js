@@ -6,7 +6,7 @@ import "./insert.scss";
 import DatePicker from "react-datepicker";
 import { ToastContainer } from "react-toastify";
 import { ErrorToast, SuccessToast } from "component/notifi";
-import TourSelector from "component/select";
+import TourSelector from "component/admin/select";
 
 const ScheduleInsertPage = () => {
     const [formData, setFormData] = useState({

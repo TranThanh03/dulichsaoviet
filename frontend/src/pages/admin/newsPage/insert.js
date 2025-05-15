@@ -55,6 +55,7 @@ const NewsInsertPage = () => {
                 method: "POST",
                 body: formDataCloudinary
             });
+            
             const data = await response.json();
 
             if (data.secure_url) {

@@ -11,6 +11,7 @@ import com.websitesaoviet.WebsiteSaoViet.dto.response.admin.ToursSummaryResponse
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.ApiResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.common.TourResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.*;
+import com.websitesaoviet.WebsiteSaoViet.enums.CommonStatus;
 import com.websitesaoviet.WebsiteSaoViet.exception.AppException;
 import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.service.BookingService;
@@ -81,6 +82,10 @@ public class TourController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<ApiResponse<TourResponse>> updateUser(@PathVariable String id, @RequestBody @Valid TourUpdateRequest request) {
+        if (scheduleService.existsScheduleByTourIdAndStatus(id, CommonStatus.NOT_STARTED.getValue())) {
+            throw new AppException(ErrorCode.TOUR_NOT_STARTED);
+        }
+
         ApiResponse<TourResponse> apiResponse = ApiResponse.<TourResponse>builder()
                 .code(1503)
                 .message("Cập nhật thông tin tour thành công.")
@@ -202,6 +207,21 @@ public class TourController {
         ApiResponse<List<ListToursResponse>> apiResponse = ApiResponse.<List<ListToursResponse>>builder()
                 .code(1513)
                 .result(tourService.getListTours())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/not-started/{id}")
+    ResponseEntity<ApiResponse<TourResponse>> checkNotStartedById(@PathVariable String id) {
+        if (scheduleService.existsScheduleByTourIdAndStatus(id, CommonStatus.NOT_STARTED.getValue())) {
+            throw new AppException(ErrorCode.TOUR_NOT_STARTED);
+        }
+
+        ApiResponse<TourResponse> apiResponse = ApiResponse.<TourResponse>builder()
+                .code(1514)
+                .message("Không tồn tại lịch trình.")
                 .build();
 
         return ResponseEntity.ok(apiResponse);

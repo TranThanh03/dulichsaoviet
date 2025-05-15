@@ -51,7 +51,7 @@ public class ScheduleService {
         Schedule schedule = scheduleMapper.createSchedule(request);
 
         schedule.setCode(getNextCode("schedule"));
-        schedule.setEndDate(request.getStartDate().plusDays(tour.getQuantityDay()));
+        schedule.setEndDate(request.getStartDate().plusDays(tour.getQuantityDay() - 1));
         schedule.setQuantityPeople(0);
         schedule.setStatus(CommonStatus.NOT_STARTED.getValue());
         schedule.setCreatedTime(LocalDateTime.now());
@@ -125,6 +125,10 @@ public class ScheduleService {
         } else {
             throw new AppException(ErrorCode.SCHEDULE_INVALID);
         }
+    }
+
+    public boolean existsScheduleByTourIdAndStatus(String id, String status) {
+        return scheduleRepository.existsScheduleByTourIdAndStatus(id, status);
     }
 
     public boolean existsScheduleByQuantityPeople(String id, int people) {

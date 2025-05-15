@@ -1,0 +1,21 @@
+.step-3 {
+    .form-group {
+        padding-top: 20px;
+    }
+
+    .btn-control {
+        padding-top: 5px;
+        text-align: center;
+
+        button {
+            font-weight: bold;
+            color: white;
+            background-color: #f6c83f;
+            padding: 8px 20px;
+        }
+
+        button:hover {
+            background-color: #ffbf00;
+        }
+    }
+}
