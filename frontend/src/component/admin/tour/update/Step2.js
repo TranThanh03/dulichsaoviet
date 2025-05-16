@@ -1,5 +1,5 @@
 import { ErrorToast, SuccessToast } from "component/notifi";
-import { useState, memo, forwardRef } from "react";
+import { useState, memo, forwardRef, useEffect } from "react";
 import "./step2.scss";
 
 const Step2 = forwardRef(({ formData, setFormData, imgPreview, setImgPreview }, ref) => {
@@ -99,6 +99,7 @@ const Step2 = forwardRef(({ formData, setFormData, imgPreview, setImgPreview }, 
         }
 
         setUploading(true);
+        SuccessToast("Đang tải hình ảnh lên Cloudinary...")
 
         try {
             const uploaders = imgPreview.image.map((file) => sendCloudinary(file));
@@ -134,6 +135,20 @@ const Step2 = forwardRef(({ formData, setFormData, imgPreview, setImgPreview }, 
         }
     };
 
+    useEffect(() => {
+        const primaryBtns = document.querySelectorAll('.footer-buttons .btn-primary');
+        
+        primaryBtns.forEach(btn => {
+            if (uploading) {
+                btn.classList.add('disabled');
+                btn.setAttribute('disabled', 'true');
+            } else {
+                btn.classList.remove('disabled');
+                btn.removeAttribute('disabled');
+            }
+        });
+    }, [uploading]);
+    
     return (
         <div className="step-2">
             <div className="form-group">
@@ -147,8 +162,6 @@ const Step2 = forwardRef(({ formData, setFormData, imgPreview, setImgPreview }, 
                 />
                 <p className="msg-error"><i>Upload tối đa 4 file ảnh.</i></p>
             </div>
-
-            {uploading && SuccessToast("Đang tải hình ảnh lên Cloudinary...")}
 
             <div className="row my-4 upload-custom">
                 {imgPreview.previewURLs.map((url, idx) => (

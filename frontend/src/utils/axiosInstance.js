@@ -51,16 +51,16 @@ axiosInstance.interceptors.response.use(
             setLoading(false);
         }
 
-        // if (error.response?.data?.code === 4445) {
-        //     if (error.config.url.includes("/api/v1/auth/introspect")) {
-        //         return Promise.reject(error.response || error.message);
-        //     }
+        if (error.response?.data?.code === 4445) {
+            if (error.config.url.includes("/api/v1/auth/introspect")) {
+                return Promise.reject(error.response || error.message);
+            }
 
-        //     window.location.href = "/error/404";
-        // }
-        // else if (error.code === "ERR_NETWORK") {
-        //     window.location.href = "/error/500";
-        // }
+            window.location.href = "/error/404";
+        }
+        else if (error.code === "ERR_NETWORK") {
+            window.location.href = "/error/500";
+        }
 
         return Promise.reject(error.response || error.message);
     }

@@ -12,7 +12,7 @@ const TourInsertPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         destination: '',
-        area: '',
+        area: 'b',
         quantityDay: 1,
         description: '',
         image: [],

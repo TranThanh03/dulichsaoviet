@@ -69,9 +69,9 @@ const NewsDetailPage = () => {
                 <h1>{news.title || ''}</h1>
                 
                 <div className="article-meta">
-                    <span className="author">{`Mã: ${news.code}`}</span>
-                    <span className="date">{`Ngày đăng: ${news.timeStamp ? formatDatetime(news.timeStamp) : ''}`}</span>
-                    <span className="float-right me-0"><i class="fa-regular fa-eye me-1"></i>{news.viewCount || 0}</span>
+                    <span>{`Mã: ${news.code}`}</span>
+                    <span>{`Ngày đăng: ${news.timeStamp ? formatDatetime(news.timeStamp) : ''}`}</span>
+                    <span><i class="fa-regular fa-eye me-1"></i>{news.viewCount || 0}</span>
                 </div>
                 
                 <img src={news.image || noImage} alt="Ảnh" className="featured-image" /> 

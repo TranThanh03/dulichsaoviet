@@ -116,7 +116,7 @@ const Step3 = forwardRef(({ formData, setFormData, setImgPreview }, ref) => {
                 setFormData({
                     name: '',
                     destination: '',
-                    area: '',
+                    area: 'b',
                     quantityDay: '',
                     description: '',
                     image: [],
