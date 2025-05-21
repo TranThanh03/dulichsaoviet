@@ -351,7 +351,7 @@ const BookingPage = () => {
                             </div>
                         )}
 
-                        <button type="button" className={`booking-btn btn-submit-booking ${agree && formData.method ? '' : 'inactive'}`} onClick={handleSubmit}>Xác nhận</button>
+                        <button type="button" className={`booking-btn btn-submit-booking ${agree && formData.method && formData.quantityAdult + formData.quantityChildren > 0 ? '' : 'inactive'}`} onClick={handleSubmit}>Xác nhận</button>
                     </div>
                 </div>
             </div>
