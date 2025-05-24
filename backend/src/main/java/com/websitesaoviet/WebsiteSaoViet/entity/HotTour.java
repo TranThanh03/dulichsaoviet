@@ -4,26 +4,25 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Entity
-@Table(name = "sequence")
+@Table(name = "hot_tour")
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Sequence {
+public class HotTour {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
-    Long id;
+    String id;
 
-    @Column(name = "type", unique = true)
-    String type;
+    @Column(name = "destination", length = 500)
+    String destination;
 
-    @Column(name = "year")
-    int year;
-
-    @Column(name = "last_number")
-    int lastNumber;
+    @Column(name = "created_time")
+    LocalDate createdTime;
 }

@@ -78,6 +78,9 @@ const TourApi = {
             }
         });
     },
+    getHot: () => {
+        return axiosInstance.get("/api/v1/tours/hot");
+    },
 };
 
 export default TourApi;

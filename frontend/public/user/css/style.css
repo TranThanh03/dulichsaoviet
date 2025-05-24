@@ -5315,9 +5315,9 @@
         position: absolute;
         border-radius: 20px;
         background: var(--primary-color);
-        -webkit-transform: rotate(25deg) translate(40px, -60px);
-        -ms-transform: rotate(25deg) translate(40px, -60px);
-        transform: rotate(25deg) translate(40px, -60px); }
+        -webkit-transform: rotate(25deg) translate(-6px, -76px);
+        -ms-transform: rotate(25deg) translate(-6px, -76px);
+        transform: rotate(25deg) translate(-6px, -76px); }
         .experience-years .title.bgc-secondary {
         background: var(--secondary-color); }
     .experience-years .text {

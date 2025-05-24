@@ -94,7 +94,8 @@ public enum ErrorCode {
     SCHEDULE_INVALID(1059, "Số người tối đa không hợp lệ!", HttpStatus.OK),
     TOTAL_PEOPLE_INVALID(1060, "Số người tối đa nằm trong khoảng từ 1-99!", HttpStatus.OK),
     BOOKING_SUCCESSFULLY(1061, "Lịch trình đang có lịch đặt!", HttpStatus.OK),
-    TOUR_NOT_STARTED(1062, "Tour có lịch trình chưa diễn ra!", HttpStatus.OK)
+    TOUR_NOT_STARTED(1062, "Tour có lịch trình chưa diễn ra!", HttpStatus.OK),
+    HOTTOUR_NOT_EXITED(1063, "Hot tour không tồn tại!", HttpStatus.OK)
     ;
     
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

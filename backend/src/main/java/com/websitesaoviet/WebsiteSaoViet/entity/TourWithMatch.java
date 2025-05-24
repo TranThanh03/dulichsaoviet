@@ -1,14 +1,26 @@
 package com.websitesaoviet.WebsiteSaoViet.entity;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@FieldDefaults(level = AccessLevel.PUBLIC)
 public class TourWithMatch {
-    Tour tour;
-    int matchCount;
+    private Tour tour;
+    private Object[] rawTour;
+    private int matchCount;
+
+    public TourWithMatch(Tour tour, int matchCount) {
+        this.tour = tour;
+        this.matchCount = matchCount;
+    }
+
+    public TourWithMatch(Object[] rawTour, int matchCount) {
+        this.rawTour = rawTour;
+        this.matchCount = matchCount;
+    }
 }

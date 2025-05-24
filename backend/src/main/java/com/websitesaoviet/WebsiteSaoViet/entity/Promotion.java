@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", unique = true)
     String id;
 
     @Column(name = "code")

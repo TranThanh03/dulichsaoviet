@@ -48,8 +48,8 @@ const LoginPage = () => {
                         <div className="featured-image my-3">
                             <img src={logo} className="img-fluid" alt="Logo" />
                         </div>
-                        <p className="text-white fs-2">Sao Việt</p>
-                        <small className="text-white text-wrap text-center fs-4">Uy tín tạo nên sự tin tưởng</small>
+                        <p className="text-white fs-2 mb-0">Sao Việt</p>
+                        <small className="text-white text-wrap text-center fs-4 mb-2">Uy tín tạo nên sự tin tưởng</small>
                     </div>
 
                     <div className="col-md-6 right-box d-flex px-4">

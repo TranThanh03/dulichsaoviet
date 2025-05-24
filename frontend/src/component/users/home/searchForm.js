@@ -44,16 +44,15 @@ const SearchForm = () => {
                                     <option value="">Chọn điểm đến</option>
                                     <option value="Đà Nẵng">Đà Nẵng</option>
                                     <option value="Nha Trang">Nha Trang</option>
+                                    <option value="Phú Quốc">Phú Quốc</option>
                                     <option value="Hà Nội">Hà Nội</option>
                                     <option value="Sa Pa">Sa Pa</option>
                                     <option value="Hà Giang">Hà Giang</option>
-                                    <option value="Phú Quốc">Phú Quốc</option>
                                     <option value="Quy Nhơn">Quy Nhơn</option>
                                     <option value="Đà Lạt">Đà Lạt</option>
-                                    <option value="Cần Thơ">Cần Thơ</option>
+                                    <option value="Cát Bà">Cát Bà</option>
                                     <option value="Hạ Long">Hạ Long</option>
-                                    <option value="Ninh Bình">Ninh Bình</option>
-                                    <option value="Quảng Ninh">Quảng Ninh</option>
+                                    <option value="Huế">Huế</option>
                                     <option value="Côn Đảo">Côn Đảo</option>
                                     <option value="Hồ Chí Minh">TP. Hồ Chí Minh</option>
                                 </select>

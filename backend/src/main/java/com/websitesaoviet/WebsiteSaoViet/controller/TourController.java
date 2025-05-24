@@ -226,4 +226,15 @@ public class TourController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/hot")
+    ResponseEntity<ApiResponse<List<FilterToursResponse>>> getHotTours() {
+
+        ApiResponse<List<FilterToursResponse>> apiResponse = ApiResponse.<List<FilterToursResponse>>builder()
+                .code(1515)
+                .result(tourService.getHotTours())
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }

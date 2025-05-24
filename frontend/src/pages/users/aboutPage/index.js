@@ -138,7 +138,7 @@ const AboutPage = () => {
                 </div>
             </section>
 
-            <section className="about-feature-two bgc-black pt-100 pb-45 rel z-1">
+            <section className="about-feature-two bgc-black pt-50 pb-100 rel z-1">
                 <div className="container">
                     <div className="section-title text-center text-white counter-text-wrap mb-50" data-aos="fade-up"
                         data-aos-duration="1500" data-aos-offset="50">
@@ -149,9 +149,8 @@ const AboutPage = () => {
                         </p>
                     </div>
                     <div className="row">
-                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="1500"
-                            data-aos-offset="50">
-                            <div className="feature-item style-two">
+                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                            <div className="feature-item style-two" style={{ height: "100%" }}>
                                 <div className="icon"><i className="flaticon-save-money"></i></div>
                                 <div className="content">
                                     <h5><Link to="#">Đảm bảo giá tốt nhất</Link></h5>
@@ -159,9 +158,8 @@ const AboutPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500"
-                            data-aos-offset="50">
-                            <div className="feature-item style-two">
+                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1500" data-aos-offset="50">
+                            <div className="feature-item style-two" style={{ height: "100%" }}>
                                 <div className="icon"><i className="flaticon-travel-1"></i></div>
                                 <div className="content">
                                     <h5><Link to="#">Điểm đến đa dạng</Link></h5>
@@ -169,9 +167,8 @@ const AboutPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1500"
-                            data-aos-offset="50">
-                            <div className="feature-item style-two">
+                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1500" data-aos-offset="50">
+                            <div className="feature-item style-two" style={{ height: "100%" }}>
                                 <div className="icon"><i className="flaticon-booking"></i></div>
                                 <div className="content">
                                     <h5><Link to="#">Đặt chỗ nhanh</Link></h5>
@@ -180,9 +177,8 @@ const AboutPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150" data-aos-duration="1500"
-                            data-aos-offset="50">
-                            <div className="feature-item style-two">
+                        <div className="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150" data-aos-duration="1500" data-aos-offset="50">
+                            <div className="feature-item style-two" style={{ height: "100%" }}>
                                 <div className="icon"><i className="flaticon-guidepost"></i></div>
                                 <div className="content">
                                     <h5><Link to="#">Hướng dẫn du lịch tốt</Link></h5>

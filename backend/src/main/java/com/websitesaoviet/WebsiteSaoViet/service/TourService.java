@@ -39,6 +39,7 @@ public class TourService {
     TourRepository tourRepository;
     TourMapper tourMapper;
     SequenceService sequenceService;
+    HotTourService hotTourService;
 
     public TourResponse createTour(TourCreationRequest request) {
         LocalDateTime currentTime = LocalDateTime.now();
@@ -383,27 +384,29 @@ public class TourService {
 
         List<Tour> listTour = tourRepository.findAllBySimilar(id).stream()
                 .map(t -> new TourWithMatch(t, computeMatchCount(t.getDestination(), selectedLower)))
-                .filter(t -> t.matchCount > 0)
+                .filter(t -> t.getMatchCount() > 0)
                 .sorted((a, b) -> {
-                    int cmp = Integer.compare(b.matchCount, a.matchCount);
+                    int cmp = Integer.compare(b.getMatchCount(), a.getMatchCount());
                     if (cmp != 0) return cmp;
 
                     if (quantityDay != null) {
-                        boolean aMatch = a.tour.getQuantityDay() == quantityDay;
-                        boolean bMatch = b.tour.getQuantityDay() == quantityDay;
+                        boolean aMatch = a.getTour().getQuantityDay() == quantityDay;
+                        boolean bMatch = b.getTour().getQuantityDay() == quantityDay;
                         return Boolean.compare(bMatch, aMatch);
                     }
                     return 0;
                 })
                 .limit(2)
-                .map(twm -> twm.tour)
+                .map(twm -> twm.getTour())
                 .collect(Collectors.toList());
 
         return tourMapper.toSimilarToursResponse(listTour);
     }
 
     private int computeMatchCount(String destString, Set<String> selectedLower) {
-        return (int) Arrays.stream(destString.split(" - "))
+        String normalized = destString.replace("–", "-");
+
+        return (int) Arrays.stream(normalized.split(" - "))
                 .map(s -> s.trim().toLowerCase())
                 .filter(selectedLower::contains)
                 .count();
@@ -411,5 +414,47 @@ public class TourService {
 
     public List<ListToursResponse> getListTours() {
         return tourMapper.toListTours(tourRepository.findAll());
+    }
+
+    public List<FilterToursResponse> getHotTours() {
+        String destination = hotTourService.checkHotTour();
+
+        if (destination == null || destination.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Set<String> selectedLower = Arrays.stream(destination.split(", "))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .collect(Collectors.toSet());
+
+        List<Object[]> rawTours = tourRepository.findHotTours();
+
+        List<TourWithMatch> tourWithMatches = rawTours.stream()
+                .map(obj -> {
+                    String dest = (String) obj[2];
+                    int matchCount = computeMatchCount(dest, selectedLower);
+                    return new TourWithMatch(obj, matchCount);
+                })
+                .filter(twm -> twm.getMatchCount() > 0)
+                .sorted((a, b) -> Integer.compare(b.getMatchCount(), a.getMatchCount()))
+                .limit(8)
+                .collect(Collectors.toList());
+
+        return tourWithMatches.stream()
+                .map(twm -> {
+                    Object[] obj = twm.getRawTour();
+                    return new FilterToursResponse(
+                            (String) obj[0],
+                            (String) obj[1],
+                            (String) obj[2],
+                            (String) obj[3],
+                            ((Number) obj[4]).intValue(),
+                            ((Number) obj[5]).doubleValue(),
+                            ((Number) obj[6]).intValue(),
+                            ((Number) obj[7]).intValue()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }

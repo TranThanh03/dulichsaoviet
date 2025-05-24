@@ -3,6 +3,61 @@
         height: 48px;
     }
 
+    .hot-tour {
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .destination-item .content {
+            padding-bottom: 20px !important;
+        }
+
+        .destination-footer {
+            padding: 0;
+            padding-top: 20px;
+
+            .price {
+                margin-right: 5px;
+            }
+        }
+
+        .destination-header .ratting {
+            position: absolute;
+            right: 20px;
+            top: 170px;
+            line-height: 1;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            display: -webkit-inline-box;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            background-color: white;
+            padding: 5px 8px;
+            border-radius: 15px;
+        }
+
+        .content h6 {
+            color: white;
+            margin-top: 5px;
+        }
+
+        .image .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: red;
+            font-weight: bold;
+            background-color: white;
+            padding: 7px 16px;
+            font-size: 16px;
+            border-radius: 24px;
+            z-index: 2;
+        }
+    }
+
     .popular-destinations-area .img-custom {
         .badge {
             position: absolute;
@@ -11,9 +66,10 @@
             z-index: 2;
             font-size: 16px;
             font-weight: 500;
-            padding: 5px 12px;
-            border-radius: 10px;
-            background: #ff737e
+            padding: 6px 14px;
+            border-radius: 15px;
+            background: #ff737e;
+            font-weight: bold;
         }
 
         .order {
@@ -37,6 +93,16 @@
     @media only screen and (max-width: 992px) {
         .space-custom {
             height: 140px;
+        }
+    }
+
+    @media only screen and (min-width: 580px) and (max-width: 1199px) {
+        .hot-tour .image img {
+            height: 250px;
+        }
+
+        .destination-header .ratting {
+            top: 219px !important;
         }
     }
 

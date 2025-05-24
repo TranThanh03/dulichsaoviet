@@ -7,11 +7,29 @@ import AnimatedCounter from 'component/counter';
 import { Link } from 'react-router-dom';
 import { TourApi } from 'services';
 import formatNumberShort from 'utils/formatNumberShort';
+import formatCurrency from 'utils/formatCurrency';
 
 const slides = [slide1, slide2, slide3, slide4, slide5];
 
 const HomePage = () => {
+    const [hotTours, setHotTours] = useState([]);
     const [popularTours, setPopularTours] = useState([]);
+
+    useEffect(() => {
+        const fetchHotTour = async () => {
+            try {
+                const response = await TourApi.getHot();
+
+                if (response?.code === 1515) {
+                    setHotTours(response?.result);
+                }
+            } catch(error) {
+                console.error("Failed to fetch hot tour: ", error);
+            }
+        }
+
+        fetchHotTour();
+    }, [])
 
     useEffect(() => {
         const fetchPopularTour = async () => {
@@ -37,7 +55,7 @@ const HomePage = () => {
 
             <div className="space-custom bgc-black"></div>
 
-            <section className="destinations-area bgc-black pt-60 pb-70">
+            <section className="destinations-area bgc-black pt-90 pb-80">
                 <div className="container-fluid">
                     <div className="row justify-content-center">
                         <div className="col-lg-12">
@@ -48,32 +66,50 @@ const HomePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="row justify-content-center">
-                        {/* @foreach ($tours as $tour)
-                            <div className="col-xxl-3 col-xl-4 col-md-6" style="margin-bottom: 30px">
-                                <div className="destination-item block_tours" data-aos="fade-up" data-aos-duration="1500"
-                                    data-aos-offset="50">
-                                    <div className="image">
-                                        <div className="ratting"><i className="fas fa-star"></i> {{ number_format($tour->rating, 1) }}</div>
-                                        <a href="#" className="heart"><i className="fas fa-heart"></i></a>
-                                        <img src="{{ asset('admin/assets/images/gallery-tours/' . $tour->images[0] . '') }}"
-                                            alt="Destination">
-                                    </div>
-                                    <div className="content">
-                                        <span className="location"><i className="fal fa-map-marker-alt"></i>{{ $tour->destination }}</span>
-                                        <h5><a href="{{ route('tour-detail', ['id' => $tour->tourId]) }}">{{ $tour->title }}</a>
-                                        </h5>
-                                        <span className="time">{{ $tour->time }}</span>
-                                    </div>
-                                    <div className="destination-footer">
-                                        <span className="price"><span>{{ number_format($tour->priceAdult, 0, ',', '.') }}</span> VND /
-                                            người</span>
-                                        <a href="{{ route('tour-detail', ['id' => $tour->tourId]) }}" className="read-more">Đặt ngay <i
-                                                className="fal fa-angle-right"></i></a>
+                    <div className="row justify-content-center hot-tour">
+                        {hotTours.length > 0 && 
+                            hotTours.map((item, index) => (
+                                <div key={index} className="col-xxl-3 col-xl-4 col-md-6">
+                                    <div className="destination-item block_tours" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
+                                        <div className="image">
+                                            <span className="badge">HOT</span>
+                                            <img src={item.image ? item.image : noImage} alt="tour-image" />
+                                        </div>
+
+                                        <div className="content equal-content-fix">
+                                            <div className="destination-header">
+                                                <span className="location">
+                                                    <i className="fal fa-map-marker-alt"></i> {item.destination}
+                                                </span>
+
+                                                <div className="ratting">
+                                                    {[...Array(5)].map((_, i) =>
+                                                        i < item.rating ? (
+                                                            <i key={i} className="fas fa-star"></i>
+                                                        ) : (
+                                                            <i key={i} className="far fa-star"></i>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <h6 className="fw-bold mb-2">{item.name}</h6>
+                                            <ul className="blog-meta">
+                                                <li><i className="far fa-clock"></i> {item.quantityDay} ngày {item.quantityDay-1} đêm</li>
+                                                <li><i className="far fa-user"></i> {item.people}</li>
+                                            </ul>
+                                            <div className="destination-footer">
+                                                <span className="price">
+                                                    <span>{formatCurrency(item.adultPrice)}</span> / người
+                                                </span>
+                                                <Link to={`/tour/detail/${item.id}`} className="theme-btn style-two style-three" style={{ color: "white"}}>
+                                                    <i className="fal fa-arrow-right ms-0"></i>
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach */}
+                            )
+                        )}
                     </div>
                 </div>
             </section>
@@ -87,7 +123,7 @@ const HomePage = () => {
                                     <h2>Du lịch với sự tự tin lý do hàng đầu để chọn công ty chúng tôi</h2>
                                 </div>
                                 <p className="text-indent">Chúng tôi sẽ nỗ lực hết mình để biến giấc mơ du lịch của bạn thành hiện thực những viên ngọc ẩn
-                                    và những điểm tham quan không thể bỏ qua</p>
+                                    và những điểm tham quan không thể bỏ qua...</p>
                                 <div className="divider counter-text-wrap mt-45 mb-55">
                                     <span>
                                         Chúng tôi có <span><AnimatedCounter end={5} className="plus" /> năm</span> kinh nghiệm
@@ -213,7 +249,7 @@ const HomePage = () => {
                                         <div className="divider style-two counter-text-wrap my-25">
                                             <span><AnimatedCounter end={5} className="plus" /> năm</span>
                                         </div>
-                                        <p className="text-indent">Chúng tôi tự hào cung cấp các hành trình được cá nhân hóa.</p>
+                                        <p>Chúng tôi tự hào cung cấp các hành trình được cá nhân hóa.</p>
                                     </div>
                                 </div>
                             </div>
@@ -225,14 +261,14 @@ const HomePage = () => {
                                         <div className="icon"><i className="flaticon-tent"></i></div>
                                         <div className="content">
                                             <h5><Link to="#">Chinh phục cảnh quan Việt Nam</Link></h5>
-                                            <p className="text-indent">Khám phá những cảnh đẹp hùng vĩ và tuyệt vời của đất nước Việt Nam.</p>
+                                            <p>Khám phá những cảnh đẹp hùng vĩ và tuyệt vời của đất nước Việt Nam.</p>
                                         </div>
                                     </div>
                                     <div className="feature-item">
                                         <div className="icon"><i className="flaticon-tent"></i></div>
                                         <div className="content">
                                             <h5><Link to="#">Trải nghiệm đặc sắc Việt Nam</Link></h5>
-                                            <p className="text-indent">Trải nghiệm những hoạt động và lễ hội đặc trưng của văn hóa Việt.</p>
+                                            <p>Trải nghiệm những hoạt động và lễ hội đặc trưng của văn hóa Việt.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -241,14 +277,14 @@ const HomePage = () => {
                                         <div className="icon"><i className="flaticon-tent"></i></div>
                                         <div className="content">
                                             <h5><Link to="#">Khám phá di sản Việt Nam</Link></h5>
-                                            <p className="text-indent">Khám phá các di sản thế giới và những kỳ quan thiên nhiên nổi tiếng.</p>
+                                            <p>Khám phá các di sản thế giới và những kỳ quan thiên nhiên nổi tiếng.</p>
                                         </div>
                                     </div>
                                     <div className="feature-item">
                                         <div className="icon"><i className="flaticon-tent"></i></div>
                                         <div className="content">
                                             <h5><Link to="#">Vẻ đẹp thiên nhiên Việt Nam</Link></h5>
-                                            <p className="text-indent">Chinh phục vẻ đẹp tự nhiên hoang sơ và kỳ vĩ của Việt Nam.</p>
+                                            <p>Chinh phục vẻ đẹp tự nhiên hoang sơ và kỳ vĩ của Việt Nam.</p>
                                         </div>
                                     </div>
                                 </div>

@@ -50,6 +50,10 @@ spring:
           starttls:
             enable: true
 
+gemini:
+  api-key: "AIzaSyBTF86yFwr2ujLX0Lv8182Zc27XCs-yHck"
+  url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=%s"
+
 jwt:
   signerKey: "q7Tw92RvdkeKfQJl+7mhtwfnQJuJRoseRNLfA3rrPlE+sKvBao2hyhGCu46opa4Q"
 

@@ -234,4 +234,30 @@ public interface TourRepository extends JpaRepository<Tour, String> {
             "WHERE t.id != :id AND s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople " +
             "ORDER BY t.quantityOrder DESC")
     List<Tour> findAllBySimilar(@Param("id") String id);
+
+    @Query(value = """
+    SELECT t.id, t.name, t.destination,
+        (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
+        t.quantity_day,
+        MIN(s.adult_price) AS adult_price,
+        (
+            SELECT IFNULL(SUM(s2.total_people - s2.quantity_people), 0)
+            FROM schedule s2
+            WHERE s2.tour_id = t.id AND s2.status = 'Chưa diễn ra' AND s2.quantity_people < s2.total_people
+        ) AS people,
+        IFNULL(FLOOR((
+            SELECT AVG(r2.rating)
+            FROM review r2
+            WHERE r2.tour_id = t.id
+        )), 0) AS rating,
+        MAX(s.created_time) AS created_time
+    FROM tour t
+    INNER JOIN schedule s ON t.id = s.tour_id
+    WHERE
+        (s.status = 'Chưa diễn ra') AND
+        (s.quantity_people < s.total_people)
+    GROUP BY t.id, t.name, t.destination, t.quantity_day
+    """,
+            nativeQuery = true)
+    List<Object[]> findHotTours();
 }
