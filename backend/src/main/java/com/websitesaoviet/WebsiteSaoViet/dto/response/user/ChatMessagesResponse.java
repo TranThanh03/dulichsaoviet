@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChatMessagesResponse {
     String id;
-    String content;
+    Object content;
     String senderType;
     LocalDateTime createdTime;
 }

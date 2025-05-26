@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: May 24, 2025 at 06:49 PM
+-- Generation Time: May 26, 2025 at 07:58 PM
 -- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
@@ -112,6 +112,28 @@ INSERT INTO `booking` (`id`, `adult_price`, `booking_time`, `children_price`, `c
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `chat_sessions`
+--
+
+CREATE TABLE `chat_sessions` (
+  `id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `started_at` datetime(6) DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `customer_code` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `chat_sessions`
+--
+
+INSERT INTO `chat_sessions` (`id`, `started_at`, `status`, `updated_at`, `customer_code`) VALUES
+('694daf43-6b8c-4852-aa77-02dbefc18bdd', '2025-05-26 07:02:24.065502', 'Đang diễn ra', '2025-05-27 00:51:34.589471', 'CB2025000002'),
+('f318ccad-5444-4e50-95db-11bf052c387f', '2025-05-26 06:56:20.524387', 'Đang diễn ra', '2025-05-27 00:49:10.152902', 'CB2025000001');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `checkout`
 --
 
@@ -200,7 +222,39 @@ CREATE TABLE `hot_tour` (
 --
 
 INSERT INTO `hot_tour` (`id`, `created_time`, `destination`) VALUES
-('a295afeb-172c-447d-8032-df4719670061', '2025-05-24', 'Hạ Long, Đà Nẵng, Phú Quốc, Hội An, Nha Trang, Sapa, Đà Lạt, Huế, TP. Hồ Chí Minh, Hà Nội');
+('a295afeb-172c-447d-8032-df4719670061', '2025-05-25', 'Hạ Long, Đà Nẵng, Phú Quốc, Hội An, Nha Trang, Sapa, Đà Lạt, Huế, TP. Hồ Chí Minh, Hà Nội');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` varchar(255) COLLATE utf8mb4_vietnamese_ci NOT NULL,
+  `chat_id` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL,
+  `content` longtext COLLATE utf8mb4_vietnamese_ci,
+  `created_at` datetime(6) DEFAULT NULL,
+  `sender_type` varchar(255) COLLATE utf8mb4_vietnamese_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `chat_id`, `content`, `created_at`, `sender_type`) VALUES
+('0fd8a71d-7ba9-40b1-bcec-d6ac699b989f', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'Xin chào', '2025-05-27 00:50:09.797246', 'customer'),
+('1881d672-5266-4451-82b6-bafab1925522', 'f318ccad-5444-4e50-95db-11bf052c387f', 'Đà nẵng', '2025-05-27 00:49:10.214641', 'customer'),
+('3d71a211-f1c9-41c0-aeb3-2eee18ec267d', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'hà nội hạ long', '2025-05-27 00:51:16.636096', 'customer'),
+('3fb07f75-b41f-49b8-a860-46f663d7f5d5', 'f318ccad-5444-4e50-95db-11bf052c387f', 'Dựa vào thời tiết hiện tại, bạn muốn gợi ý địa điểm du lịch ở khu vực nào của Việt Nam? Miền Bắc, Trung hay Nam?', '2025-05-27 00:48:51.406881', 'chatbot'),
+('55dbe6a6-0c94-49e2-99cb-06336efcbfe5', 'f318ccad-5444-4e50-95db-11bf052c387f', '[{\"id\":\"68f11a1b-7f72-4e63-8b8a-c21261c37d72\",\"name\":\"MIỀN TRUNG 3N2Đ | ĐÀ NẴNG – CÙ LAO CHÀM – HỘI AN – BÀ NÀ\",\"destination\":\"ĐÀ NẴNG – CÙ LAO CHÀM – HỘI AN – BÀ NÀ\",\"image\":\"https://res.cloudinary.com/doie0qiiq/image/upload/v1747329424/saoviet/pzukbcxa4m48xqrhvgth.png\",\"quantityDay\":3,\"adultPrice\":6000000.0,\"startDate\":\"2025-05-27\",\"endDate\":\"2025-05-29\",\"people\":20}]', '2025-05-27 00:49:10.252849', 'chatbot'),
+('6321003f-50ee-4ffd-8194-4dc4ce24bb19', 'f318ccad-5444-4e50-95db-11bf052c387f', 'Thời tiết này thích hợp đi đâu?', '2025-05-27 00:48:51.377600', 'customer'),
+('6d9230e5-c54c-41dc-aee4-9735864479f1', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'Dựa trên tìm kiếm hiện tại, một số tour du lịch hot ở Việt Nam bao gồm:*   Hà Nội*   Hạ Long*   Đà Nẵng*   Phú Quốc*   Sapa*   Đà Lạt*   Hội An', '2025-05-27 00:50:43.104879', 'chatbot'),
+('83ac0ae7-bf14-4feb-b95d-e2ddf8dfd084', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'Gợi ý cho tôi một số tour hot hiện nay', '2025-05-27 00:50:43.086778', 'customer'),
+('bc8de288-7c59-46b1-ba3e-a1d966ed0f8b', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'Xin lỗi, tôi chỉ hỗ trợ về tour du lịch.', '2025-05-27 00:50:09.818001', 'chatbot'),
+('c2f9cea6-2f47-40a5-9fee-0fd0d310f33d', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'Hà nội đà nẵng', '2025-05-27 00:51:34.628921', 'customer'),
+('e02f7e3a-e958-43ba-babf-5095c2633bd9', '694daf43-6b8c-4852-aa77-02dbefc18bdd', 'Không tìm được tour phù hợp với yêu cầu.', '2025-05-27 00:51:16.658099', 'chatbot'),
+('ff42d1c7-8e55-4676-bfea-3e88f1fe4745', '694daf43-6b8c-4852-aa77-02dbefc18bdd', '[{\"id\":\"68f11a1b-7f72-4e63-8b8a-c21261c37d72\",\"name\":\"MIỀN TRUNG 3N2Đ | ĐÀ NẴNG – CÙ LAO CHÀM – HỘI AN – BÀ NÀ\",\"destination\":\"ĐÀ NẴNG – CÙ LAO CHÀM – HỘI AN – BÀ NÀ\",\"image\":\"https://res.cloudinary.com/doie0qiiq/image/upload/v1747329424/saoviet/pzukbcxa4m48xqrhvgth.png\",\"quantityDay\":3,\"adultPrice\":6000000.0,\"startDate\":\"2025-05-27\",\"endDate\":\"2025-05-29\",\"people\":20}]', '2025-05-27 00:51:34.652088', 'chatbot');
 
 -- --------------------------------------------------------
 
@@ -251,7 +305,7 @@ CREATE TABLE `promotion` (
 --
 
 INSERT INTO `promotion` (`id`, `description`, `discount`, `end_date`, `quantity`, `start_date`, `code`, `created_time`, `status`, `title`) VALUES
-('9c815954-d017-4480-b9bb-ff48bf2a882b', 'Áp dụng cho mọi tour và mọi khách hàng.', 100000, '2025-05-25', 48, '2025-05-20', 'HEHOT25', '2025-05-20 08:35:10.646026', 'Đang diễn ra', 'Giảm giá 100K');
+('9c815954-d017-4480-b9bb-ff48bf2a882b', 'Áp dụng cho mọi tour và mọi khách hàng.', 100000, '2025-05-25', 48, '2025-05-20', 'HEHOT25', '2025-05-20 08:35:10.646026', 'Đã kết thúc', 'Giảm giá 100K');
 
 -- --------------------------------------------------------
 
@@ -301,9 +355,9 @@ CREATE TABLE `schedule` (
 
 INSERT INTO `schedule` (`id`, `adult_price`, `children_price`, `code`, `end_date`, `quantity_people`, `start_date`, `status`, `total_people`, `tour_id`, `created_time`) VALUES
 ('21147ccf-0d6c-4b03-99ec-efbf1528ea81', 6000000, 5000000, 'LT2025000000005', '2025-05-29', 0, '2025-05-27', 'Chưa diễn ra', 20, '68f11a1b-7f72-4e63-8b8a-c21261c37d72', '2025-05-24 20:18:33.578216'),
-('97ea5ccd-b06e-4a01-9ccf-aabbc8865e1c', 4500000, 3900000, 'LT2025000000003', '2025-05-27', 3, '2025-05-25', 'Chưa diễn ra', 20, '3bbdf626-1ba7-4549-a4e4-cde096ea04fc', '2025-05-20 07:53:48.691959'),
-('ab2e919f-d0e3-49c2-8e8c-6c7acabe0e3c', 5000000, 4500000, 'LT2025000000004', '2025-05-29', 0, '2025-05-26', 'Chưa diễn ra', 12, 'f5fbffc4-86f3-4553-914b-393722c310ad', '2025-05-23 14:33:12.023832'),
-('c95ea5f5-2e96-4aa4-bb9b-951d6e7ba862', 4500000, 3800000, 'LT2025000000002', '2025-05-25', 4, '2025-05-23', 'Chưa diễn ra', 15, '2a851424-9745-4742-9c1e-60eca98c398e', '2025-05-20 07:48:11.670139'),
+('97ea5ccd-b06e-4a01-9ccf-aabbc8865e1c', 4500000, 3900000, 'LT2025000000003', '2025-05-27', 3, '2025-05-25', 'Đang diễn ra', 20, '3bbdf626-1ba7-4549-a4e4-cde096ea04fc', '2025-05-20 07:53:48.691959'),
+('ab2e919f-d0e3-49c2-8e8c-6c7acabe0e3c', 5000000, 4500000, 'LT2025000000004', '2025-05-29', 0, '2025-05-26', 'Đang diễn ra', 12, 'f5fbffc4-86f3-4553-914b-393722c310ad', '2025-05-23 14:33:12.023832'),
+('c95ea5f5-2e96-4aa4-bb9b-951d6e7ba862', 4500000, 3800000, 'LT2025000000002', '2025-05-25', 4, '2025-05-23', 'Đã kết thúc', 15, '2a851424-9745-4742-9c1e-60eca98c398e', '2025-05-20 07:48:11.670139'),
 ('f93bdfd8-e42a-4e0a-91ba-dcfd960876bc', 4000000, 3200000, 'LT2025000000001', '2025-05-21', 14, '2025-05-19', 'Đã kết thúc', 20, '2a851424-9745-4742-9c1e-60eca98c398e', '2025-05-16 00:09:13.831903');
 
 -- --------------------------------------------------------
@@ -327,7 +381,8 @@ INSERT INTO `sequence` (`id`, `last_number`, `type`, `year`) VALUES
 (1, 2, 'customer', 2025),
 (2, 8, 'tour', 2025),
 (3, 1, 'news', 2025),
-(4, 5, 'schedule', 2025);
+(4, 5, 'schedule', 2025),
+(5, 2, 'chatbot', 2025);
 
 -- --------------------------------------------------------
 
@@ -498,6 +553,12 @@ ALTER TABLE `booking`
   ADD UNIQUE KEY `UKtirjn0ldjn2xdqne9laduomc6` (`code`);
 
 --
+-- Indexes for table `chat_sessions`
+--
+ALTER TABLE `chat_sessions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `checkout`
 --
 ALTER TABLE `checkout`
@@ -522,6 +583,12 @@ ALTER TABLE `customer_roles`
 -- Indexes for table `hot_tour`
 --
 ALTER TABLE `hot_tour`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -589,7 +656,7 @@ ALTER TABLE `tour_itineraries`
 -- AUTO_INCREMENT for table `sequence`
 --
 ALTER TABLE `sequence`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

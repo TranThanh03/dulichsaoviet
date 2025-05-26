@@ -52,7 +52,7 @@ public class ChatbotController {
             throw new AppException(ErrorCode.CHATBOT_ERROR);
         }
 
-        chatbotService.createMessage(id, "chatbot", inputMessage, result);
+        chatbotService.createMessage(id, "chatbot", message, result);
 
         ApiResponse<List<ChatToursResponse>> apiResponse = ApiResponse.<List<ChatToursResponse>>builder()
                 .code(2200)

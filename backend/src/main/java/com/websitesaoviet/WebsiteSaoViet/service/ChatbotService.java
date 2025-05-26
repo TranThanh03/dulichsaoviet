@@ -1,6 +1,9 @@
 package com.websitesaoviet.WebsiteSaoViet.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ChatMessagesResponse;
 import com.websitesaoviet.WebsiteSaoViet.dto.response.user.ChatToursResponse;
 import com.websitesaoviet.WebsiteSaoViet.entity.ChatSessions;
@@ -11,6 +14,7 @@ import com.websitesaoviet.WebsiteSaoViet.exception.ErrorCode;
 import com.websitesaoviet.WebsiteSaoViet.repository.ChatSessionsRepository;
 import com.websitesaoviet.WebsiteSaoViet.repository.MessagesRepository;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class ChatbotService {
     @NonFinal
     @Value("${gemini.api-key}")
@@ -52,6 +57,7 @@ public class ChatbotService {
                     "Chỉ trả lời câu hỏi nếu nó liên quan đến tour ở Việt Nam." +
                     "Không lặp lại câu hỏi của người dùng trong câu trả lời." +
                     "Nếu trong câu hỏi có liên quan đến điểm đến hoặc tour, ví dụ: Hà Nội, Hạ Long,... thì gán destination: Hà Nội, Hạ Long,..." +
+                    "Nếu trong câu hỏi mà chỉ có 1 điểm đến hoặc 1 tour, ví dụ: Hà Nội thì trả về JSON chứa destination: Hà Nội." +
                     "Nếu trong câu hỏi có liên quan đến 2 hay nhiều điểm đến hoặc tour, ví dụ: 'Hà Nội, Hạ Long', 'Hà Nội - Hạ Long',... thì gán destination: [Hà Nội, Hạ Long,...]" +
                     "Nếu trong câu hỏi có liên quan đến thời gian, số ngày ví dụ: 2 ngày, 2 ngày 1 đêm,... thì gán quantityDay: 2,..." +
                     "Nếu trong câu hỏi có liên quan đến khu vực(Miền Bắc, Miền Trung, Miền Nam) thì gán area lần lượt là: b, t, n." +
@@ -112,12 +118,36 @@ public class ChatbotService {
             chatSessionsRepository.save(chatSessions);
         }
 
-        return chatSessionsRepository.findByCustomerCode(code);
+        List<ChatMessagesResponse> messages = chatSessionsRepository.findByCustomerCode(code);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.findAndRegisterModules();
+
+        for (ChatMessagesResponse msg : messages) {
+            Object contentObj = msg.getContent();
+
+            if (contentObj instanceof String) {
+                String content = ((String) contentObj).trim();
+
+                if (content.startsWith("[") && content.endsWith("]")) {
+                    try {
+                        List<Map<String, Object>> parsedContent = mapper.readValue(
+                                content, new TypeReference<List<Map<String, Object>>>() {});
+                        msg.setContent(parsedContent);
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return messages;
     }
 
     public void updateChat(String id, String inputMessage) {
         chatSessionsRepository.update(id, LocalDateTime.now());
-        createMessage(id, "customer", inputMessage, null);
+        createMessage(id, "customer", inputMessage.trim().replaceAll("\"", ""), null);
     }
 
     public void createMessage(String chatId, String senderType, String message, List<ChatToursResponse> result) {
@@ -127,9 +157,12 @@ public class ChatbotService {
         try {
             if (result != null) {
                 ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
                 content = mapper.writeValueAsString(result);
             } else {
-                content = message;
+                content = message.trim();
             }
 
             messages.setChatId(chatId);
@@ -138,7 +171,9 @@ public class ChatbotService {
             messages.setCreatedAt(LocalDateTime.now());
 
             messagesRepository.save(messages);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
     }
 
     public String getNextCode(String type) {
