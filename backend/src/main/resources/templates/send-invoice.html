@@ -14,7 +14,7 @@
     Lịch đặt #<b th:text="${invoice.code}"></b> của bạn đã <b>bị hủy</b>.
 </p>
 
-<h3>Hóa đơn chi tiết</h3>
+<h3>Hóa đơn chi tiết:</h3>
 <h4 th:text="${invoice.tourName + ' (' + #dates.format(startDate, 'dd-MM-yyyy') + ' - ' + #dates.format(endDate, 'dd-MM-yyyy') + ')'}"></h4>
 
 <p>Mã hóa đơn: <span th:text="${invoice.code}"></span></p>

@@ -554,7 +554,7 @@ public class TourService {
                     })
                     .filter(twm -> twm.getMatchCount() > 0)
                     .sorted(Comparator.comparingInt(TourWithMatch::getMatchCount).reversed())
-                    .limit(5)
+                    .limit(6)
                     .map(twm -> {
                         Object[] obj = twm.getRawTour();
                         return new ChatToursResponse(
@@ -577,7 +577,7 @@ public class TourService {
         }
 
         return rawResult.stream()
-                .limit(5)
+                .limit(6)
                 .map(obj -> new ChatToursResponse(
                         (String) obj[0],
                         (String) obj[1],

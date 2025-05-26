@@ -144,51 +144,53 @@ const Chatbot = () => {
                             <div key={index} className={`message ${msg.senderType || "chatbot"}`}>
                                 {((msg.content !== null && msg.content !== "") || (Array.isArray(msg.content) && msg.content.length > 0)) && (
                                     <div className="message-text">
-                                        {Array.isArray(msg.content) && msg.content.length > 0 ? msg.content.map((item) => (
-                                            <div key={item.id} className="tour-grid-wrap">
+                                        {Array.isArray(msg.content) && msg.content.length > 0 ? (
+                                            <div className="tour-grid-wrap">
                                                 <div className="row">
-                                                    <div className="tour-card-custom col-sm-6 col-md-12">
-                                                        <Link to={`/tour/detail/${item.id}`}>
-                                                            <div className="destination-item tour-grid style-three bgc-lighter block_tours equal-block-fix">
-                                                                <div className="image">
-                                                                    <img src={item.image || noImage} alt="tour-image" />
-                                                                </div>
+                                                    {msg.content.map((item) => (
+                                                        <div key={item.id} className="tour-card-custom col-sm-6 col-md-12">
+                                                            <Link to={`/tour/detail/${item.id}`}>
+                                                                <div className="destination-item tour-grid style-three bgc-lighter block_tours equal-block-fix">
+                                                                    <div className="image">
+                                                                        <img src={item.image || noImage} alt="tour-image" />
+                                                                    </div>
 
-                                                                <div className="content equal-content-fix">
-                                                                    <div className="destination-header">
-                                                                        <span className="location">
-                                                                            <i className="fal fa-map-marker-alt me-2"></i>{item.destination}
-                                                                        </span>
-                                                                    </div>
-                                                                    <h6 className="fw-bold mb-2">{item.name}</h6>
-                                                                    <ul className="blog-meta">
-                                                                        <li><i className="far fa-clock me-2"></i>{item.quantityDay} ngày {item.quantityDay-1} đêm</li>
-                                                                        <li><i className="far fa-user me-2"></i>{item.people}</li>
-                                                                    </ul>
-                                                                    <ul className="blog-meta">
-                                                                        <li>
-                                                                            <i className="fa-solid fa-plane-departure me-2"></i>
-                                                                            {item.startDate ? formatDatetime(item.startDate) : ''}
-                                                                        </li>
-                                                                    </ul>
-                                                                    <ul className="blog-meta">
-                                                                        <li>
-                                                                            <i className="fas fa-plane-arrival me-2"></i>
-                                                                            {item.endDate ? formatDatetime(item.endDate) : ''}
-                                                                        </li>
-                                                                    </ul>
-                                                                    <div className="destination-footer">
-                                                                        <span className="price">
-                                                                            <span className="color-red" style={{ fontSize: "16px"}}>{item.adultPrice ? formatCurrency(item.adultPrice) : 0}</span> / người
-                                                                        </span>
+                                                                    <div className="content equal-content-fix">
+                                                                        <div className="destination-header">
+                                                                            <span className="location">
+                                                                                <i className="fal fa-map-marker-alt me-2"></i>{item.destination}
+                                                                            </span>
+                                                                        </div>
+                                                                        <h6 className="fw-bold mb-2">{item.name}</h6>
+                                                                        <ul className="blog-meta">
+                                                                            <li><i className="far fa-clock me-2"></i>{item.quantityDay} ngày {item.quantityDay-1} đêm</li>
+                                                                            <li><i className="far fa-user me-2"></i>{item.people}</li>
+                                                                        </ul>
+                                                                        <ul className="blog-meta">
+                                                                            <li>
+                                                                                <i className="fa-solid fa-plane-departure me-2"></i>
+                                                                                {item.startDate ? formatDatetime(item.startDate) : ''}
+                                                                            </li>
+                                                                        </ul>
+                                                                        <ul className="blog-meta">
+                                                                            <li>
+                                                                                <i className="fas fa-plane-arrival me-2"></i>
+                                                                                {item.endDate ? formatDatetime(item.endDate) : ''}
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div className="destination-footer">
+                                                                            <span className="price">
+                                                                                <span className="color-red" style={{ fontSize: "16px"}}>{item.adultPrice ? formatCurrency(item.adultPrice) : 0}</span> / người
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </Link>
-                                                    </div>
+                                                            </Link>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
-                                        )): (
+                                        ): (
                                             msg.content
                                         )}
                                     </div>
