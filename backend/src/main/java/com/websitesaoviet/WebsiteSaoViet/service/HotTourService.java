@@ -57,7 +57,7 @@ public class HotTourService {
                     createHotTour(destination);
                 }
             }
-        } else if (!hotTour.getCreatedTime().isEqual(currentDay)) {
+        } else if (currentDay.isAfter(hotTour.getCreatedTime().plusWeeks(1))) {
             Object response = chatbotService.sendPrompt(message);
 
             if (response instanceof Map) {

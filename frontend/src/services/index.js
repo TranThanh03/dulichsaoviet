@@ -7,3 +7,4 @@ export { default as BookingApi } from './bookingApi';
 export { default as CheckoutApi } from './checkoutApi';
 export { default as AdminApi } from './adminApi';
 export { default as NewsApi } from './newsApi';
+export { default as ChatbotApi } from './chatbotApi';

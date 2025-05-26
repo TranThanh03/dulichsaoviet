@@ -2,6 +2,7 @@ import { memo } from 'react';
 import Header from '../header';
 import Footer from '../footer';
 import { useLocation } from 'react-router-dom';
+import Chatbot from 'component/chatbot';
 
 const MasterLayout = ({ children, ...props }) => {
     const location = useLocation();
@@ -18,6 +19,7 @@ const MasterLayout = ({ children, ...props }) => {
             
             {isValidPath && <Header />}
             {children}
+            {isValidPath && <Chatbot />}
             {isValidPath && <Footer />}
         </div>
     );

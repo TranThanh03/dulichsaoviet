@@ -28,6 +28,7 @@ public class SecurityConfig {
             "/promotions/list",
             "/news/{id:[0-9a-f\\-]{36}}", "/news/outstanding", "/news/top-new",
             "/news/list-outstanding/{id:[0-9a-f\\-]{36}}", "/news/list-top-new/{id:[0-9a-f\\-]{36}}",
+            "/chatbot/{code}", "/chatbot/generat-codes",
     };
 
     private final String[] POST_PUBLIC_ENDPOINTS = {

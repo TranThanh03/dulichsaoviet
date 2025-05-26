@@ -260,4 +260,44 @@ public interface TourRepository extends JpaRepository<Tour, String> {
     """,
             nativeQuery = true)
     List<Object[]> findHotTours();
+
+    @Query(value = """
+    SELECT t.id, t.name, t.destination,
+        (SELECT i.image FROM tour_images i WHERE i.tour_id = t.id LIMIT 1) AS image,
+        t.quantity_day,
+        MIN(s.adult_price) AS adult_price,
+        MIN(s.start_date) AS start_date,
+        MAX(s.end_date) AS end_date,
+        (
+            SELECT IFNULL(SUM(s2.total_people - s2.quantity_people), 0)
+            FROM schedule s2
+            WHERE s2.tour_id = t.id AND s2.status = 'Chưa diễn ra' AND s2.quantity_people < s2.total_people AND
+            (:minPrice IS NULL OR s2.adult_price >= :minPrice) AND
+            (:maxPrice IS NULL OR s2.adult_price <= :maxPrice) AND
+            (:startDate IS NULL OR s2.start_date >= :startDate) AND
+            (:endDate IS NULL OR s2.end_date <= :endDate)
+        ) AS people,
+        MAX(s.created_time) AS created_time
+    FROM tour t
+    INNER JOIN schedule s ON t.id = s.tour_id
+    WHERE
+        (s.status = 'Chưa diễn ra') AND
+        (s.quantity_people < s.total_people) AND
+        (:minPrice IS NULL OR s.adult_price >= :minPrice) AND
+        (:maxPrice IS NULL OR s.adult_price <= :maxPrice) AND
+        (:area IS NULL OR t.area = :area) AND
+        (:startDate IS NULL OR s.start_date >= :startDate) AND
+        (:endDate IS NULL OR s.end_date <= :endDate) AND
+        (:quantityDay IS NULL OR t.quantity_day = :quantityDay)
+    GROUP BY t.id, t.name, t.destination, t.quantity_day
+    """,
+            nativeQuery = true)
+    List<Object[]> findChatTours(
+            @Param("minPrice") Double minPrice,
+            @Param("maxPrice") Double maxPrice,
+            @Param("area") String area,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("quantityDay") Integer quantityDay
+    );
 }

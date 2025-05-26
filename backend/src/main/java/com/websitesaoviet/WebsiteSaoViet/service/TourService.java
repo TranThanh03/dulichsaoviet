@@ -28,6 +28,8 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -341,9 +343,7 @@ public class TourService {
             };
         }
 
-        if (startDate != null && endDate != null) {
-            sort = sort.and(Sort.by(Sort.Direction.ASC, "start_date"));
-        } else if (startDate != null) {
+        if (startDate != null) {
             sort = sort.and(Sort.by(Sort.Direction.ASC, "start_date"));
         } else if (endDate != null) {
             sort = sort.and(Sort.by(Sort.Direction.DESC, "end_date"));
@@ -456,5 +456,160 @@ public class TourService {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<ChatToursResponse> getChatTours(Object response) {
+        Map<String, Object> map = (Map<String, Object>) response;
+        Double minPrice = null;
+        Double maxPrice = null;
+        String destination = null;
+        String area = null;
+        Integer quantityDay = null;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        Comparator<Object[]> comparator = null;
+
+        if (map.get("minPrice") != null)
+            minPrice = Double.valueOf(map.get("minPrice").toString()) > 0 ? Double.valueOf(map.get("minPrice").toString()) : null;
+
+        if (map.get("maxPrice") != null)
+            maxPrice = Double.valueOf(map.get("maxPrice").toString()) > 0 ? Double.valueOf(map.get("maxPrice").toString()) : null;
+
+        if (map.get("startDate") != null) {
+            if (isValidDate(map.get("startDate").toString(), "yyyy-MM-dd")) {
+                startDate = LocalDate.parse(map.get("startDate").toString());
+            } else {
+                throw new AppException(ErrorCode.CHATBOT_DATE_INVALID);
+            }
+        }
+
+        if (map.get("endDate") != null) {
+            if (isValidDate(map.get("endDate").toString(), "yyyy-MM-dd")) {
+                endDate = LocalDate.parse(map.get("endDate").toString());
+            } else {
+                throw new AppException(ErrorCode.CHATBOT_DATE_INVALID);
+            }
+        }
+
+        if (map.get("area") != null) {
+            String a = map.get("area").toString().toLowerCase();
+
+            if (a.equals("b") || a.equals("t") || a.equals("n")) {
+                area = a;
+            }
+        }
+
+        if (map.get("quantityDay") != null) {
+            int qd = Integer.parseInt(map.get("quantityDay").toString());
+
+            if (qd >= 1 && qd <= 99) {
+                quantityDay = qd;
+            }
+        }
+
+        List<Object[]> rawResult = tourRepository.findChatTours(
+                minPrice, maxPrice, area, startDate, endDate, quantityDay
+        );
+
+        if (map.get("sorted") != null) {
+            String sortKey = map.get("sorted").toString();
+            switch (sortKey) {
+                case "high-to-low" -> comparator = Comparator.comparingDouble(o -> -((Number) o[5]).doubleValue());
+                case "low-to-high" -> comparator = Comparator.comparingDouble(o -> ((Number) o[5]).doubleValue());
+                case "new" -> comparator = Comparator.comparing(o -> ((Date) o[9]));
+                case "old" -> comparator = Comparator.comparing(o -> ((Date) o[9]));
+            }
+        }
+
+        if (startDate != null) {
+            comparator = comparator == null
+                    ? Comparator.comparing(o -> ((Date) o[6]))
+                    : comparator.thenComparing(o -> ((Date) o[6]));
+        } else if (endDate != null) {
+            comparator = comparator == null
+                    ? Comparator.comparing(o -> ((Date) o[7]))
+                    : comparator.thenComparing(o -> ((Date) o[7]));
+        }
+
+        if (map.get("destination") != null) {
+            Object destinations = map.get("destination");
+            if (destinations instanceof List<?>) {
+                destination = ((List<?>) destinations).stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "));
+            } else {
+                destination = destinations.toString();
+            }
+
+            Set<String> selectedLower = Arrays.stream(destination.split(", "))
+                    .map(String::trim)
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toSet());
+
+            return rawResult.stream()
+                    .map(obj -> {
+                        String dest = (String) obj[2];
+                        int matchCount = computeMatchCount(dest, selectedLower);
+                        return new TourWithMatch(obj, matchCount);
+                    })
+                    .filter(twm -> twm.getMatchCount() > 0)
+                    .sorted(Comparator.comparingInt(TourWithMatch::getMatchCount).reversed())
+                    .limit(5)
+                    .map(twm -> {
+                        Object[] obj = twm.getRawTour();
+                        return new ChatToursResponse(
+                                (String) obj[0],
+                                (String) obj[1],
+                                (String) obj[2],
+                                (String) obj[3],
+                                ((Number) obj[4]).intValue(),
+                                ((Number) obj[5]).doubleValue(),
+                                ((Date) obj[6]).toLocalDate(),
+                                ((Date) obj[7]).toLocalDate(),
+                                ((Number) obj[8]).intValue()
+                        );
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        if (comparator != null) {
+            rawResult.sort(comparator);
+        }
+
+        return rawResult.stream()
+                .limit(5)
+                .map(obj -> new ChatToursResponse(
+                        (String) obj[0],
+                        (String) obj[1],
+                        (String) obj[2],
+                        (String) obj[3],
+                        ((Number) obj[4]).intValue(),
+                        ((Number) obj[5]).doubleValue(),
+                        toLocalDate(obj[6]),
+                        toLocalDate(obj[7]),
+                        ((Number) obj[8]).intValue()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private LocalDate toLocalDate(Object obj) {
+        if (obj instanceof Timestamp ts) {
+            return ts.toLocalDateTime().toLocalDate();
+        } else if (obj instanceof java.sql.Date date) {
+            return date.toLocalDate();
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean isValidDate(String dateStr, String format) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+            LocalDate.parse(dateStr, formatter);
+
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }

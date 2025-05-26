@@ -10,15 +10,27 @@ const axiosInstance = axios.create({
 
 const pendingRequests = new Set();
 
+const shouldSkipLoading = (url = '') => {
+    return url.includes('/api/v1/chatbot') || url.includes('/api/v1/auth/introspect');
+};
+
 axiosInstance.interceptors.request.use(
     (config) => {
-            config.metadata = { startTime: new Date().getTime() };
+        const url = config.url || '';
+
+        config.metadata = {
+            startTime: new Date().getTime(),
+            skipLoading: shouldSkipLoading(url),
+        };
+
+        if (!config.metadata.skipLoading) {
             const timer = setTimeout(() => {
                 setLoading(true);
             }, 250);
             config.metadata.timer = timer;
-            pendingRequests.add(config);
+        }
 
+        pendingRequests.add(config);
         return config;
     },
     (error) => {
@@ -28,37 +40,42 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     (response) => {
-        if (response.config.metadata?.timer) {
-            clearTimeout(response.config.metadata.timer);
+        const config = response.config;
+
+        if (config.metadata?.timer) {
+            clearTimeout(config.metadata.timer);
         }
 
-        pendingRequests.delete(response.config);
+        pendingRequests.delete(config);
 
-        if (pendingRequests.size === 0) {
+        if (!config.metadata?.skipLoading && pendingRequests.size === 0) {
             setLoading(false);
         }
 
         return response.data;
     },
     (error) => {
-        if (error.config?.metadata?.timer) {
-            clearTimeout(error.config.metadata.timer);
+        const config = error.config || {};
+
+        if (config.metadata?.timer) {
+            clearTimeout(config.metadata.timer);
         }
 
-        pendingRequests.delete(error.config);
+        pendingRequests.delete(config);
 
-        if (pendingRequests.size === 0) {
+        if (!config.metadata?.skipLoading && pendingRequests.size === 0) {
             setLoading(false);
         }
 
         if (error.response?.data?.code === 4445) {
-            if (error.config.url.includes("/api/v1/auth/introspect")) {
+            const url = error.config?.url || '';
+
+            if (shouldSkipLoading(url)) {
                 return Promise.reject(error.response || error.message);
             }
 
             window.location.href = "/error/404";
-        }
-        else if (error.code === "ERR_NETWORK") {
+        } else if (error.code === "ERR_NETWORK") {
             window.location.href = "/error/500";
         }
 
