@@ -60,7 +60,7 @@ public class ChatbotService {
                     "Nếu trong câu hỏi mà chỉ có 1 điểm đến hoặc 1 tour, ví dụ: Hà Nội thì trả về JSON chứa destination: Hà Nội." +
                     "Nếu trong câu hỏi có liên quan đến 2 hay nhiều điểm đến hoặc tour, ví dụ: 'Hà Nội, Hạ Long', 'Hà Nội - Hạ Long',... thì gán destination: [Hà Nội, Hạ Long,...]" +
                     "Nếu trong câu hỏi có liên quan đến thời gian, số ngày ví dụ: 2 ngày, 2 ngày 1 đêm,... thì gán quantityDay: 2,..." +
-                    "Nếu trong câu hỏi có liên quan đến khu vực(Miền Bắc, Miền Trung, Miền Nam) thì gán area lần lượt là: b, t, n." +
+                    "Nếu trong câu hỏi có liên quan đến khu vực hoặc miền(Miền Bắc, Miền Trung, Miền Nam) thì trả về JSON chứa area lần lượt là: b, t, n." +
                     "Nếu trong câu hỏi có liên quan đến ngày khởi hành, ngày xuất phát, ví dụ: 23/05/2025, 23-05-2025,... thì gán vào startDate: 2025-05-23,..." +
                     "Nếu trong câu hỏi có liên quan đến ngày kết thúc, ví dụ: 23/05/2025, 23-05-2025,... thì gán vào endDate: 2025-05-23,..." +
                     "Nếu trong câu hỏi có liên quan đến giá, ví dụ: 5 triệu, 5.000.000, 5000000, thì gán vào maxPrice: 5000000" +

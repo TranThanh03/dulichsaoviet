@@ -30,6 +30,8 @@
     .message {
         margin-bottom: 10px;
         display: flex;
+        display: flex;
+        flex-direction: column;
     }
 
     .message.chatbot .message-text {
@@ -42,6 +44,7 @@
 
     .message.customer {
         justify-content: flex-end;
+        align-items: end;
     }
 
     .message.customer .message-text {
@@ -50,6 +53,10 @@
         padding: 8px 12px;
         border-radius: 10px;
         max-width: 85%;
+    }
+
+    .message-time {
+        font-size: 10px;
     }
 
     .chatbot-input input {
