@@ -58,6 +58,8 @@ const NewsUpdatePage = () => {
         formDataCloudinary.append("folder", "saoviet");
 
         try {
+            SuccessToast("Đang tải ảnh lên Cloudinary...");
+            
             const response = await fetch("https://api.cloudinary.com/v1_1/doie0qiiq/image/upload", {
                 method: "POST",
                 body: formDataCloudinary

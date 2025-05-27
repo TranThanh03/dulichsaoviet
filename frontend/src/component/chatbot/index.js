@@ -143,14 +143,14 @@ const Chatbot = () => {
                         {messages.length > 0 && messages.map((msg, index) => (
                             <div key={index} className={`message ${msg.senderType || "chatbot"}`}>
                                 {((msg.content !== null && msg.content !== "") || (Array.isArray(msg.content) && msg.content.length > 0)) && (
-                                    <div className="message-text">
+                                    <div className="message-text" style={{ backgroundColor: Array.isArray(msg.content) ? "transparent" : "" }}>
                                         {Array.isArray(msg.content) && msg.content.length > 0 ? (
                                             <div className="tour-grid-wrap">
                                                 <div className="row">
                                                     {msg.content.map((item) => (
                                                         <div key={item.id} className="tour-card-custom col-sm-6 col-md-12">
                                                             <Link to={`/tour/detail/${item.id}`}>
-                                                                <div className="destination-item tour-grid style-three bgc-lighter block_tours equal-block-fix">
+                                                                <div className="destination-item tour-grid style-three bgc-lighter block_tours equal-block-fix shadow-sm">
                                                                     <div className="image">
                                                                         <img src={item.image || noImage} alt="tour-image" />
                                                                     </div>

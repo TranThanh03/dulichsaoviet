@@ -49,7 +49,7 @@ const NewsPage = () => {
                     <Link to={`/news/detail/${outstanding.id}`} data-aos="fade-top" data-aos-duration="1500" data-aos-offset="50">
                         <article className="featured-article">
                             <img src={outstanding.image || noImage} alt="Ảnh" />
-                            <h4>{outstanding.title || ''}</h4>
+                            <h4 className="fw-bold">{outstanding.title || ''}</h4>
                             <p className="ellipsis">{outstanding.summary || ''}</p>
                             <span>
                                 <i class="fa-regular fa-eye me-1"></i>
@@ -67,7 +67,7 @@ const NewsPage = () => {
                             <Link key={index} to={`/news/detail/${item.id || ''}`} data-aos="fade-top" data-aos-duration="1500" data-aos-offset="50">
                                 <article key={index} className="news-item" style={{ height: "100%" }}>
                                     <img src={item.image || noImage} alt="Ảnh" />
-                                    <h5>{item.title || ''}</h5>
+                                    <h5 className="fw-bold">{item.title || ''}</h5>
                                     <p className="ellipsis">{item.summary || ''}</p>
                                     <span>
                                         <i class="fa-regular fa-eye me-1"></i>
