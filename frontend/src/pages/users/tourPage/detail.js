@@ -176,7 +176,7 @@ const TourDetailPage = () => {
                         <div className="col-lg-7">
                             <div className="tour-details-content">
                                 <h3>Khám phá Tours</h3>
-                                <p dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.description || '') }}></p>
+                                <p className="description" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.description || '') }}></p>
                                 <div className="row pb-55">
                                     <div className="col-md-6" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="50">
                                         <div className="tour-include-exclude mt-30">

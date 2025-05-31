@@ -9,8 +9,17 @@
         #p-custom {
             margin-bottom: 0px !important;
         }
+    }
 
-        
+    .tour-details-content .description,
+    .accordion-body {
+        ul, li {
+            list-style: circle !important;
+        }
+    }
+    
+    .tour-details-content .description {
+        text-align: justify;
     }
 
     .location .quantity-order {
