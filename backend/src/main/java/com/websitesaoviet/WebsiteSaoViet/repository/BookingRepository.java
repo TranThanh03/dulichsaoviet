@@ -86,8 +86,7 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
     @Query("SELECT new com.websitesaoviet.WebsiteSaoViet.dto.response.admin.PopularToursResponse(" +
             "b.tourCode, b.tourName, COUNT(b)) " +
             "FROM Booking b " +
-            "WHERE b.status = 'Đã xác nhận' " +
-            "AND FUNCTION('MONTH', b.bookingTime) = FUNCTION('MONTH', :currentDate) " +
+            "WHERE FUNCTION('MONTH', b.bookingTime) = FUNCTION('MONTH', :currentDate) " +
             "AND FUNCTION('YEAR', b.bookingTime) = FUNCTION('YEAR', :currentDate) " +
             "GROUP BY b.tourCode, b.tourName " +
             "ORDER BY COUNT(b) DESC " +

@@ -94,12 +94,16 @@ public interface TourRepository extends JpaRepository<Tour, String> {
     @Query("SELECT t AS tour, COUNT(b.id) AS bookingCount " +
             "FROM Tour t " +
             "INNER JOIN Booking b ON t.id = b.tourId " +
-            "INNER JOIN Schedule s ON t.id = s.tourId " +
-            "WHERE s.status = 'Chưa diễn ra' AND s.quantityPeople < s.totalPeople " +
+            "WHERE EXISTS (" +
+            "   SELECT 1 FROM Schedule s " +
+            "   WHERE s.tourId = t.id " +
+            "   AND s.status = 'Chưa diễn ra' " +
+            "   AND s.quantityPeople < s.totalPeople" +
+            ") " +
             "AND MONTH(b.bookingTime) = MONTH(CURRENT_DATE) " +
             "AND YEAR(b.bookingTime) = YEAR(CURRENT_DATE) " +
             "GROUP BY t " +
-            "ORDER BY bookingCount DESC " +
+            "ORDER BY COUNT(b.id) DESC " +
             "LIMIT 5")
     List<TourBookingStatsResponse> findPopularTours();
 
